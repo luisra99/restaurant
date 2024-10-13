@@ -2,24 +2,73 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" content="#ffffff" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>Restaurante</title>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + React PWA Boilerplate</title>
-  <meta name="description" content="React + Vite PWA Boilerplate" />
-  <meta name="author" content="Salman Dabbakuti" />
-  <meta name="keywords" content="React, Vite, React Vite, React Boilerplate" />
-  <link rel="manifest" href="/manifest.webmanifest" type="application/manifest+json" />
-  <link rel="icon" href="/favicon.ico" type="image/svg+xml" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
-  <link rel="mask-icon" href="/maskable-icon-512x512.png" color="#FFFFFF" />
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="white">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black">
+  <!-- https://web.dev/uses-rel-preconnect -->
+  <link rel="preconnect" href="https://storage.googleapis.com" />
+
+  <meta name="description" content="Starter kit for modern web applications" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/favicon.svg" type="image/svg" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="mask-icon" href="/favicon.svg" color="#FFFFFF" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <meta name="keywords" content="react, pwa, boilerplate, template" />
+
+  <meta name="description" content="Starter kit for modern web applications" data-react-helmet="true" />
+  <meta property="og:title" content="Restaurante" data-react-helmet="true" />
+  <!-- https://web.dev/defer-non-critical-css/ -->
+  <style>
+    @font-face {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 300;
+      src:
+        local("Roboto Light"),
+        local("Roboto-Light"),
+        url("./fonts/Roboto-Light.ttf") format("truetype");
+    }
+
+    @font-face {
+      font-family: "Roboto";
+      font-style: normal;
+      font-weight: 400;
+      src:
+        local("Roboto"),
+        local("Roboto-Regular"),
+        url("./fonts/Roboto-Regular.ttf") format("truetype");
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+  <div id="root">
+    <style>
+      body {
+        background-color: #3f51b5;
+        height: 100vh;
+        background-image: radial-gradient(circle,
+            rgb(255 255 255 / 24%) 0%,
+            rgb(231 231 231 / 0%) 100%);
+      }
+    </style>
+    <div class="slpash" style="
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: -1;
+        ">
+
+    </div>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 
 </html>
