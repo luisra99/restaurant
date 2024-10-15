@@ -16,6 +16,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { LoadConcept } from "@/utils/concepts";
 
 const DependienteSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
@@ -23,26 +24,26 @@ const DependienteSchema = Yup.object().shape({
 });
 
 const Dependientes = () => {
-  const [dependientes, setDependientes] = useState([
-    { nombre: "Juan Pérez", email: "juan@gmail.com" },
-    { nombre: "María Gómez", email: "maria@gmail.com" },
-  ]);
   const [editingIndex, setEditingIndex] = useState(null);
-
+  const [concepts, setConcepts] = useState<any[]>([]);
+  const Load = async () => {
+    const _concepts = await LoadConcept(1);
+    setConcepts(_concepts);
+  };
   const addDependiente = (dependiente: any) => {
     if (editingIndex !== null) {
-      const updatedDependientes = [...dependientes];
+      const updatedDependientes = [...concepts];
       updatedDependientes[editingIndex] = dependiente;
-      setDependientes(updatedDependientes);
+      setConcepts(updatedDependientes);
       setEditingIndex(null);
     } else {
-      setDependientes([...dependientes, dependiente]);
+      setConcepts([...concepts, dependiente]);
     }
   };
 
   const deleteDependiente = (index: any) => {
-    const updatedDependientes = dependientes.filter((_, i) => i !== index);
-    setDependientes(updatedDependientes);
+    const updatedDependientes = concepts.filter((_, i) => i !== index);
+    setConcepts(updatedDependientes);
   };
 
   const editDependiente = (index: any) => {
@@ -58,7 +59,7 @@ const Dependientes = () => {
       <Formik
         initialValues={
           editingIndex !== null
-            ? dependientes[editingIndex]
+            ? concepts[editingIndex]
             : { nombre: "", email: "" }
         }
         enableReinitialize
@@ -106,7 +107,7 @@ const Dependientes = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dependientes.map((dependiente, index) => (
+            {concepts.map((dependiente, index) => (
               <TableRow key={index}>
                 <TableCell>{dependiente.nombre}</TableCell>
                 <TableCell>{dependiente.email}</TableCell>

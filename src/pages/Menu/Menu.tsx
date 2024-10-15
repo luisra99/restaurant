@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
@@ -14,6 +14,8 @@ import {
   Chip,
   Box,
 } from "@mui/material";
+import { LoadConcept } from "@/utils/concepts";
+import { getOffers } from "@/services/menu";
 
 const menuItems = [
   {
@@ -148,34 +150,21 @@ const menuItems = [
   },
 ];
 
-const categories = [
-  "All",
-  "Aguas y jugos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-  "Menú vegetariano",
-  "Entrantes fríos",
-];
-
 const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("Todo");
+  const [categorys, setCategorys] = useState<any[]>([]);
+  const [menu, setMenu] = useState<any[]>([]);
+  const Load = async () => {
+    const _concepts = await LoadConcept(1);
+    const _menu = await getOffers();
+    setMenu([..._menu]);
+    setCategorys([..._concepts]);
+  };
+
+  useEffect(() => {
+    Load();
+  }, []);
 
   const handleSearchChange = (event: {
     target: { value: React.SetStateAction<string> };
@@ -189,11 +178,13 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
     setCategory(event.target.value);
   };
 
-  const filteredItems = menuItems.filter((item) => {
-    const isInCategory = category === "All" || item.category === category;
+  const filteredItems = menu.filter((item) => {
+    const isInCategory = category === "Todo" || item.category.id === category;
     const isInSearch =
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase());
+      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      Number(searchTerm) + 200 >= Number(item.price) ||
+      item.details.toLowerCase().includes(searchTerm.toLowerCase());
     return isInCategory && isInSearch;
   });
 
@@ -211,15 +202,24 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
 
       {/* Filtro por categorías */}
       <Box mb={2}>
-        {categories.map((cat) => (
+        <Chip
+          color="primary"
+          size="medium"
+          label={"Todo"}
+          variant={category === "Todo" ? "filled" : "outlined"}
+          clickable
+          sx={{ ml: 1, mb: 1 }}
+          onClick={() => setCategory("Todo")}
+        />
+        {categorys.map((cat) => (
           <Chip
             color="primary"
             size="medium"
-            label={cat}
-            variant={category === cat ? "filled" : "outlined"}
+            label={cat.denomination}
+            variant={category === cat.id ? "filled" : "outlined"}
             clickable
             sx={{ ml: 1, mb: 1 }}
-            onClick={() => setCategory(cat)}
+            onClick={() => setCategory(cat.id)}
           />
         ))}
       </Box>
@@ -254,7 +254,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
               <CardMedia
                 component="img"
                 height="140"
-                image={item.image}
+                image={`http://localhost:4000/public/${item.image}`}
                 alt={item.name}
                 sx={{
                   objectFit: "cover", // Asegura que la imagen cubra el área sin distorsionarse

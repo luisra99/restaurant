@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,28 +16,44 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { LoadConcept } from "@/utils/concepts";
+import { getTable, listTables, postTables, putTables } from "@/services/table";
 
 const MesaSchema = Yup.object().shape({
-  numero: Yup.number().required("Número de mesa requerido"),
-  capacidad: Yup.number().required("Capacidad requerida"),
-  ubicacion: Yup.string().required("Ubicación requerida"),
+  name: Yup.string().required("Número de mesa requerido"),
+  capacity: Yup.number().required("Capacidad requerida"),
+  datails: Yup.string().required("Ubicación requerida"),
 });
 
 const Mesas = () => {
-  const [mesas, setMesas] = useState([
-    { numero: 1, capacidad: 4, ubicacion: "Interior" },
-    { numero: 2, capacidad: 6, ubicacion: "Terraza" },
-  ]);
+  const [mesas, setMesas] = useState<any[]>([]);
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    capacity: "",
+    details: "",
+  });
+  const Load = async () => {
+    const _concepts = await listTables();
+    setMesas([..._concepts]);
+  };
+
+  useEffect(() => {
+    Load();
+  }, []);
+
   const [editingIndex, setEditingIndex] = useState(null);
 
-  const addMesa = (mesa: any) => {
+  const addMesa = async (mesa: any) => {
     if (editingIndex !== null) {
-      const updatedMesas = [...mesas];
-      updatedMesas[editingIndex] = mesa;
-      setMesas(updatedMesas);
-      setEditingIndex(null);
+      await putTables(editingIndex, mesa).then(() =>
+        setInitialValues({
+          name: "",
+          capacity: "",
+          details: "",
+        })
+      );
     } else {
-      setMesas([...mesas, mesa]);
+      await postTables(mesa);
     }
   };
 
@@ -46,7 +62,9 @@ const Mesas = () => {
     setMesas(updatedMesas);
   };
 
-  const editMesa = (index: any) => {
+  const editMesa = async (index: any) => {
+    const concept = await getTable(index);
+    setInitialValues(concept);
     setEditingIndex(index);
   };
 
@@ -57,11 +75,7 @@ const Mesas = () => {
       </Typography>
 
       <Formik
-        initialValues={
-          editingIndex !== null
-            ? mesas[editingIndex]
-            : { numero: "", capacidad: "", ubicacion: "" }
-        }
+        initialValues={initialValues}
         enableReinitialize
         validationSchema={MesaSchema}
         onSubmit={(values, { resetForm }) => {
@@ -69,32 +83,38 @@ const Mesas = () => {
           resetForm();
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, values, resetForm }) => (
           <Form>
             <Box display="flex" flexDirection="column" gap={2}>
               <Field
-                name="numero"
+                name="name"
                 as={TextField}
-                label="Número de Mesa"
-                error={touched.numero && Boolean(errors.numero)}
-                helperText={touched.numero && errors.numero}
+                label="Nombre de la mesa"
+                error={touched.name && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
               />
               <Field
-                name="capacidad"
+                name="capacity"
                 as={TextField}
                 label="Capacidad"
                 type="number"
-                error={touched.capacidad && Boolean(errors.capacidad)}
-                helperText={touched.capacidad && errors.capacidad}
+                error={touched.capacity && Boolean(errors.capacity)}
+                helperText={touched.capacity && errors.capacity}
               />
               <Field
-                name="ubicacion"
+                name="details"
                 as={TextField}
                 label="Ubicación"
-                error={touched.ubicacion && Boolean(errors.ubicacion)}
-                helperText={touched.ubicacion && errors.ubicacion}
+                error={touched.details && Boolean(errors.details)}
+                helperText={touched.details && errors.details}
               />
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addMesa(values).then(() => Load());
+                  resetForm();
+                }}
+              >
                 {editingIndex !== null ? "Guardar Cambios" : "Añadir Mesa"}
               </Button>
             </Box>
@@ -116,14 +136,14 @@ const Mesas = () => {
           <TableBody>
             {mesas.map((mesa, index) => (
               <TableRow key={index}>
-                <TableCell>{mesa.numero}</TableCell>
-                <TableCell>{mesa.capacidad}</TableCell>
-                <TableCell>{mesa.ubicacion}</TableCell>
+                <TableCell>{mesa.name}</TableCell>
+                <TableCell>{mesa.capacity}</TableCell>
+                <TableCell>{mesa.details}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => editMesa(index)}>
+                  <IconButton onClick={() => editMesa(mesa.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteMesa(index)}>
+                  <IconButton onClick={() => deleteMesa(mesa.is)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

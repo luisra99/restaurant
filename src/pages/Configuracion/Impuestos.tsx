@@ -20,6 +20,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { LoadConcept } from "@/utils/concepts";
 
 const ImpuestoSchema = Yup.object().shape({
   tipo: Yup.string().required("Tipo requerido"),
@@ -37,6 +38,11 @@ const ImpuestosDescuentos = () => {
       porcentaje: 10,
     },
   ]);
+  const [concepts, setConcepts] = useState<any[]>([]);
+  const Load = async () => {
+    const _concepts = await LoadConcept(1);
+    setConcepts(_concepts);
+  };
   const [editingIndex, setEditingIndex] = useState(null);
 
   const addImpuesto = (impuesto: any) => {

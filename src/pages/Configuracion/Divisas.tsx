@@ -16,6 +16,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { LoadConcept } from "@/utils/concepts";
 
 const DivisaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
@@ -23,26 +24,27 @@ const DivisaSchema = Yup.object().shape({
 });
 
 const Divisas = () => {
-  const [divisas, setDivisas] = useState([
-    { nombre: "USD", tasaCambio: 1 },
-    { nombre: "EUR", tasaCambio: 0.85 },
-  ]);
+  const [concepts, setConcepts] = useState<any[]>([]);
+  const Load = async () => {
+    const _concepts = await LoadConcept(1);
+    setConcepts(_concepts);
+  };
   const [editingIndex, setEditingIndex] = useState(null);
 
   const addDivisa = (divisa: any) => {
     if (editingIndex !== null) {
-      const updatedDivisas = [...divisas];
+      const updatedDivisas = [...concepts];
       updatedDivisas[editingIndex] = divisa;
-      setDivisas(updatedDivisas);
+      setConcepts(updatedDivisas);
       setEditingIndex(null);
     } else {
-      setDivisas([...divisas, divisa]);
+      setConcepts([...concepts, divisa]);
     }
   };
 
   const deleteDivisa = (index: any) => {
-    const updatedDivisas = divisas.filter((_, i) => i !== index);
-    setDivisas(updatedDivisas);
+    const updatedDivisas = concepts.filter((_, i) => i !== index);
+    setConcepts(updatedDivisas);
   };
 
   const editDivisa = (index: any) => {
@@ -58,7 +60,7 @@ const Divisas = () => {
       <Formik
         initialValues={
           editingIndex !== null
-            ? divisas[editingIndex]
+            ? concepts[editingIndex]
             : { nombre: "", tasaCambio: "" }
         }
         enableReinitialize
@@ -105,7 +107,7 @@ const Divisas = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {divisas.map((divisa, index) => (
+            {concepts.map((divisa, index) => (
               <TableRow key={index}>
                 <TableCell>{divisa.nombre}</TableCell>
                 <TableCell>{divisa.tasaCambio}</TableCell>
