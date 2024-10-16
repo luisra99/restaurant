@@ -20,10 +20,12 @@ import Cuenta from "@/pages/Cuenta/Cuenta";
 import Manage from "@/pages/GestionCuenta/Manage";
 import AddMenuOffer from "@/pages/Oferta/Oferta";
 import Config from "@/pages/Configuracion/Config";
+import OpenAccount from "@/pages/Cuenta/components/FormularioCuenta";
+import Cuentas from "@/pages/Cuenta/Cuentas";
 
 const myRoutes: Routes = {
   [Pages.Welcome]: {
-    component: AddMenuOffer,
+    component: Cuentas,
     path: "/",
     title: "Inicio",
   },

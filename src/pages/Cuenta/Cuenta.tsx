@@ -18,8 +18,51 @@ import {
   Info,
 } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
+import { getAccount, getAccounts } from "@/services/account";
+import { fTime } from "@/_pwa-framework/utils/format-time";
 function Cuenta() {
-  const cuenta = {
+  const accountTypeIcon: { [key: number]: JSX.Element } = {
+    13: (
+      <ReceiptLongIcon
+        sx={{
+          width: "50%",
+          height: "auto",
+          maxWidth: "none",
+          color: "gray",
+        }}
+      />
+    ),
+    14: (
+      <ShoppingCartCheckoutIcon
+        sx={{
+          width: "50%",
+          height: "auto",
+          maxWidth: "none",
+          color: "gray",
+        }}
+      />
+    ),
+    15: (
+      <HomeIcon
+        sx={{
+          width: "50%",
+          height: "auto",
+          maxWidth: "none",
+          color: "gray",
+        }}
+      />
+    ),
+  };
+  const [cuenta, setCuenta] = useState<any>([]);
+  const Load = async () => {
+    const cuenta = await getAccount(1);
+    setCuenta(cuenta);
+  };
+  useEffect(() => {
+    Load();
+  }, []);
+  const cuenta2 = {
     table: "Mesa 14",
     location: "Terraza",
     people: 3,
@@ -65,8 +108,8 @@ function Cuenta() {
           {" "}
           <Grid container display={"flex"} justifyContent={"start"}>
             <Grid item xs={6} textAlign={"left"}>
-              <Typography variant="h5">{cuenta.table}</Typography>
-              <Typography>Depediente: {cuenta.dependent}</Typography>
+              <Typography variant="h5">{cuenta?.name}</Typography>
+              <Typography>Depediente: {cuenta?.idDependent}</Typography>
             </Grid>
 
             <Grid item xs={2} textAlign={"left"}>
@@ -75,7 +118,7 @@ function Cuenta() {
                 alignItems={"center"}
                 flexWrap={"wrap"}
               >
-                <AccessTime sx={{ mr: 1 }} /> {cuenta.initTime}
+                <AccessTime sx={{ mr: 1 }} /> {fTime(cuenta?.created)}
               </Typography>
               <br />
               <Box
@@ -83,7 +126,7 @@ function Cuenta() {
                 alignItems={"center"}
                 flexWrap={"wrap"}
               >
-                <People sx={{ mr: 1 }} /> {cuenta.people}
+                <People sx={{ mr: 1 }} /> {cuenta?.people ?? "¿?"}
               </Box>
             </Grid>
             <Grid
@@ -93,16 +136,7 @@ function Cuenta() {
               display={"flex"}
               justifyContent={"center"}
             >
-              <ReceiptLongIcon
-                sx={{
-                  width: "50%",
-                  height: "auto",
-                  maxWidth: "none",
-                  color: "gray",
-                }}
-              />
-              {/* <HomeIcon sx={{ width: '50%', height: 'auto', maxWidth: 'none',color:"gray"}}/> */}
-              {/* <ShoppingCartCheckoutIcon sx={{ width: '50%', height: 'auto', maxWidth: 'none',color:"gray"}}/> */}
+              {accountTypeIcon[cuenta?.idType]}
             </Grid>
 
             <Grid
@@ -125,14 +159,14 @@ function Cuenta() {
 
         <Paper elevation={3} sx={{ padding: 2, borderRadius: "8px", mb: 1 }}>
           <Grid container rowSpacing={1}>
-            {cuenta.orders.map((order, index) => (
+            {cuenta?.orders?.map((order: any, index: number) => (
               <>
                 <Grid item xs={6}>
                   <Typography variant="h6" sx={{ fontWeight: 500 }}>
-                    {order.product}
+                    {order.name}
                   </Typography>
                   <Typography sx={{ color: "brown" }}>
-                    ${order.price}
+                    ${order.totalPrice}
                   </Typography>
                 </Grid>
 
@@ -150,12 +184,15 @@ function Cuenta() {
                         width: "50px",
                         "&:hover": { backgroundColor: "#e0e0e0" },
                       }}
+                      onClick={() => {
+                        console.log(order.id);
+                      }}
                     >
                       <Remove />
                     </IconButton>
 
                     <Typography sx={{ minWidth: 20, textAlign: "center" }}>
-                      {order.count}
+                      {order.quantity}
                     </Typography>
 
                     <IconButton
@@ -184,7 +221,7 @@ function Cuenta() {
                     </IconButton>
                   </Box>
                 </Grid>
-                {index !== cuenta.orders.length - 1 && (
+                {index !== cuenta?.orders.length - 1 && (
                   <Grid item xs={12} textAlign="center">
                     <hr />
                   </Grid>
@@ -210,7 +247,7 @@ function Cuenta() {
           >
             <Typography>Productos</Typography>
             <Typography fontSize={25} textAlign={"center"}>
-              <b>{cuenta.productsCount}</b>{" "}
+              <b>{cuenta?.totalQuantity}</b>{" "}
             </Typography>
           </Typography>
           <Typography
@@ -222,7 +259,7 @@ function Cuenta() {
             <Typography textAlign={"center"}>SubTotal</Typography>
             <Typography textAlign={"center"} fontSize={25}>
               {" "}
-              $ <b style={{ fontWeight: 100 }}>{cuenta.subTotal}</b>
+              $ <b style={{ fontWeight: 100 }}>{cuenta?.totalPrice}</b>
             </Typography>
           </Typography>
           <Typography
@@ -233,7 +270,7 @@ function Cuenta() {
             <Typography textAlign={"center"}> A pagar</Typography>
             <Typography textAlign={"center"} fontSize={25}>
               {" "}
-              $ <b style={{ fontWeight: 900 }}>{cuenta.toPay}</b>
+              $ <b style={{ fontWeight: 900 }}>{cuenta?.finalPrice}</b>
             </Typography>
           </Typography>
         </Paper>
@@ -246,36 +283,20 @@ function Cuenta() {
               <Grid container spacing={1} justifyContent={"space-between"}>
                 <Grid item xs={10}>
                   <Grid container>
-                    {cuenta.taxes.map((tax) => (
+                    {cuenta?.mappedTaxsDiscounts?.map((tax: any) => (
                       <Fragment key={tax.name}>
                         <Grid item xs={9}>
-                          <Typography variant="h5">
-                            {tax.name} <b>({tax.percent}%)</b>
+                          <Typography variant="body1">
+                            {tax.name}{" "}
+                            <b>
+                              ({tax.tax ? "+" : "-"}
+                              {tax.percent}%)
+                            </b>
                           </Typography>
                         </Grid>
 
                         <Grid item xs={3} textAlign={"right"}>
-                          <Typography variant="h5">${tax.amount}</Typography>
-                        </Grid>
-                      </Fragment>
-                    ))}
-                    {!!cuenta?.discounts?.length && (
-                      <Grid item xs={12} textAlign="center">
-                        <hr />
-                      </Grid>
-                    )}
-                    {cuenta.discounts.map((discount) => (
-                      <Fragment key={discount.name}>
-                        <Grid item xs={9}>
-                          <Typography variant="h5">
-                            {discount.name} <b>(-{discount.percent}%)</b>
-                          </Typography>
-                        </Grid>
-
-                        <Grid item xs={3} textAlign={"right"}>
-                          <Typography variant="h5">
-                            ${discount.amount}
-                          </Typography>
+                          <Typography variant="body1">${tax.amount}</Typography>
                         </Grid>
                       </Fragment>
                     ))}
@@ -349,14 +370,14 @@ function Cuenta() {
             <Info sx={{ mr: 1, color: "gray", fontSize: "20px" }} />
             <Typography variant="overline" letterSpacing={1} color={"gray"}>
               <i>
-                {cuenta.table} - {cuenta.people}{" "}
-                {cuenta.people > 1 ? "personas" : "persona"}
+                {cuenta?.name} - {cuenta?.people}{" "}
+                {cuenta?.people > 1 ? "personas" : "persona"}
               </i>
             </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={1} width={"100%"} mt={1}>
-          {cuenta.currency.map((currency) => (
+          {/* {cuenta.currency.map((currency: any) => (
             <Grid item xs={3}>
               <Paper
                 key={currency.name}
@@ -374,7 +395,7 @@ function Cuenta() {
                 </Grid>
               </Paper>
             </Grid>
-          ))}
+          ))} */}
         </Grid>
       </Box>
     </>

@@ -2,13 +2,15 @@ import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
 import { Button, Grid, Modal, Paper, Typography } from "@mui/material";
 import Calculator from "@/app/components/calculator/Calc";
-import { Person, Timelapse } from "@mui/icons-material";
+import { Home, Person, Shop, Timelapse } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import HomeIcon from "@mui/icons-material/Home";
 import { listTables } from "@/services/table";
 import axios from "axios";
+import { fToNow } from "@/_pwa-framework/utils/format-time";
+import { getAccounts } from "@/services/account";
 const style = {
   position: "absolute",
   top: "50%",
@@ -27,18 +29,23 @@ function Mesas() {
   const [mesas, setMesas] = useState<any[]>([]);
   const Load = async () => {
     const _concepts = await listTables();
+    getAccounts();
     setMesas([..._concepts]);
   };
-
+  const statusColors: { [key: number]: string } = {
+    0: "lightgreen",
+    1: "lightcoral",
+    2: "lightyellow",
+    3: "orange",
+    4: "lightblue",
+  };
+  const accountTypeIcon: { [key: number]: JSX.Element } = {
+    13: <ReceiptLongIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
+    14: <ShoppingCartCheckoutIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
+    15: <HomeIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
+  };
   useEffect(() => {
     Load();
-    axios.post(`http://localhost:4000/accounts`, {
-      name: "Raul",
-      description: "el informatico",
-      people: 4,
-      idDependent: null,
-      idTable: null,
-    });
   }, []);
 
   // const mesas: any = [
@@ -109,18 +116,7 @@ function Mesas() {
                 sx={{
                   padding: 2,
                   borderRadius: "8px",
-                  backgroundColor:
-                    mesa.status === 0
-                      ? "lightgreen"
-                      : mesa.status === 1
-                        ? "lightcoral"
-                        : mesa.status === 2
-                          ? "lightyellow"
-                          : mesa.status === 3
-                            ? "orange"
-                            : mesa.status === 4
-                              ? "lightblue"
-                              : "lightgray",
+                  backgroundColor: statusColors[mesa.status] || "lightgray",
                   cursor: "pointer",
                   position: "relative",
                 }}
@@ -162,29 +158,49 @@ function Mesas() {
                 >
                   {/* Monto total de la cuenta */}
                   {mesa.Account && (
-                    <Typography variant="caption" color="textSecondary">
-                      ${mesa.amount}
+                    <Typography
+                      variant="caption"
+                      fontSize={"15px"}
+                      color="textSecondary"
+                    >
+                      {mesa.Account._count.details}{" "}
+                      {mesa.Account._count.details > 1
+                        ? "productos"
+                        : "producto"}{" "}
+                      - ${mesa.amount}
                     </Typography>
                   )}
 
                   {/* Tiempo de ocupación */}
                   {mesa.Account && (
                     <Box display="flex" alignItems="center">
-                      <Timelapse fontSize="small" sx={{ marginRight: 0.5 }} />
-                      <Typography variant="caption" color="textSecondary">
-                        {mesa.Account.tiempoOcupacion} minutos
-                      </Typography>
+                      {accountTypeIcon[mesa.Account.idType]}
                     </Box>
                   )}
                 </Box>
 
                 {/* Productos en la mesa */}
                 {mesa.Account && (
-                  <Typography variant="body1" sx={{ marginTop: 1 }}>
-                    {mesa.Account._count.details}{" "}
-                    {mesa.Account._count.details > 1 ? "productos" : "producto"}
-                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ marginTop: 1 }}
+                  ></Typography>
                 )}
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ marginTop: 0.5 }}
+                >
+                  {/* Tiempo de ocupación */}
+                  {mesa.Account && (
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="caption" color="textSecondary">
+                        {fToNow(mesa.Account.created)}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
                 {/* Mesero asignado */}
                 {mesa.Account && (
                   <Typography

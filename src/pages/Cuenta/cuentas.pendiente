@@ -1,0 +1,71 @@
+
+                {/* Muestra los detalles de la mesa si no hay una cuenta abierta */}
+                {!cuenta.Account && (
+                  <Box alignItems="left">
+                    <Typography variant="body2" color="textSecondary">
+                      {cuenta.details}
+                    </Typography>
+                  </Box>
+                )}
+                {/* Monto total y tiempo de ocupación */}
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ marginTop: 0.5 }}
+                >
+                  {/* Monto total de la cuenta */}
+                  {cuenta.Account && (
+                    <Typography
+                      variant="caption"
+                      fontSize={"15px"}
+                      color="textSecondary"
+                    >
+                      {cuenta.Account._count.details}{" "}
+                      {cuenta.Account._count.details > 1
+                        ? "productos"
+                        : "producto"}{" "}
+                      - ${cuenta.amount}
+                    </Typography>
+                  )}
+
+                  {/* Tiempo de ocupación */}
+                  {cuenta.Account && (
+                    <Box display="flex" alignItems="center">
+                      {accountTypeIcon[cuenta.Account.idType]}
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Productos en la mesa */}
+                {cuenta.Account && (
+                  <Typography
+                    variant="body1"
+                    sx={{ marginTop: 1 }}
+                  ></Typography>
+                )}
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ marginTop: 0.5 }}
+                >
+                  {/* Tiempo de ocupación */}
+                  {cuenta.Account && (
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="caption" color="textSecondary">
+                        {fToNow(cuenta.Account.created)}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+                {/* Mesero asignado */}
+                {cuenta.Account && (
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    sx={{ marginTop: 0.5 }}
+                  >
+                    Mesero: {cuenta.Account.dependent || "No asignado"}
+                  </Typography>
+                )}
