@@ -6,6 +6,12 @@ import Calculator from "@/app/components/calculator/Calc";
 import { useEffect, useState } from "react";
 import Menu from "../Menu/Menu";
 import Cuenta from "../Cuenta/Cuenta";
+import {
+  deleteAccountDetails,
+  getAccount,
+  modifyAccountDetails,
+} from "@/services/account";
+import { useSearchParams } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -18,8 +24,29 @@ const style = {
   p: 4,
 };
 function Manage() {
-  const [open, setOpen] = useState(false);
-  const [ammount, setAmmount] = useState<string>("");
+  const [searchParams] = useSearchParams();
+  const [open, setOpen] = useState<number | null>(null);
+  const [idAccount, setAccount] = useState<number>(1);
+  const [quantity, setQuantity] = useState<string>("");
+  const [negative, setNegative] = useState<boolean>(false);
+  const [cuenta, setCuenta] = useState<any>({});
+
+  const deleteOffer = (idOffer: number) => {
+    deleteAccountDetails({ idAccount, idOffer }).then(() => Load());
+  };
+
+  const Load = async () => {
+    const id = Number(searchParams.get("id"));
+    if (typeof id == "number") {
+      setAccount(id);
+      const cuenta = await getAccount(id);
+      setCuenta({ ...cuenta });
+    }
+  };
+
+  useEffect(() => {
+    Load();
+  }, []);
 
   return (
     <>
@@ -29,7 +56,12 @@ function Manage() {
           <Menu setProduct={setOpen} />
         </Grid>
         <Grid item ml={"60vw"}>
-          <Cuenta />
+          <Cuenta
+            setProduct={setOpen}
+            setNegative={setNegative}
+            deleteOffer={deleteOffer}
+            data={cuenta}
+          />
         </Grid>
       </Grid>
       <Modal
@@ -39,11 +71,18 @@ function Manage() {
       >
         <Box sx={style}>
           <Calculator
-            result={ammount}
-            setResult={setAmmount}
+            result={quantity}
+            setResult={setQuantity}
             submit={() => {
-              setOpen(false);
-              console.log(ammount);
+              modifyAccountDetails({
+                idAccount,
+                quantity: Number(quantity),
+                negative,
+                idOffer: open,
+              }).then(() => Load());
+              setNegative(false);
+              setOpen(null);
+              setQuantity("");
             }}
           />
         </Box>

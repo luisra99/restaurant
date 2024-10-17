@@ -11,6 +11,8 @@ import { listTables } from "@/services/table";
 import axios from "axios";
 import { fToNow } from "@/_pwa-framework/utils/format-time";
 import { getAccounts } from "@/services/account";
+import { RouterLink } from "@/_pwa-framework/routes/components";
+import { Link, useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,6 +28,7 @@ const style = {
 function Cuentas() {
   const [open, setOpen] = useState(false);
   const [cuentas, setCuentas] = useState<any[]>([]);
+  const navegar = useNavigate();
   const Load = async () => {
     const _concepts = await getAccounts();
     setCuentas([..._concepts]);
@@ -55,7 +58,7 @@ function Cuentas() {
                   cursor: "pointer",
                   position: "relative",
                 }}
-                onClick={() => setOpen(true)}
+                onClick={() => navegar(`/manage?id=${cuenta.id}`)}
               >
                 {/* Contenedor principal con el nombre de la mesa y la cantidad de personas */}
                 <Box
@@ -82,7 +85,7 @@ function Cuentas() {
         </Grid>
       </Box>
       <Modal
-        open={open}
+        open={false}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -93,7 +96,6 @@ function Cuentas() {
             alignItems="center"
             sx={{ marginTop: 2 }}
           >
-            {/* Botón para abrir cuenta normal */}
             <Button
               variant="contained"
               color="primary"
@@ -109,7 +111,6 @@ function Cuentas() {
               </Typography>
             </Button>
 
-            {/* Botón para cuenta de pedidos para llevar */}
             <Button
               variant="contained"
               color="primary"
@@ -126,7 +127,6 @@ function Cuentas() {
               </Typography>
             </Button>
 
-            {/* Botón para cuenta de servicio a domicilio */}
             <Button
               variant="contained"
               color="primary"

@@ -5,4 +5,5 @@ export enum Pages {
   Cuenta,
   Manage,
   Config,
+  Offer,
 }

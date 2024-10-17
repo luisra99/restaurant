@@ -47,7 +47,11 @@ const myRoutes: Routes = {
   [Pages.Manage]: {
     component: Manage,
     path: "/manage",
-    title: "Cuenta",
+  },
+  [Pages.Offer]: {
+    component: AddMenuOffer,
+    path: "/offer",
+    title: "Crear oferta",
   },
 };
 

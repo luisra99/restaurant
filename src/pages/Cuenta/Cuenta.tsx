@@ -19,9 +19,23 @@ import {
 } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { getAccount, getAccounts } from "@/services/account";
+import {
+  deleteAccountDetails,
+  getAccount,
+  getAccounts,
+} from "@/services/account";
 import { fTime } from "@/_pwa-framework/utils/format-time";
-function Cuenta() {
+function Cuenta({
+  data,
+  setNegative,
+  setProduct,
+  deleteOffer,
+}: {
+  data: any;
+  deleteOffer: (idOffer: number) => void;
+  setNegative: (args: boolean) => void;
+  setProduct: (args: number) => void;
+}) {
   const accountTypeIcon: { [key: number]: JSX.Element } = {
     13: (
       <ReceiptLongIcon
@@ -54,52 +68,7 @@ function Cuenta() {
       />
     ),
   };
-  const [cuenta, setCuenta] = useState<any>([]);
-  const Load = async () => {
-    const cuenta = await getAccount(1);
-    setCuenta(cuenta);
-  };
-  useEffect(() => {
-    Load();
-  }, []);
-  const cuenta2 = {
-    table: "Mesa 14",
-    location: "Terraza",
-    people: 3,
-    initDate: "4/23/23",
-    initTime: "16:04",
-    dependent: "Adriana",
-    orders: [
-      { count: 3, product: "Manjar de quesos y embutidos", price: "12,500.00" },
-      {
-        count: 2,
-        product: "Ensalada de Vegetales de Estación",
-        price: "250.00",
-      },
-      { count: 3, product: "Manjar de quesos y embutidos", price: "12,500.00" },
-      {
-        count: 2,
-        product: "Ensalada de Vegetales de Estación",
-        price: "1,000.00",
-      },
-      { count: 3, product: "Manjar de quesos y embutidos", price: "12,500.00" },
-      { count: 2, product: "Jugo natural", price: "1,000.00" },
-      { count: 3, product: "Arroz frito", price: "2,000.00" },
-      { count: 2, product: "Jugo natural", price: "1,000.00" },
-    ],
-    subTotal: "121,500.00",
-    taxes: [
-      { name: "Servicio", percent: 10, amount: "120,500.00" },
-      { name: "Cumpleaños", percent: 19, amount: "102,500.00" },
-    ],
-    discounts: [{ name: "Dia del amor", percent: 5, amount: "102,500.00" }],
-    productsCount: 4,
-    toPay: "123,500.00",
-    currency: [
-      { name: "USD", amount: "33.40" },
-      { name: "EUR", amount: "30.25" },
-    ],
-  };
+
   return (
     <>
       <Meta title="Configuración" />
@@ -108,8 +77,8 @@ function Cuenta() {
           {" "}
           <Grid container display={"flex"} justifyContent={"start"}>
             <Grid item xs={6} textAlign={"left"}>
-              <Typography variant="h5">{cuenta?.name}</Typography>
-              <Typography>Depediente: {cuenta?.idDependent}</Typography>
+              <Typography variant="h5">{data?.name}</Typography>
+              <Typography>Depediente: {data?.idDependent}</Typography>
             </Grid>
 
             <Grid item xs={2} textAlign={"left"}>
@@ -118,7 +87,7 @@ function Cuenta() {
                 alignItems={"center"}
                 flexWrap={"wrap"}
               >
-                <AccessTime sx={{ mr: 1 }} /> {fTime(cuenta?.created)}
+                <AccessTime sx={{ mr: 1 }} /> {fTime(data?.created)}
               </Typography>
               <br />
               <Box
@@ -126,7 +95,7 @@ function Cuenta() {
                 alignItems={"center"}
                 flexWrap={"wrap"}
               >
-                <People sx={{ mr: 1 }} /> {cuenta?.people ?? "¿?"}
+                <People sx={{ mr: 1 }} /> {data?.people ?? "¿?"}
               </Box>
             </Grid>
             <Grid
@@ -136,7 +105,7 @@ function Cuenta() {
               display={"flex"}
               justifyContent={"center"}
             >
-              {accountTypeIcon[cuenta?.idType]}
+              {accountTypeIcon[data?.idType]}
             </Grid>
 
             <Grid
@@ -159,7 +128,7 @@ function Cuenta() {
 
         <Paper elevation={3} sx={{ padding: 2, borderRadius: "8px", mb: 1 }}>
           <Grid container rowSpacing={1}>
-            {cuenta?.orders?.map((order: any, index: number) => (
+            {data?.orders?.map((order: any, index: number) => (
               <>
                 <Grid item xs={6}>
                   <Typography variant="h6" sx={{ fontWeight: 500 }}>
@@ -185,7 +154,8 @@ function Cuenta() {
                         "&:hover": { backgroundColor: "#e0e0e0" },
                       }}
                       onClick={() => {
-                        console.log(order.id);
+                        setNegative(true);
+                        setProduct(order.id);
                       }}
                     >
                       <Remove />
@@ -204,6 +174,9 @@ function Cuenta() {
 
                         "&:hover": { backgroundColor: "#e0e0e0" },
                       }}
+                      onClick={() => {
+                        setProduct(order.id);
+                      }}
                     >
                       <Add />
                     </IconButton>
@@ -216,18 +189,24 @@ function Cuenta() {
 
                         "&:hover": { backgroundColor: "#e0e0e0" },
                       }}
+                      onClick={() => deleteOffer(order.id)}
                     >
                       <DeleteIcon color="error" />
                     </IconButton>
                   </Box>
                 </Grid>
-                {index !== cuenta?.orders.length - 1 && (
+                {index !== data?.orders?.length - 1 && (
                   <Grid item xs={12} textAlign="center">
                     <hr />
                   </Grid>
                 )}
               </>
             ))}
+            {data?.orders?.length === 0 && (
+              <Typography variant="body2" textAlign={"center"}>
+                No hay productos en la cuenta
+              </Typography>
+            )}
           </Grid>
         </Paper>
         <Paper
@@ -247,7 +226,7 @@ function Cuenta() {
           >
             <Typography>Productos</Typography>
             <Typography fontSize={25} textAlign={"center"}>
-              <b>{cuenta?.totalQuantity}</b>{" "}
+              <b>{data?.totalQuantity}</b>{" "}
             </Typography>
           </Typography>
           <Typography
@@ -259,7 +238,8 @@ function Cuenta() {
             <Typography textAlign={"center"}>SubTotal</Typography>
             <Typography textAlign={"center"} fontSize={25}>
               {" "}
-              $ <b style={{ fontWeight: 100 }}>{cuenta?.totalPrice}</b>
+              ${" "}
+              <b style={{ fontWeight: 100 }}>{data?.totalPrice?.toFixed(2)}</b>
             </Typography>
           </Typography>
           <Typography
@@ -270,7 +250,8 @@ function Cuenta() {
             <Typography textAlign={"center"}> A pagar</Typography>
             <Typography textAlign={"center"} fontSize={25}>
               {" "}
-              $ <b style={{ fontWeight: 900 }}>{cuenta?.finalPrice}</b>
+              ${" "}
+              <b style={{ fontWeight: 900 }}>{data?.finalPrice?.toFixed(2)}</b>
             </Typography>
           </Typography>
         </Paper>
@@ -283,7 +264,7 @@ function Cuenta() {
               <Grid container spacing={1} justifyContent={"space-between"}>
                 <Grid item xs={10}>
                   <Grid container>
-                    {cuenta?.mappedTaxsDiscounts?.map((tax: any) => (
+                    {data?.mappedTaxsDiscounts?.map((tax: any) => (
                       <Fragment key={tax.name}>
                         <Grid item xs={9}>
                           <Typography variant="body1">
@@ -296,7 +277,9 @@ function Cuenta() {
                         </Grid>
 
                         <Grid item xs={3} textAlign={"right"}>
-                          <Typography variant="body1">${tax.amount}</Typography>
+                          <Typography variant="body1">
+                            ${tax.amount?.toFixed(2)}
+                          </Typography>
                         </Grid>
                       </Fragment>
                     ))}
@@ -370,8 +353,10 @@ function Cuenta() {
             <Info sx={{ mr: 1, color: "gray", fontSize: "20px" }} />
             <Typography variant="overline" letterSpacing={1} color={"gray"}>
               <i>
-                {cuenta?.name} - {cuenta?.people}{" "}
-                {cuenta?.people > 1 ? "personas" : "persona"}
+                {data?.name}
+                {data?.people &&
+                  ` - ${data?.people > 1 ? "personas" : "persona"}`}
+                {}
               </i>
             </Typography>
           </Grid>
