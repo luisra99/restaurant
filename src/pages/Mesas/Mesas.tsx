@@ -27,10 +27,12 @@ const style = {
 
 function Mesas() {
   const [openAccount, setOpenAccount] = useState(false);
-  const [ammount, setAmmount] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
   const [mesas, setMesas] = useState<any[]>([]);
   const navegar = useNavigate();
-
+  function handleClose(): void {
+    setOpenAccount(false);
+  }
   const Load = async () => {
     const _concepts = await listTables();
     getAccounts();
@@ -226,6 +228,7 @@ function Mesas() {
       </Box>
       <Modal
         open={!!openAccount}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

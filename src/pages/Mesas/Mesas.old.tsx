@@ -21,8 +21,10 @@ const style = {
 
 function Mesas() {
   const [open, setOpen] = useState(false);
-  const [ammount, setAmmount] = useState<string>("");
-
+  const [amount, setAmount] = useState<string>("");
+  function handleClose(): void {
+    setOpen(false);
+  }
   const mesas: any = [
     { name: "Mesa 1", orders: 1, amount: 56.87, status: "libre" },
     {

@@ -27,6 +27,7 @@ const MesaSchema = Yup.object().shape({
 
 const Mesas = () => {
   const [mesas, setMesas] = useState<any[]>([]);
+
   const [initialValues, setInitialValues] = useState({
     name: "",
     capacity: "",

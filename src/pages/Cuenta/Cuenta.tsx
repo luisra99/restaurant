@@ -1,7 +1,14 @@
 import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, Grid, IconButton, Paper, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Modal,
+  Paper,
+  Typography,
+} from "@mui/material";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import HomeIcon from "@mui/icons-material/Home";
@@ -25,6 +32,7 @@ import {
   getAccounts,
 } from "@/services/account";
 import { fTime } from "@/_pwa-framework/utils/format-time";
+import OpenAccount from "./components/FormularioCuenta";
 function Cuenta({
   data,
   setNegative,
@@ -69,6 +77,13 @@ function Cuenta({
     ),
   };
 
+  function handleClose(
+    event: {},
+    reason: "backdropClick" | "escapeKeyDown"
+  ): void {
+    setOpen(false);
+  }
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Meta title="Configuración" />
@@ -118,6 +133,7 @@ function Cuenta({
                 size="large"
                 variant="contained"
                 color="info"
+                onClick={() => setOpen(true)}
                 sx={{ height: "50px", width: "50px" }}
               >
                 <EditIcon />
@@ -264,25 +280,33 @@ function Cuenta({
               <Grid container spacing={1} justifyContent={"space-between"}>
                 <Grid item xs={10}>
                   <Grid container>
-                    {data?.mappedTaxsDiscounts?.map((tax: any) => (
-                      <Fragment key={tax.name}>
-                        <Grid item xs={9}>
-                          <Typography variant="body1">
-                            {tax.name}{" "}
-                            <b>
-                              ({tax.tax ? "+" : "-"}
-                              {tax.percent}%)
-                            </b>
-                          </Typography>
-                        </Grid>
+                    {data?.mappedTaxsDiscounts?.length ? (
+                      data?.mappedTaxsDiscounts?.map((tax: any) => (
+                        <Fragment key={tax.name}>
+                          <Grid item xs={9}>
+                            <Typography variant="body1">
+                              {tax.name}{" "}
+                              <b>
+                                ({tax.tax ? "+" : "-"}
+                                {tax.percent}%)
+                              </b>
+                            </Typography>
+                          </Grid>
 
-                        <Grid item xs={3} textAlign={"right"}>
-                          <Typography variant="body1">
-                            ${tax.amount?.toFixed(2)}
-                          </Typography>
-                        </Grid>
-                      </Fragment>
-                    ))}
+                          <Grid item xs={3} textAlign={"right"}>
+                            <Typography variant="body1">
+                              ${tax.amount?.toFixed(2)}
+                            </Typography>
+                          </Grid>
+                        </Fragment>
+                      ))
+                    ) : (
+                      <Grid item>
+                        <Typography variant="body1">
+                          No hay impuestos ni descuentos aplicados
+                        </Typography>
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
                 {/* Espacio vacío para mantener la alineación */}
@@ -361,16 +385,22 @@ function Cuenta({
             </Typography>
           </Grid>
         </Grid>
-        <Grid container spacing={1} width={"100%"} mt={1}>
-          {/* {cuenta.currency.map((currency: any) => (
+        <Grid
+          container
+          spacing={1}
+          width={"100%"}
+          mt={1}
+          justifyContent={"space-evenly"}
+        >
+          {data.divisaAmount?.map((currency: any) => (
             <Grid item xs={3}>
               <Paper
-                key={currency.name}
+                key={currency.denomination}
                 elevation={3}
                 sx={{ padding: 2, borderRadius: "8px", position: "relative" }}
               >
                 <Grid item xs={9}>
-                  <Typography>{currency.name}</Typography>
+                  <Typography>{currency.denomination}</Typography>
                 </Grid>
 
                 <Grid item xs={3} textAlign={"right"}>
@@ -380,7 +410,19 @@ function Cuenta({
                 </Grid>
               </Paper>
             </Grid>
-          ))} */}
+          ))}
+          {open && (
+            <Modal
+              onClose={handleClose}
+              open={!!open}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <OpenAccount id={data.id} />
+              </Box>
+            </Modal>
+          )}
         </Grid>
       </Box>
     </>
@@ -388,3 +430,9 @@ function Cuenta({
 }
 
 export default Cuenta;
+const style = {
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};

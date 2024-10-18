@@ -151,6 +151,10 @@ export default function Header({ onOpenNav }: any) {
       }
     });
 
+  function handleClose(): void {
+    setOpenAccount(false);
+  }
+
   return (
     <>
       <AppBar sx={{ ..._style, backgroundColor: "#ffffff00" }}>
@@ -172,6 +176,7 @@ export default function Header({ onOpenNav }: any) {
         </Toolbar>
       </AppBar>
       <Modal
+        onClose={handleClose}
         open={!!openAccount}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

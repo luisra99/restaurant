@@ -17,6 +17,7 @@ import {
 import { LoadConcept } from "@/utils/concepts"; // Para cargar conceptos como tipos de cuenta
 import axios from "axios";
 import { listTables } from "@/services/table";
+import { getAccount } from "@/services/account";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
@@ -27,9 +28,17 @@ const validationSchema = Yup.object().shape({
   idTable: Yup.string().nullable(), // La mesa puede ser opcional
 });
 
-const OpenAccount = () => {
+const OpenAccount = ({ id }: any) => {
   const [tables, setTables] = useState([]); // Estado para almacenar las mesas
   const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    description: null,
+    people: null,
+    idDependent: null,
+    idTable: null,
+    idType: null,
+  });
 
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
@@ -42,6 +51,32 @@ const OpenAccount = () => {
   useEffect(() => {
     loadOptions();
   }, []);
+  useEffect(() => {
+    if (id) {
+      getAccount(id).then(
+        ({ name, description, people, idDependent, idTable, idType }: any) => {
+          console.log("datos ceunta", {
+            name,
+            description,
+            people,
+            idDependent,
+            idTable,
+            idType,
+          });
+          setInitialValues(
+            structuredClone({
+              name,
+              description,
+              people,
+              idDependent,
+              idTable,
+              idType,
+            })
+          );
+        }
+      );
+    }
+  }, [id]);
 
   // Manejo del envío del formulario
   const handleSubmit = async (
@@ -70,15 +105,9 @@ const OpenAccount = () => {
         Abrir Nueva Cuenta
       </Typography>
       <Formik
-        initialValues={{
-          name: "",
-          description: null,
-          people: null,
-          idDependent: null,
-          idTable: null,
-          idType: null,
-        }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
+        enableReinitialize
         onSubmit={handleSubmit}
       >
         {({ values, setFieldValue, errors, touched }) => (
@@ -90,6 +119,7 @@ const OpenAccount = () => {
                 as={TextField}
                 label="Nombre de la cuenta"
                 variant="outlined"
+                value={values.name}
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && errors.name}
               />
@@ -99,15 +129,15 @@ const OpenAccount = () => {
                 as={ToggleButtonGroup}
                 color="primary"
                 exclusive
-                value={values.idType}
+                value={`${values.idType}`}
                 onChange={(e: any) => setFieldValue("idType", e.target.value)}
                 name="idType"
                 aria-label="Platform"
                 fullWidth
               >
-                <ToggleButton value="1">Cuenta normal</ToggleButton>
-                <ToggleButton value="2">Cuenta casa</ToggleButton>
-                <ToggleButton value="3">Para llevar</ToggleButton>
+                <ToggleButton value="13">Cuenta normal</ToggleButton>
+                <ToggleButton value="15">Cuenta casa</ToggleButton>
+                <ToggleButton value="14">Para llevar</ToggleButton>
               </Field>
             </FormControl>
 
@@ -116,6 +146,7 @@ const OpenAccount = () => {
               <Field
                 name="description"
                 as={TextField}
+                value={values.description}
                 label="Descripción"
                 variant="outlined"
                 error={touched.description && Boolean(errors.description)}
@@ -128,6 +159,7 @@ const OpenAccount = () => {
               <Field
                 name="people"
                 as={TextField}
+                value={values.people}
                 label="Número de personas"
                 variant="outlined"
                 type="number"
@@ -142,6 +174,7 @@ const OpenAccount = () => {
               <Field
                 name="idTable"
                 as={Select}
+                value={`${values.idTable}`}
                 label="Mesa (opcional)"
                 error={touched.idTable && Boolean(errors.idTable)}
               >

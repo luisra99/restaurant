@@ -3,13 +3,6 @@ import axios from "axios";
 export const getOffers = async () => {
   try {
     const { data } = await axios.get(`http://localhost:4000/offers`);
-    axios.post(`http://localhost:4000/accounts`, {
-      name: "Raul",
-      description: "el informatico",
-      people: 4,
-      idDependent: null,
-      idTable: null,
-    });
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);

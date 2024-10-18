@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,9 @@ import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
+import axios from "axios";
+import { getTable } from "@/services/table";
+import { getDivisa, postDivisa, putDivisa } from "@/services/divisa";
 
 const DivisaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
@@ -25,20 +28,32 @@ const DivisaSchema = Yup.object().shape({
 
 const Divisas = () => {
   const [concepts, setConcepts] = useState<any[]>([]);
+  const [initialValues, setInitialValues] = useState({
+    denomination: "",
+    details: "",
+  });
   const Load = async () => {
-    const _concepts = await LoadConcept(1);
+    const _concepts = await LoadConcept(6);
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);
 
-  const addDivisa = (divisa: any) => {
+  const addDivisa = (divisa: any, resetForm: any) => {
     if (editingIndex !== null) {
-      const updatedDivisas = [...concepts];
-      updatedDivisas[editingIndex] = divisa;
-      setConcepts(updatedDivisas);
+      putDivisa(editingIndex, divisa).then(() => {
+        Load();
+        setInitialValues({
+          denomination: "",
+          details: "",
+        });
+        resetForm();
+      });
       setEditingIndex(null);
     } else {
-      setConcepts([...concepts, divisa]);
+      postDivisa(divisa).then(() => {
+        Load();
+        resetForm();
+      });
     }
   };
 
@@ -47,9 +62,15 @@ const Divisas = () => {
     setConcepts(updatedDivisas);
   };
 
-  const editDivisa = (index: any) => {
+  const editDivisa = async (index: any) => {
+    const concept = await getDivisa(index);
+    setInitialValues(concept);
     setEditingIndex(index);
   };
+
+  useEffect(() => {
+    Load();
+  }, []);
 
   return (
     <Box p={3}>
@@ -58,37 +79,35 @@ const Divisas = () => {
       </Typography>
 
       <Formik
-        initialValues={
-          editingIndex !== null
-            ? concepts[editingIndex]
-            : { nombre: "", tasaCambio: "" }
-        }
+        initialValues={initialValues}
         enableReinitialize
         validationSchema={DivisaSchema}
-        onSubmit={(values, { resetForm }) => {
-          addDivisa(values);
-          resetForm();
-        }}
+        onSubmit={(values, { resetForm }) => {}}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, values, resetForm }) => (
           <Form>
             <Box display="flex" flexDirection="column" gap={2}>
               <Field
-                name="nombre"
+                name="denomination"
                 as={TextField}
                 label="Nombre"
-                error={touched.nombre && Boolean(errors.nombre)}
-                helperText={touched.nombre && errors.nombre}
+                error={touched.denomination && Boolean(errors.denomination)}
+                helperText={touched.denomination && errors.denomination}
               />
               <Field
-                name="tasaCambio"
+                name="details"
                 as={TextField}
                 label="Tasa de Cambio"
                 type="number"
-                error={touched.tasaCambio && Boolean(errors.tasaCambio)}
-                helperText={touched.tasaCambio && errors.tasaCambio}
+                error={touched.details && Boolean(errors.details)}
+                helperText={touched.details && errors.details}
               />
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addDivisa(values, resetForm);
+                }}
+              >
                 {editingIndex !== null ? "Guardar Cambios" : "Añadir Divisa"}
               </Button>
             </Box>
@@ -109,13 +128,13 @@ const Divisas = () => {
           <TableBody>
             {concepts.map((divisa, index) => (
               <TableRow key={index}>
-                <TableCell>{divisa.nombre}</TableCell>
-                <TableCell>{divisa.tasaCambio}</TableCell>
+                <TableCell>{divisa.denomination}</TableCell>
+                <TableCell>{divisa.details}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => editDivisa(index)}>
+                  <IconButton onClick={() => editDivisa(divisa.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteDivisa(index)}>
+                  <IconButton onClick={() => deleteDivisa(divisa.id)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

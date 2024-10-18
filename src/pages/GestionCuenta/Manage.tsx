@@ -30,7 +30,9 @@ function Manage() {
   const [quantity, setQuantity] = useState<string>("");
   const [negative, setNegative] = useState<boolean>(false);
   const [cuenta, setCuenta] = useState<any>({});
-
+  function handleClose(): void {
+    setOpen(null);
+  }
   const deleteOffer = (idOffer: number) => {
     deleteAccountDetails({ idAccount, idOffer }).then(() => Load());
   };
@@ -66,6 +68,7 @@ function Manage() {
       </Grid>
       <Modal
         open={!!open}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

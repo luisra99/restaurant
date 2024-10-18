@@ -14,10 +14,14 @@ import {
   Chip,
   Box,
   Button,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import { LoadConcept } from "@/utils/concepts";
 import { getOffers } from "@/services/menu";
 import { useNavigate } from "react-router-dom";
+import { Add } from "@mui/icons-material";
 
 const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,21 +65,27 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   return (
     <>
       {/* Barra de búsqueda */}
-      <TextField
-        fullWidth
-        label="Buscar"
-        variant="outlined"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        margin="normal"
-      />
-      <Button
-        variant="outlined"
-        sx={{ mr: 1 }}
-        onClick={() => navegar(`/offer`)}
-      >
-        Crear oferta
-      </Button>
+      <Grid container spacing={1} alignItems={"center"} p={2}>
+        <Grid item xs={11}>
+          <TextField
+            fullWidth
+            label="Buscar"
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </Grid>
+        <Grid item xs={1}>
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ height: "100%" }}
+            onClick={() => navegar(`/offer`)}
+          >
+            Crear oferta
+          </Button>
+        </Grid>
+      </Grid>
 
       {/* Filtro por categorías */}
       <Box mb={2}>
@@ -105,7 +115,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
 
       {/* Efecto de desvanecimiento inferior */}
 
-      <Grid container spacing={2} maxHeight={"74vh"} overflow={"auto"} pt={2}>
+      <Grid container spacing={2} maxHeight={"74vh"} overflow={"auto"} p={2}>
         <Box
           sx={{
             top: 0,

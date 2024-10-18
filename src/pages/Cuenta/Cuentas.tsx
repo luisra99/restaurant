@@ -28,6 +28,9 @@ const style = {
 function Cuentas() {
   const [open, setOpen] = useState(false);
   const [cuentas, setCuentas] = useState<any[]>([]);
+  function handleClose(): void {
+    setOpen(false);
+  }
   const navegar = useNavigate();
   const Load = async () => {
     const _concepts = await getAccounts();
@@ -86,6 +89,7 @@ function Cuentas() {
       </Box>
       <Modal
         open={false}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
