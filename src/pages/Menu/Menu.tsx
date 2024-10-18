@@ -13,15 +13,18 @@ import {
   FormControl,
   Chip,
   Box,
+  Button,
 } from "@mui/material";
 import { LoadConcept } from "@/utils/concepts";
 import { getOffers } from "@/services/menu";
+import { useNavigate } from "react-router-dom";
 
 const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("Todo");
   const [categorys, setCategorys] = useState<any[]>([]);
   const [menu, setMenu] = useState<any[]>([]);
+  const navegar = useNavigate();
   const Load = async () => {
     const _concepts = await LoadConcept(1);
     const _menu = await getOffers();
@@ -66,6 +69,13 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
         onChange={handleSearchChange}
         margin="normal"
       />
+      <Button
+        variant="outlined"
+        sx={{ mr: 1 }}
+        onClick={() => navegar(`/offer`)}
+      >
+        Crear oferta
+      </Button>
 
       {/* Filtro por categorías */}
       <Box mb={2}>

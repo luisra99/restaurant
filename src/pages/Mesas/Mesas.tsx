@@ -11,6 +11,8 @@ import { listTables } from "@/services/table";
 import axios from "axios";
 import { fToNow } from "@/_pwa-framework/utils/format-time";
 import { getAccounts } from "@/services/account";
+import OpenAccount from "../Cuenta/components/FormularioCuenta";
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -24,9 +26,11 @@ const style = {
 };
 
 function Mesas() {
-  const [open, setOpen] = useState(false);
+  const [openAccount, setOpenAccount] = useState(false);
   const [ammount, setAmmount] = useState<string>("");
   const [mesas, setMesas] = useState<any[]>([]);
+  const navegar = useNavigate();
+
   const Load = async () => {
     const _concepts = await listTables();
     getAccounts();
@@ -120,7 +124,11 @@ function Mesas() {
                   cursor: "pointer",
                   position: "relative",
                 }}
-                onClick={() => setOpen(true)}
+                onClick={() =>
+                  mesa.Account
+                    ? navegar(`/manage?id=${mesa.Account.id}`)
+                    : setOpenAccount(true)
+                }
               >
                 {/* Contenedor principal con el nombre de la mesa y la cantidad de personas */}
                 <Box
@@ -217,67 +225,12 @@ function Mesas() {
         </Grid>
       </Box>
       <Modal
-        open={open}
+        open={!!openAccount}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            sx={{ marginTop: 2 }}
-          >
-            {/* Botón para abrir cuenta normal */}
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-                /* Acción para abrir cuenta normal */
-              }}
-            >
-              <ReceiptLongIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Cuenta local
-              </Typography>
-            </Button>
-
-            {/* Botón para cuenta de pedidos para llevar */}
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-
-                /* Acción para pedidos para llevar */
-              }}
-            >
-              <ShoppingCartCheckoutIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Para Llevar
-              </Typography>
-            </Button>
-
-            {/* Botón para cuenta de servicio a domicilio */}
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-
-                /* Acción para servicio a domicilio */
-              }}
-            >
-              <HomeIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Cuenta casa
-              </Typography>
-            </Button>
-          </Box>
+          <OpenAccount />
         </Box>
       </Modal>
     </>

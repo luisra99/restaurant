@@ -17,6 +17,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Modal,
 } from "@mui/material";
 import {
   ExpandLess,
@@ -39,14 +40,24 @@ import routes from "@/_pwa-framework/routes";
 import { usePathname } from "@/_pwa-framework/routes/hooks";
 import { useSession } from "@/_pwa-framework/session/state";
 import { NavItem } from "./common/NavItem";
+import OpenAccount from "@/pages/Cuenta/components/FormularioCuenta";
+import { minWidth } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 export default function Header({ onOpenNav }: any) {
   const theme = useTheme();
   const pathname = usePathname();
   const [open, setOpen] = useState<any>({});
+  const navegar = useNavigate();
+  const [openAccount, setOpenAccount] = useState<any>(false);
   const handleClick = (param?: string) => {
     param && setOpen((prevState: any) => ({ [param]: !prevState[param] }));
   };
-
+  const style = {
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   const lgUp = useResponsive("up", "lg");
 
   const renderContent = (
@@ -141,18 +152,35 @@ export default function Header({ onOpenNav }: any) {
     });
 
   return (
-    <AppBar sx={{ ..._style, backgroundColor: "#ffffff00" }}>
-      <Toolbar sx={{ minHeight: "50px !important" }}>
-        {menu}
-        {renderContent}
-        <Box display={"flex"} flexGrow={1} />
-        <Button variant="outlined" sx={{ mr: 1 }}>
-          Ver Cuentas
-        </Button>
+    <>
+      <AppBar sx={{ ..._style, backgroundColor: "#ffffff00" }}>
+        <Toolbar sx={{ minHeight: "50px !important" }}>
+          {menu}
+          {renderContent}
+          <Box display={"flex"} flexGrow={1} />
+          <Button
+            variant="outlined"
+            sx={{ mr: 1 }}
+            onClick={() => navegar(`/accounts`)}
+          >
+            Ver Cuentas
+          </Button>
 
-        <Button variant="contained">Abrir cuenta </Button>
-      </Toolbar>
-    </AppBar>
+          <Button variant="contained" onClick={() => setOpenAccount(true)}>
+            Abrir cuenta{" "}
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Modal
+        open={!!openAccount}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <OpenAccount />
+        </Box>
+      </Modal>
+    </>
   );
 }
 

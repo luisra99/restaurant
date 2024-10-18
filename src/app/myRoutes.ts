@@ -29,6 +29,10 @@ const myRoutes: Routes = {
     path: "/",
     title: "Inicio",
   },
+  [Pages.Accounts]: {
+    component: Cuentas,
+    path: "/accounts",
+  },
   [Pages.Mesas]: {
     component: Mesas,
     path: "/mesas",
@@ -51,7 +55,6 @@ const myRoutes: Routes = {
   [Pages.Offer]: {
     component: AddMenuOffer,
     path: "/offer",
-    title: "Crear oferta",
   },
 };
 

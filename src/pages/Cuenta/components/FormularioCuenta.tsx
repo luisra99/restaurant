@@ -11,6 +11,8 @@ import {
   Box,
   Typography,
   Grid,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { LoadConcept } from "@/utils/concepts"; // Para cargar conceptos como tipos de cuenta
 import axios from "axios";
@@ -92,6 +94,22 @@ const OpenAccount = () => {
                 helperText={touched.name && errors.name}
               />
             </FormControl>
+            <FormControl fullWidth sx={{ marginBottom: 2 }}>
+              <Field
+                as={ToggleButtonGroup}
+                color="primary"
+                exclusive
+                value={values.idType}
+                onChange={(e: any) => setFieldValue("idType", e.target.value)}
+                name="idType"
+                aria-label="Platform"
+                fullWidth
+              >
+                <ToggleButton value="1">Cuenta normal</ToggleButton>
+                <ToggleButton value="2">Cuenta casa</ToggleButton>
+                <ToggleButton value="3">Para llevar</ToggleButton>
+              </Field>
+            </FormControl>
 
             {/* Descripción de la cuenta */}
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
@@ -150,26 +168,6 @@ const OpenAccount = () => {
                 error={touched.idDependent && Boolean(errors.idDependent)}
                 helperText={touched.idDependent && errors.idDependent}
               />
-            </FormControl>
-
-            {/* Tipo de cuenta */}
-            <FormControl fullWidth sx={{ marginBottom: 2 }}>
-              <InputLabel htmlFor="idType">Tipo de Cuenta</InputLabel>
-              <Field
-                name="idType"
-                as={Select}
-                label="Tipo de Cuenta"
-                error={touched.idType && Boolean(errors.idType)}
-              >
-                {accountTypes.map((type: any, index) => (
-                  <MenuItem key={index} value={type.id}>
-                    {type.denomination}
-                  </MenuItem>
-                ))}
-              </Field>
-              {touched.idType && errors.idType && (
-                <Typography color="error">{errors.idType}</Typography>
-              )}
             </FormControl>
 
             <Box display="flex" justifyContent="space-between" gap={1}>
