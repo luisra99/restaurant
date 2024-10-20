@@ -44,8 +44,8 @@ const AddMenuOffer = ({ id }: any) => {
   });
   const [categorys, setCategorys] = useState([]);
   const Load = async (id?: any) => {
-    const conceptoArea = await LoadConcept(3);
-    const conceptoCategory = await LoadConcept(1);
+    const conceptoArea = await LoadConcept("Áreas");
+    const conceptoCategory = await LoadConcept("Categorías");
     if (id) {
       const offer = await getOffer(id);
       setInitialValues(offer);

@@ -34,7 +34,7 @@ const Divisas = () => {
     details: "",
   });
   const Load = async () => {
-    const _concepts = await LoadConcept(6);
+    const _concepts = await LoadConcept("Divisas");
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);

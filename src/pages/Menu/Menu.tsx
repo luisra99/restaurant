@@ -44,7 +44,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
 
   const navegar = useNavigate();
   const Load = async () => {
-    const _concepts = await LoadConcept(1);
+    const _concepts = await LoadConcept("Categorías");
     const _menu = await getOffers();
     setMenu([..._menu]);
     setCategorys([..._concepts]);
@@ -170,13 +170,23 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
                 </Typography>
                 <Typography variant="h6">${item.price}</Typography>
                 <Box display={"flex"} justifyContent={"flex-end"}>
-                  <Button variant="outlined" sx={{ mr: 1 }} color="error" onClick={()=>deleteOffer(item.id)}>
+                  <Button
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                    color="error"
+                    onClick={() => deleteOffer(item.id)}
+                  >
                     Eliminar
                   </Button>
-                  <Button variant="contained" onClick={()=>{
-                    setId(item.id)
-                    setOpen(true)
-                  }}>Modificar</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setId(item.id);
+                      setOpen(true);
+                    }}
+                  >
+                    Modificar
+                  </Button>
                 </Box>
               </CardContent>
             </Card>
@@ -196,9 +206,9 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
         />
       </Grid>
       <Modal
-        onClose={()=>{
-          setOpen(false)
-          setId(null)
+        onClose={() => {
+          setOpen(false);
+          setId(null);
         }}
         open={open}
         aria-labelledby="modal-modal-title"

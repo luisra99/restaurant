@@ -1,18 +1,20 @@
 import axios from "axios";
 
-export const LoadConcept = async (
-  fatherDenomination:
-    | "Categorías"
-    | "Tipo de cuenta"
-    | "Áreas"
-    | "Tipos de pago"
-    | "Estado cuenta"
-    | "Divisas"
-) => {
+export const pay = async (paymentData: any) => {
   try {
-    const { data } = await axios.post(`http://localhost:4000/concept`, {
-      fatherDenomination,
-    });
+    const { data } = await axios.post(
+      `http://localhost:4000/payments`,
+      paymentData
+    );
+    return data;
+  } catch (error) {
+    console.error("Error consumiendo servicio", error);
+  }
+};
+
+export const listConcepts = async () => {
+  try {
+    const { data } = await axios.get(`http://localhost:4000/concepts`);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -37,15 +39,15 @@ export const putConcept = async (id: number, content: any) => {
     console.error("Error consumiendo servicio", error);
   }
 };
-export const postConcept = async (fatherId: number, content: any) => {
+
+export const postConcept = async (content: any) => {
   try {
-    const { data } = await axios.post(`http://localhost:4000/concepts`, {
-      fatherId,
-      ...content,
-    });
+    const { data } = await axios.post(
+      `http://localhost:4000/concepts`,
+      content
+    );
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
   }
 };
-const conceptsEnum = [];

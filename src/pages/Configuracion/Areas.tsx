@@ -19,7 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
 import axios from "axios";
 import { getTable } from "@/services/table";
-import {getConcept, postConcept, putConcept } from "@/services/concept";
+import { getConcept, postConcept, putConcept } from "@/services/concept";
 import { deleteConcept } from "@/services/concept";
 
 const AreaSchema = Yup.object().shape({
@@ -32,10 +32,10 @@ const Areas = () => {
   const [initialValues, setInitialValues] = useState({
     denomination: "",
     details: "",
-    fatherId:3
+    fatherId: 3,
   });
   const Load = async () => {
-    const _concepts = await LoadConcept(3);
+    const _concepts = await LoadConcept("Áreas");
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);
@@ -47,7 +47,7 @@ const Areas = () => {
         setInitialValues({
           denomination: "",
           details: "",
-          fatherId:3
+          fatherId: 3,
         });
         resetForm();
       });

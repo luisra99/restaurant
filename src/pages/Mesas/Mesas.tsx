@@ -32,6 +32,7 @@ function Mesas() {
   const navegar = useNavigate();
   function handleClose(): void {
     setOpenAccount(false);
+    Load();
   }
   const Load = async () => {
     const _concepts = await listTables();

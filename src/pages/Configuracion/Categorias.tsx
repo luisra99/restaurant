@@ -35,7 +35,7 @@ const Categorias = () => {
     denomination: "",
   });
   const Load = async () => {
-    const _concepts = await LoadConcept(1);
+    const _concepts = await LoadConcept("Categorías");
     setConcepts([..._concepts]);
   };
 
@@ -56,7 +56,7 @@ const Categorias = () => {
   };
 
   const deleteCategoria = (id: any) => {
-    deleteConcept(id).then(()=>Load())
+    deleteConcept(id).then(() => Load());
   };
 
   const editCategoria = async (id: any) => {
