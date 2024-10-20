@@ -19,53 +19,55 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
 import axios from "axios";
 import { getTable } from "@/services/table";
-import { getDivisa, postDivisa, putDivisa } from "@/services/divisa";
+import {getConcept, postConcept, putConcept } from "@/services/concept";
 import { deleteConcept } from "@/services/concept";
 
-const DivisaSchema = Yup.object().shape({
+const AreaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
-  tasaCambio: Yup.number().required("Tasa de Cambio requerida"),
+  details: Yup.string(),
 });
 
-const Divisas = () => {
+const Areas = () => {
   const [concepts, setConcepts] = useState<any[]>([]);
   const [initialValues, setInitialValues] = useState({
     denomination: "",
     details: "",
+    fatherId:3
   });
   const Load = async () => {
-    const _concepts = await LoadConcept(6);
+    const _concepts = await LoadConcept(3);
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);
 
-  const addDivisa = (divisa: any, resetForm: any) => {
+  const addArea = (area: any, resetForm: any) => {
     if (editingIndex !== null) {
-      putDivisa(editingIndex, divisa).then(() => {
+      putConcept(editingIndex, area).then(() => {
         Load();
         setInitialValues({
           denomination: "",
           details: "",
+          fatherId:3
         });
         resetForm();
       });
       setEditingIndex(null);
     } else {
-      postDivisa(divisa).then(() => {
+      postConcept(area).then(() => {
         Load();
         resetForm();
       });
     }
   };
 
-  const deleteDivisa = (id: any) => {
+  const deleteArea = (id: any) => {
     deleteConcept(id).then(() => Load());
   };
 
-  const editDivisa = async (index: any) => {
-    const concept = await getDivisa(index);
+  const editArea = async (id: any) => {
+    const concept = await getConcept(id);
     setInitialValues(concept);
-    setEditingIndex(index);
+    setEditingIndex(id);
   };
 
   useEffect(() => {
@@ -75,13 +77,13 @@ const Divisas = () => {
   return (
     <Box p={3}>
       <Typography variant="h5" gutterBottom>
-        Declarar Divisas
+        Declarar Areas
       </Typography>
 
       <Formik
         initialValues={initialValues}
         enableReinitialize
-        validationSchema={DivisaSchema}
+        validationSchema={AreaSchema}
         onSubmit={(values, { resetForm }) => {}}
       >
         {({ errors, touched, values, resetForm }) => (
@@ -98,24 +100,23 @@ const Divisas = () => {
                 name="details"
                 as={TextField}
                 label="Tasa de Cambio"
-                type="number"
                 error={touched.details && Boolean(errors.details)}
                 helperText={touched.details && errors.details}
               />
               <Button
                 variant="contained"
                 onClick={() => {
-                  addDivisa(values, resetForm);
+                  addArea(values, resetForm);
                 }}
               >
-                {editingIndex !== null ? "Guardar Cambios" : "Añadir Divisa"}
+                {editingIndex !== null ? "Guardar Cambios" : "Añadir Area"}
               </Button>
             </Box>
           </Form>
         )}
       </Formik>
 
-      {/* Tabla de divisas */}
+      {/* Tabla de areas */}
       <Paper sx={{ marginTop: 3 }}>
         <Table>
           <TableHead>
@@ -126,15 +127,15 @@ const Divisas = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {concepts.map((divisa, index) => (
+            {concepts.map((area, index) => (
               <TableRow key={index}>
-                <TableCell>{divisa.denomination}</TableCell>
-                <TableCell>{divisa.details}</TableCell>
+                <TableCell>{area.denomination}</TableCell>
+                <TableCell>{area.details}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => editDivisa(divisa.id)}>
+                  <IconButton onClick={() => editArea(area.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteDivisa(divisa.id)}>
+                  <IconButton onClick={() => deleteArea(area.id)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -147,4 +148,4 @@ const Divisas = () => {
   );
 };
 
-export default Divisas;
+export default Areas;

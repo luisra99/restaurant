@@ -17,17 +17,31 @@ import {
   OutlinedInput,
   InputAdornment,
   IconButton,
+  Modal,
 } from "@mui/material";
 import { LoadConcept } from "@/utils/concepts";
-import { getOffers } from "@/services/menu";
+import { deleteOffer, getOffers } from "@/services/menu";
 import { useNavigate } from "react-router-dom";
 import { Add } from "@mui/icons-material";
+import OpenAccount from "../Cuenta/components/FormularioCuenta";
+import AddMenuOffer from "../Oferta/Oferta";
+
+const style = {
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("Todo");
   const [categorys, setCategorys] = useState<any[]>([]);
   const [menu, setMenu] = useState<any[]>([]);
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [id, setId] = useState<any>(null);
+
   const navegar = useNavigate();
   const Load = async () => {
     const _concepts = await LoadConcept(1);
@@ -155,6 +169,15 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
                   {item.description}
                 </Typography>
                 <Typography variant="h6">${item.price}</Typography>
+                <Box display={"flex"} justifyContent={"flex-end"}>
+                  <Button variant="outlined" sx={{ mr: 1 }} color="error" onClick={()=>deleteOffer(item.id)}>
+                    Eliminar
+                  </Button>
+                  <Button variant="contained" onClick={()=>{
+                    setId(item.id)
+                    setOpen(true)
+                  }}>Modificar</Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
@@ -172,6 +195,19 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
           }}
         />
       </Grid>
+      <Modal
+        onClose={()=>{
+          setOpen(false)
+          setId(null)
+        }}
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <AddMenuOffer id={id} />
+        </Box>
+      </Modal>
     </>
   );
 };

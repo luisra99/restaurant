@@ -54,62 +54,6 @@ function Mesas() {
     Load();
   }, []);
 
-  // const mesas: any = [
-  //   { name: "Mesa 1", orders: 1, amount: 56.87, status: "libre" },
-  //   {
-  //     name: "Mesa 2",
-  //     orders: 2,
-  //     amount: 56.87,
-  //     status: "ocupada",
-  //     personas: 2,
-  //   },
-  //   {
-  //     name: "Mesa 3",
-  //     orders: 2,
-  //     amount: 56.87,
-  //     status: "reservada",
-  //     personas: 4,
-  //   },
-  //   {
-  //     name: "Mesa 4",
-  //     orders: 2,
-  //     amount: 56.87,
-  //     status: "esperando_pedido",
-  //     personas: 2,
-  //   },
-  //   {
-  //     name: "Mesa 5",
-  //     orders: 2,
-  //     amount: 56.87,
-  //     status: "esperando_cuenta",
-  //     personas: 2,
-  //   },
-  //   { name: "Mesa 6", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 7", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 8", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 9", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 10", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 11", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 12", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 13", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 14", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 15", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 16", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 17", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 18", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 19", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 20", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 21", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 22", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 23", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 24", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 25", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 26", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 27", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 28", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 29", orders: 2, amount: 56.87 },
-  //   { name: "Mesa 30", orders: 2, amount: 56.87 },
-  // ];
   return (
     <>
       <Meta title="Configuración" />
@@ -129,7 +73,7 @@ function Mesas() {
                 onClick={() =>
                   mesa.Account
                     ? navegar(`/manage?id=${mesa.Account.id}`)
-                    : setOpenAccount(true)
+                    : setOpenAccount(mesa.id)
                 }
               >
                 {/* Contenedor principal con el nombre de la mesa y la cantidad de personas */}
@@ -233,7 +177,7 @@ function Mesas() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <OpenAccount />
+          <OpenAccount idTable={openAccount} handleClose={handleClose} />
         </Box>
       </Modal>
     </>

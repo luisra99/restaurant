@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const listDivisas = async () => {
+export const listDependents = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:4000/divisas`);
+    const { data } = await axios.get("http://localhost:4000/dependents");
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -16,10 +16,10 @@ export const getDivisa = async (id: number) => {
     console.error("Error consumiendo servicio", error);
   }
 };
-export const putDivisa = async (id: number, content: any) => {
+export const putDependent = async (id: number, content: any) => {
   try {
     const { data } = await axios.put(
-      `http://localhost:4000/divisas/${id}`,
+      `http://localhost:4000/dependents/${id}`,
       content
     );
     return data;
@@ -28,17 +28,23 @@ export const putDivisa = async (id: number, content: any) => {
   }
 };
 
-export const postDivisa = async (content: any) => {
+export const postDependent = async (content: any) => {
   try {
-    const { data } = await axios.post(`http://localhost:4000/divisas`, content);
+    const { data } = await axios.post(
+      "http://localhost:4000/dependents",
+      content
+    );
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
   }
 };
-export const deleteDivisa = async (id: number) => {
+
+export const deleteDependent = async (id: number) => {
   try {
-    const { data } = await axios.delete(`http://localhost:4000/divisas/${id}`);
+    const { data } = await axios.delete(
+      `http://localhost:4000/dependents/${id}`
+    );
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);

@@ -25,7 +25,7 @@ import Cuentas from "@/pages/Cuenta/Cuentas";
 
 const myRoutes: Routes = {
   [Pages.Welcome]: {
-    component: Cuentas,
+    component: Welcome,
     path: "/",
     title: "Inicio",
   },

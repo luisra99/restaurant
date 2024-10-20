@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
-import { getTable, listTables, postTables, putTables } from "@/services/table";
+import { deleteTable, getTable, listTables, postTables, putTables } from "@/services/table";
 
 const MesaSchema = Yup.object().shape({
   name: Yup.string().required("Número de mesa requerido"),
@@ -58,9 +58,8 @@ const Mesas = () => {
     }
   };
 
-  const deleteMesa = (index: any) => {
-    const updatedMesas = mesas.filter((_, i) => i !== index);
-    setMesas(updatedMesas);
+  const deleteMesa = (id: any) => {
+    deleteTable(id).then(()=>Load())
   };
 
   const editMesa = async (index: any) => {
@@ -144,7 +143,7 @@ const Mesas = () => {
                   <IconButton onClick={() => editMesa(mesa.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteMesa(mesa.is)}>
+                  <IconButton onClick={() => deleteMesa(mesa.id)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

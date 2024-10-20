@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,54 +21,68 @@ import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
+import {
+  alterTaxState,
+  deleteTaxDiscount,
+  getTaxById,
+  getTaxes,
+  postTax,
+  putTax,
+} from "@/services/taxes";
 
 const ImpuestoSchema = Yup.object().shape({
   tipo: Yup.string().required("Tipo requerido"),
   porcentaje: Yup.number().required("Porcentaje requerido"),
   tipoValor: Yup.string().required("Debe seleccionar Impuesto o Descuento"),
 });
+const initialValue = { name: "", percent: "", tax: "1" };
 
 const ImpuestosDescuentos = () => {
-  const [impuestos, setImpuestos] = useState([
-    { activo: true, tipoValor: "Impuesto", tipo: "IVA", porcentaje: 15 },
-    {
-      activo: false,
-      tipoValor: "Descuento",
-      tipo: "Descuento 10%",
-      porcentaje: 10,
-    },
-  ]);
+  const [initialValues, setInitialValues] = useState(initialValue);
   const [concepts, setConcepts] = useState<any[]>([]);
   const Load = async () => {
-    const _concepts = await LoadConcept(1);
+    const _concepts = await getTaxes();
     setConcepts(_concepts);
   };
+
   const [editingIndex, setEditingIndex] = useState(null);
 
   const addImpuesto = (impuesto: any) => {
     if (editingIndex !== null) {
-      const updatedImpuestos = [...impuestos];
-      updatedImpuestos[editingIndex] = impuesto;
-      setImpuestos(updatedImpuestos);
+      putTax(editingIndex, impuesto).then(() => Load());
       setEditingIndex(null);
     } else {
-      setImpuestos([...impuestos, impuesto]);
+      postTax(impuesto).then(() => Load());
     }
+    setInitialValues(initialValue);
   };
 
-  const toggleActivo = (index: any) => {
-    const updatedImpuestos = [...impuestos];
-    updatedImpuestos[index].activo = !updatedImpuestos[index].activo;
-    setImpuestos(updatedImpuestos);
+  const toggleActivo = (id: any) => {
+    alterTaxState(id).then(() => Load());
   };
 
-  const deleteImpuesto = (index: any) => {
-    const updatedImpuestos = impuestos.filter((_, i) => i !== index);
-    setImpuestos(updatedImpuestos);
+  const deleteImpuesto = (id: any) => {
+    deleteTaxDiscount(id).then(()=>Load())
+
   };
 
-  const editImpuesto = (index: any) => {
+  const editImpuesto = async (index: any) => {
+    const tax = await getTaxById(index);
+    setInitialValues({
+      tax: `${tax.tax ? 1 : 0}`,
+      name: tax.name,
+      percent: tax.percent,
+    });
     setEditingIndex(index);
+  };
+  useEffect(() => {
+    Load();
+  }, []);
+
+  const submit = (values: any, resetForm: any) => {
+    console.log("asd");
+    addImpuesto(values);
+    resetForm();
   };
 
   return (
@@ -78,65 +92,55 @@ const ImpuestosDescuentos = () => {
       </Typography>
 
       <Formik
-        initialValues={
-          editingIndex !== null
-            ? impuestos[editingIndex]
-            : { tipo: "", porcentaje: "", tipoValor: "Impuesto" }
-        }
+        initialValues={initialValues}
         enableReinitialize
         validationSchema={ImpuestoSchema}
         onSubmit={(values, { resetForm }) => {
+          console.log("asd");
           addImpuesto(values);
           resetForm();
         }}
       >
-        {({ errors, touched }) => (
+        {({ errors, touched, values, resetForm }) => (
           <Form>
             <Box display="flex" flexDirection="column" gap={2}>
-              <RadioGroup name="tipoValor">
+              <RadioGroup name="tax">
                 <FormControlLabel
                   control={
-                    <Field
-                      as={Radio}
-                      type="radio"
-                      name="tipoValor"
-                      value="Impuesto"
-                    />
+                    <Field as={Radio} type="radio" name="tax" value="1" />
                   }
                   label="Impuesto"
                 />
                 <FormControlLabel
                   control={
-                    <Field
-                      as={Radio}
-                      type="radio"
-                      name="tipoValor"
-                      value="Descuento"
-                    />
+                    <Field as={Radio} type="radio" name="tax" value="0" />
                   }
                   label="Descuento"
                 />
               </RadioGroup>
-              {touched.tipoValor && Boolean(errors.tipoValor) && (
-                <Typography color="error">{errors.tipoValor}</Typography>
+              {touched.tax && Boolean(errors.tax) && (
+                <Typography color="error">{errors.tax}</Typography>
               )}
 
               <Field
-                name="tipo"
+                name="name"
                 as={TextField}
                 label="Impuesto o Descuento"
-                error={touched.tipo && Boolean(errors.tipo)}
-                helperText={touched.tipo && errors.tipo}
+                error={touched.name && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
               />
               <Field
-                name="porcentaje"
+                name="percent"
                 as={TextField}
                 label="Porcentaje"
                 type="number"
-                error={touched.porcentaje && Boolean(errors.porcentaje)}
-                helperText={touched.porcentaje && errors.porcentaje}
+                error={touched.percent && Boolean(errors.percent)}
+                helperText={touched.percent && errors.percent}
               />
-              <Button variant="contained" type="submit">
+              <Button
+                variant="contained"
+                onClick={() => submit(values, resetForm)}
+              >
                 {editingIndex !== null ? "Guardar Cambios" : "Añadir"}
               </Button>
             </Box>
@@ -157,22 +161,22 @@ const ImpuestosDescuentos = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {impuestos.map((impuesto, index) => (
+            {concepts?.map((impuesto, index) => (
               <TableRow key={index}>
                 <TableCell>
                   <Checkbox
-                    checked={impuesto.activo}
-                    onChange={() => toggleActivo(index)}
+                    checked={impuesto.status}
+                    onChange={() => toggleActivo(impuesto.id)}
                   />
                 </TableCell>
-                <TableCell>{impuesto.tipoValor}</TableCell>
-                <TableCell>{impuesto.tipo}</TableCell>
-                <TableCell>{impuesto.porcentaje}</TableCell>
+                <TableCell>{impuesto.name}</TableCell>
+                <TableCell>{impuesto.tax ? "Impuesto" : "Descuento"}</TableCell>
+                <TableCell>{impuesto.percent}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => editImpuesto(index)}>
+                  <IconButton onClick={() => editImpuesto(impuesto.id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => deleteImpuesto(index)}>
+                  <IconButton onClick={() => deleteImpuesto(impuesto.id)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

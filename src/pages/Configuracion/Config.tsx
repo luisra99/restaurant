@@ -5,6 +5,7 @@ import Categorias from "./Categorias";
 import Dependientes from "./Dependientes";
 import Divisas from "./Divisas";
 import ImpuestosDescuentos from "./Impuestos";
+import Areas from "./Areas";
 
 const Dashboard = () => {
   return (
@@ -18,6 +19,11 @@ const Dashboard = () => {
         <Grid item xs={12} md={6}>
           <Paper>
             <Categorias />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper>
+            <Areas />
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>

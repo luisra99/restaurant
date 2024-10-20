@@ -27,12 +27,14 @@ import {
 import { Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import {
+  deleteAccount,
   deleteAccountDetails,
   getAccount,
   getAccounts,
 } from "@/services/account";
 import { fTime } from "@/_pwa-framework/utils/format-time";
 import OpenAccount from "./components/FormularioCuenta";
+import { printAccount } from "@/services/printer";
 function Cuenta({
   data,
   setNegative,
@@ -93,7 +95,7 @@ function Cuenta({
           <Grid container display={"flex"} justifyContent={"start"}>
             <Grid item xs={6} textAlign={"left"}>
               <Typography variant="h5">{data?.name}</Typography>
-              <Typography>Depediente: {data?.idDependent}</Typography>
+              <Typography>Depediente: {data?.dependent}</Typography>
             </Grid>
 
             <Grid item xs={2} textAlign={"left"}>
@@ -341,14 +343,14 @@ function Cuenta({
           spacing={1}
         >
           <Grid item xs={3}>
-            <Button variant="contained" color="error" fullWidth sx={{ py: 2 }}>
+            <Button variant="contained" color="error" fullWidth sx={{ py: 2 }} onClick={()=>deleteAccount(data.id)}>
               <Typography variant="subtitle1" letterSpacing={0.7}>
                 Eliminar
               </Typography>
             </Button>
           </Grid>
           <Grid item xs={5}>
-            <Button variant="contained" color="info" fullWidth sx={{ py: 2 }}>
+            <Button variant="contained" color="info" fullWidth sx={{ py: 2 }} onClick={()=>printAccount(data.id)}>
               <Print sx={{ mr: 1 }} />{" "}
               <Typography variant="subtitle1" letterSpacing={0.7}>
                 Imprimir recibo

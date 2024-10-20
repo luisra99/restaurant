@@ -18,34 +18,41 @@ import { LoadConcept } from "@/utils/concepts"; // Para cargar conceptos como ti
 import axios from "axios";
 import { listTables } from "@/services/table";
 import { getAccount } from "@/services/account";
+import { listDependents } from "@/services/dependent";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("El nombre es obligatorio"),
+  name: Yup.string().when("idTable", {
+    is: (value: any) => !value,
+    then: (schema) => schema.required("El nombre es obligatorio"),
+  }),
   description: Yup.string().nullable(),
   people: Yup.number().positive("Debe ser un número positivo").nullable(),
   idDependent: Yup.string().nullable(), // Este campo es opcional
   idTable: Yup.string().nullable(), // La mesa puede ser opcional
 });
 
-const OpenAccount = ({ id }: any) => {
-  const [tables, setTables] = useState([]); // Estado para almacenar las mesas
-  const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
-  const [initialValues, setInitialValues] = useState({
+const OpenAccount = ({ id, idTable,handleClose }: any) => {
+  const [tables, setTables] = useState<any>([]); // Estado para almacenar las mesas
+  const [dependents, setDependents] = useState<any>([]); // Estado para almacenar los tipos de cuenta
+  const [initialValues, setInitialValues] = useState<any>({
     name: "",
     description: null,
     people: null,
     idDependent: null,
-    idTable: null,
+    idTable: idTable ?? null,
     idType: null,
   });
+  // const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
 
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
     const tableConcepts = await listTables(); // ID para cargar mesas
-    const typeConcepts = await LoadConcept(2); // ID para tipos de cuenta
+    const dependentsList = await listDependents(); // ID para tipos de cuenta
+    // const typeConcepts = await LoadConcept(2); // ID para tipos de cuenta
+    // setAccountTypes(typeConcepts);
     setTables(tableConcepts);
-    setAccountTypes(typeConcepts);
+    setDependents(dependentsList);
   };
 
   useEffect(() => {
@@ -84,13 +91,21 @@ const OpenAccount = ({ id }: any) => {
     { setSubmitting, resetForm }: any
   ) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/accounts",
-        values
-      );
+      if (id) {
+        const response = await axios.put(
+          `http://localhost:4000/accounts/${id}`,
+          values
+        );
+      } else {
+        const response = await axios.post(
+          "http://localhost:4000/accounts",
+          values
+        );
+      }
 
       resetForm();
       alert("Cuenta abierta con éxito");
+      handleClose?.()
     } catch (error) {
       console.error(error);
       alert("Ha ocurrido un error al abrir la cuenta");
@@ -108,9 +123,10 @@ const OpenAccount = ({ id }: any) => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
+        validateOnMount
         onSubmit={handleSubmit}
       >
-        {({ values, setFieldValue, errors, touched }) => (
+        {({ values, setFieldValue, errors, touched }: any) => (
           <Form>
             {/* Nombre de la cuenta */}
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
@@ -146,8 +162,8 @@ const OpenAccount = ({ id }: any) => {
               <Field
                 name="description"
                 as={TextField}
-                value={values.description}
                 label="Descripción"
+                value={values.description??""}
                 variant="outlined"
                 error={touched.description && Boolean(errors.description)}
                 helperText={touched.description && errors.description}
@@ -159,8 +175,8 @@ const OpenAccount = ({ id }: any) => {
               <Field
                 name="people"
                 as={TextField}
-                value={values.people}
                 label="Número de personas"
+                value={values.people??""}
                 variant="outlined"
                 type="number"
                 error={touched.people && Boolean(errors.people)}
@@ -179,7 +195,7 @@ const OpenAccount = ({ id }: any) => {
                 error={touched.idTable && Boolean(errors.idTable)}
               >
                 <MenuItem value="">Ninguna</MenuItem>
-                {tables.map((table: any, index) => (
+                {tables.map((table: any, index: number) => (
                   <MenuItem key={index} value={table.id}>
                     {table.name}
                   </MenuItem>
@@ -190,17 +206,26 @@ const OpenAccount = ({ id }: any) => {
               )}
             </FormControl>
 
-            {/* Dependiente (opcional) */}
+            {/* DEpendiente opcional */}
             <FormControl fullWidth sx={{ marginBottom: 2 }}>
+              <InputLabel htmlFor="idTable">Dependiente (opcional)</InputLabel>
               <Field
                 name="idDependent"
-                as={TextField}
-                label="ID Dependiente (opcional)"
-                variant="outlined"
-                type="text"
+                as={Select}
+                value={`${values.idDependent}`}
+                label="Dependiente (opcional)"
                 error={touched.idDependent && Boolean(errors.idDependent)}
-                helperText={touched.idDependent && errors.idDependent}
-              />
+              >
+                <MenuItem value="">Ninguno</MenuItem>
+                {dependents.map((dependent: any, index: number) => (
+                  <MenuItem key={index} value={dependent.id}>
+                    {dependent.name}
+                  </MenuItem>
+                ))}
+              </Field>
+              {touched.idDependent && errors.idDependent && (
+                <Typography color="error">{errors.idDependent}</Typography>
+              )}
             </FormControl>
 
             <Box display="flex" justifyContent="space-between" gap={1}>

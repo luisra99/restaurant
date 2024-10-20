@@ -22,6 +22,7 @@ import {
   postConcept,
   putConcept,
 } from "@/utils/concepts";
+import { deleteConcept } from "@/services/concept";
 
 const CategoriaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre de la categoría requerido"),
@@ -54,9 +55,8 @@ const Categorias = () => {
     }
   };
 
-  const deleteCategoria = (index: any) => {
-    const updatedCategorias = concepts.filter((_, i) => i !== index);
-    setConcepts(updatedCategorias);
+  const deleteCategoria = (id: any) => {
+    deleteConcept(id).then(()=>Load())
   };
 
   const editCategoria = async (id: any) => {

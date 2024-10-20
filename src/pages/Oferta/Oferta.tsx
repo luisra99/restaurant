@@ -17,6 +17,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { Camera, CameraAlt } from "@mui/icons-material";
 import { LoadConcept } from "@/utils/concepts";
 import axios from "axios";
+import { getOffers, getOffer } from "@/services/menu";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("El nombre es obligatorio"),
@@ -29,19 +30,33 @@ const validationSchema = Yup.object().shape({
     .positive("Debe ser un número positivo"),
 });
 
-const AddMenuOffer = () => {
-  const [preview, setPreview] = useState(null); // Estado para almacenar la vista previa de la imagen
+const AddMenuOffer = ({ id }: any) => {
+  const [preview, setPreview] = useState<null | string>(null); // Estado para almacenar la vista previa de la imagen
   const [areas, setAreas] = useState([]);
+  const [initialValues, setInitialValues] = useState({
+    image: null,
+    name: "",
+    description: "",
+    details: "",
+    idCategory: "",
+    idArea: "",
+    price: "",
+  });
   const [categorys, setCategorys] = useState([]);
-  const Load = async () => {
+  const Load = async (id?: any) => {
     const conceptoArea = await LoadConcept(3);
     const conceptoCategory = await LoadConcept(1);
+    if (id) {
+      const offer = await getOffer(id);
+      setInitialValues(offer);
+      setPreview(`http://localhost:4000/public/${offer.image}`);
+    }
     setAreas(conceptoArea);
     setCategorys(conceptoCategory);
   };
   useEffect(() => {
-    Load();
-  }, []);
+    Load(id);
+  }, [id]);
   const handleSubmit = async (
     values: any,
     { setSubmitting, resetForm }: any
@@ -58,10 +73,11 @@ const AddMenuOffer = () => {
     formData.append("price", values.price);
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/offers",
-        formData
-      );
+      if (id) {
+        await axios.put(`http://localhost:4000/offers/${id}`, formData);
+      } else {
+        await axios.post(`http://localhost:4000/offers`, formData);
+      }
 
       // Resetear el formulario y la vista previa después de la creación exitosa
       resetForm();
@@ -80,15 +96,8 @@ const AddMenuOffer = () => {
         Agregar Oferta al Menú
       </Typography>
       <Formik
-        initialValues={{
-          image: null,
-          name: "",
-          description: "",
-          details: "",
-          idCategory: "",
-          idArea: "",
-          price: "",
-        }}
+        initialValues={initialValues}
+        enableReinitialize
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >

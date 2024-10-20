@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -16,37 +17,78 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadConcept } from "@/utils/concepts";
+import {
+  listDependents,
+  postDependent,
+  putDependent,
+} from "@/services/dependent";
 
 const DependienteSchema = Yup.object().shape({
-  nombre: Yup.string().required("Nombre requerido"),
-  email: Yup.string().email("Email inválido").required("Email requerido"),
+  name: Yup.string().required("Nombre requerido"),
 });
 
 const Dependientes = () => {
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [concepts, setConcepts] = useState<any[]>([]);
-  const Load = async () => {
-    const _concepts = await LoadConcept(1);
-    setConcepts(_concepts);
-  };
-  const addDependiente = (dependiente: any) => {
-    if (editingIndex !== null) {
-      const updatedDependientes = [...concepts];
-      updatedDependientes[editingIndex] = dependiente;
-      setConcepts(updatedDependientes);
-      setEditingIndex(null);
-    } else {
-      setConcepts([...concepts, dependiente]);
+  const [dependents, setDependents] = useState<any[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [initialValues, setInitialValues] = useState<any>({ name: "" });
+
+  // Cargar todos los dependientes desde el backend
+  const loadDependents = async () => {
+    setLoading(true);
+    try {
+      const dependientes = await listDependents();
+      setDependents(dependientes);
+    } catch (error) {
+      console.error("Error al cargar dependientes", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteDependiente = (index: any) => {
-    const updatedDependientes = concepts.filter((_, i) => i !== index);
-    setConcepts(updatedDependientes);
+  useEffect(() => {
+    loadDependents();
+  }, []);
+
+  const addOrUpdateDependent = async (dependent: any) => {
+    if (editingIndex !== null) {
+      // Actualizar dependiente existente
+      try {
+        const updatedDependent = await putDependent(editingIndex, dependent);
+        setEditingIndex(null);
+      } catch (error) {
+        console.error("Error al actualizar dependiente", error);
+      } finally {
+        loadDependents();
+      }
+    } else {
+      // Crear nuevo dependiente
+      try {
+        const newDependent = await postDependent(dependent);
+      } catch (error) {
+        console.error("Error al crear dependiente", error);
+      } finally {
+        loadDependents();
+      }
+    }
   };
 
-  const editDependiente = (index: any) => {
+  const deleteDependent = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:4000/dependents/${id}`);
+    } catch (error) {
+      console.error("Error al eliminar dependiente", error);
+    } finally {
+      loadDependents();
+    }
+  };
+
+  const editDependent = async (index: number) => {
+    const { data } = await axios.get(
+      `http://localhost:4000/dependents/${index}`
+    );
+    console.log(data);
+    setInitialValues({ name: data.name });
     setEditingIndex(index);
   };
 
@@ -57,15 +99,12 @@ const Dependientes = () => {
       </Typography>
 
       <Formik
-        initialValues={
-          editingIndex !== null
-            ? concepts[editingIndex]
-            : { nombre: "", email: "" }
-        }
+        initialValues={initialValues}
         enableReinitialize
         validationSchema={DependienteSchema}
         onSubmit={(values, { resetForm }) => {
-          addDependiente(values);
+          addOrUpdateDependent(values);
+          setInitialValues({ name: "" });
           resetForm();
         }}
       >
@@ -73,18 +112,11 @@ const Dependientes = () => {
           <Form>
             <Box display="flex" flexDirection="column" gap={2}>
               <Field
-                name="nombre"
+                name="name"
                 as={TextField}
                 label="Nombre"
-                error={touched.nombre && Boolean(errors.nombre)}
-                helperText={touched.nombre && errors.nombre}
-              />
-              <Field
-                name="email"
-                as={TextField}
-                label="Email"
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
+                error={touched.name && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
               />
               <Button variant="contained" type="submit">
                 {editingIndex !== null
@@ -102,25 +134,29 @@ const Dependientes = () => {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Email</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {concepts.map((dependiente, index) => (
-              <TableRow key={index}>
-                <TableCell>{dependiente.nombre}</TableCell>
-                <TableCell>{dependiente.email}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => editDependiente(index)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => deleteDependiente(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={2}>Cargando...</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              dependents.map((dependent, index) => (
+                <TableRow key={dependent.id}>
+                  <TableCell>{dependent.name}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => editDependent(dependent.id)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => deleteDependent(dependent.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </Paper>
