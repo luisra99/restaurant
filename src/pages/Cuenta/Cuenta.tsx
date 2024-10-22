@@ -23,10 +23,17 @@ import {
   Settings,
   Print,
   Info,
+  RemoveCircle,
+  Payment,
+  Delete,
+  MoneyOff,
+  Money,
+  Wallet,
 } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import {
+  closeAccount,
   deleteAccount,
   deleteAccountDetails,
   getAccount,
@@ -35,16 +42,19 @@ import {
 import { fTime } from "@/_pwa-framework/utils/format-time";
 import OpenAccount from "./components/FormularioCuenta";
 import { printAccount } from "@/services/printer";
+import PaymentModal from "../Payment/PaymentModal";
 function Cuenta({
   data,
   setNegative,
   setProduct,
   deleteOffer,
+  load,
 }: {
   data: any;
   deleteOffer: (idOffer: number) => void;
   setNegative: (args: boolean) => void;
   setProduct: (args: number) => void;
+  load: () => Promise<void>;
 }) {
   const accountTypeIcon: { [key: number]: JSX.Element } = {
     13: (
@@ -86,6 +96,7 @@ function Cuenta({
     setOpen(false);
   }
   const [open, setOpen] = useState(false);
+  const [paymentModal, setPaymentModal] = useState(false);
   return (
     <>
       <Meta title="Configuración" />
@@ -143,7 +154,6 @@ function Cuenta({
             </Grid>
           </Grid>
         </Paper>
-
         <Paper elevation={3} sx={{ padding: 2, borderRadius: "8px", mb: 1 }}>
           <Grid container rowSpacing={1}>
             {data?.orders?.map((order: any, index: number) => (
@@ -273,6 +283,62 @@ function Cuenta({
             </Typography>
           </Typography>
         </Paper>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 2,
+            borderRadius: "8px",
+            mb: 1,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography
+            variant="caption"
+            fontSize={25}
+            textTransform={"uppercase"}
+            color={"dimgrey"}
+          >
+            <Typography textAlign={"center"}>Pagado</Typography>
+            <Typography textAlign={"center"} fontSize={25}>
+              {" "}
+              $ <b style={{ fontWeight: 100 }}>{data?.totalPaid?.toFixed(2)}</b>
+            </Typography>
+          </Typography>
+          <Typography
+            variant="caption"
+            fontSize={25}
+            textTransform={"uppercase"}
+          >
+            <Button
+              variant="contained"
+              color="success"
+              fullWidth
+              sx={{ py: 2 }}
+              onClick={() => setPaymentModal(true)}
+            >
+              <Typography variant="subtitle1" letterSpacing={0.7}>
+                Pagar
+              </Typography>
+            </Button>
+          </Typography>
+          <Typography
+            variant="caption"
+            fontSize={25}
+            textTransform={"uppercase"}
+          >
+            <Typography textAlign={"center"}>Falta por pagar</Typography>
+            <Typography textAlign={"center"} fontSize={25}>
+              {" "}
+              ${" "}
+              <b style={{ fontWeight: 900 }}>
+                {(
+                  data?.finalPrice?.toFixed(2) - data?.totalPaid?.toFixed(2)
+                ).toFixed(2)}
+              </b>
+            </Typography>
+          </Typography>
+        </Paper>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Paper
@@ -343,29 +409,40 @@ function Cuenta({
           spacing={1}
         >
           <Grid item xs={3}>
-            <Button variant="contained" color="error" fullWidth sx={{ py: 2 }} onClick={()=>deleteAccount(data.id)}>
+            <Button
+              variant="contained"
+              color="error"
+              fullWidth
+              sx={{ py: 2 }}
+              onClick={() => deleteAccount(data.id)}
+            >
               <Typography variant="subtitle1" letterSpacing={0.7}>
                 Eliminar
               </Typography>
             </Button>
           </Grid>
-          <Grid item xs={5}>
-            <Button variant="contained" color="info" fullWidth sx={{ py: 2 }} onClick={()=>printAccount(data.id)}>
-              <Print sx={{ mr: 1 }} />{" "}
-              <Typography variant="subtitle1" letterSpacing={0.7}>
-                Imprimir recibo
-              </Typography>
+          <Grid item xs={3}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              sx={{ py: 2 }}
+              onClick={() => printAccount(data.id)}
+            >
+              <Print />
             </Button>
           </Grid>
-          <Grid item xs={4}>
+
+          <Grid item xs={3}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               sx={{ py: 2 }}
+              onClick={() => closeAccount(data.id)}
             >
               <Typography variant="subtitle1" letterSpacing={0.7}>
-                Cerrar Cuenta
+                Cerrar
               </Typography>
             </Button>
           </Grid>
@@ -426,6 +503,13 @@ function Cuenta({
             </Modal>
           )}
         </Grid>
+        <PaymentModal
+          open={paymentModal}
+          onClose={() => {
+            load().then(() => setPaymentModal(false));
+          }}
+          idAccount={data.id}
+        />
       </Box>
     </>
   );

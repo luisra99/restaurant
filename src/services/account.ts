@@ -56,8 +56,16 @@ export const deleteAccountDetails = async ({ idAccount, idOffer }: any) => {
 };
 export const deleteAccount = async (id: number) => {
   try {
+    const { data } = await axios.delete(`http://localhost:4000/accounts/${id}`);
+    return data;
+  } catch (error) {
+    console.error("Error consumiendo servicio", error);
+  }
+};
+export const closeAccount = async (id: number) => {
+  try {
     const { data } = await axios.delete(
-      `http://localhost:4000/accounts/${id}`
+      `http://localhost:4000/accounts/close/${id}`
     );
     return data;
   } catch (error) {

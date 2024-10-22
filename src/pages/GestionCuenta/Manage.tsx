@@ -12,6 +12,7 @@ import {
   modifyAccountDetails,
 } from "@/services/account";
 import { useSearchParams } from "react-router-dom";
+import PaymentModal from "../Payment/PaymentModal";
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,7 +27,7 @@ const style = {
 function Manage() {
   const [searchParams] = useSearchParams();
   const [open, setOpen] = useState<number | null>(null);
-  const [idAccount, setAccount] = useState<number>(1);
+  const [idAccount, setAccount] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<string>("");
   const [negative, setNegative] = useState<boolean>(false);
   const [cuenta, setCuenta] = useState<any>({});
@@ -63,6 +64,7 @@ function Manage() {
             setNegative={setNegative}
             deleteOffer={deleteOffer}
             data={cuenta}
+            load={Load}
           />
         </Grid>
       </Grid>

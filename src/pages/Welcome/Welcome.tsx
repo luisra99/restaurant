@@ -7,9 +7,7 @@ function Welcome() {
   return (
     <>
       <Meta title="Configuración" />
-      <Box justifyContent={"center"} width={"100%"} p={5}>
-        <PaymentModal open={true} onClose={() => console.log()} idAccount={1} />
-      </Box>
+      <Box justifyContent={"center"} width={"100%"} p={5}></Box>
     </>
   );
 }
