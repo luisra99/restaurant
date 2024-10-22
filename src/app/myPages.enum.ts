@@ -7,4 +7,5 @@ export enum Pages {
   Manage,
   Config,
   Offer,
+  Caja,
 }

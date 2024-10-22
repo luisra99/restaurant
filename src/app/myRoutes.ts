@@ -22,6 +22,7 @@ import AddMenuOffer from "@/pages/Oferta/Oferta";
 import Config from "@/pages/Configuracion/Config";
 import OpenAccount from "@/pages/Cuenta/components/FormularioCuenta";
 import Cuentas from "@/pages/Cuenta/Cuentas";
+import Caja from "@/pages/Caja/Caja";
 
 const myRoutes: Routes = {
   [Pages.Welcome]: {
@@ -47,6 +48,11 @@ const myRoutes: Routes = {
     component: Config,
     path: "/config",
     title: "Configuración",
+  },
+  [Pages.Caja]: {
+    component: Caja,
+    path: "/point",
+    title: "Caja",
   },
   [Pages.Manage]: {
     component: Manage,
