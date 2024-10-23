@@ -1,17 +1,6 @@
-import { Box } from "@mui/system";
-import Meta from "@/_pwa-framework/components/Meta";
-import { Button, Grid, Modal, Paper, Typography } from "@mui/material";
-import Calculator from "@/app/components/calculator/Calc";
-import { Home, Person, Shop, Timelapse } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import HomeIcon from "@mui/icons-material/Home";
 import { listTables } from "@/services/table";
-import axios from "axios";
-import { fToNow } from "@/_pwa-framework/utils/format-time";
 import { getAccounts } from "@/services/account";
-import OpenAccount from "../Cuenta/components/FormularioCuenta";
 import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
@@ -25,7 +14,7 @@ const style = {
   p: 4,
 };
 
-function useMesas():any[] {
+function useMesas(): any[] {
   const [openAccount, setOpenAccount] = useState(false);
   const [amount, setAmount] = useState<string>("");
   const [mesas, setMesas] = useState<any[]>([]);
@@ -50,7 +39,15 @@ function useMesas():any[] {
     Load();
   }, []);
 
-  return [Load,mesas,navegar,openAccount,setOpenAccount,handleClose,style];
+  return [
+    Load,
+    mesas,
+    navegar,
+    openAccount,
+    setOpenAccount,
+    handleClose,
+    style,
+  ];
 }
 
 export default useMesas;

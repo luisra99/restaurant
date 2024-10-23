@@ -1,14 +1,12 @@
 import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
-import { Button, Grid, Modal, Paper, Typography } from "@mui/material";
-import Calculator from "@/app/components/calculator/Calc";
-import { Home, Person, Shop, Timelapse } from "@mui/icons-material";
+import { Grid, Modal, Paper, Typography } from "@mui/material";
+import { Person } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import HomeIcon from "@mui/icons-material/Home";
 import { listTables } from "@/services/table";
-import axios from "axios";
 import { fToNow } from "@/_pwa-framework/utils/format-time";
 import { getAccounts } from "@/services/account";
 import OpenAccount from "../Cuenta/components/FormularioCuenta";

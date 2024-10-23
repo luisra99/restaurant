@@ -15,30 +15,16 @@ import HomeIcon from "@mui/icons-material/Home";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   People,
-  CalendarToday,
   AccessTime,
-  RoomService,
   Add,
   Remove,
   Settings,
   Print,
   Info,
-  RemoveCircle,
-  Payment,
-  Delete,
-  MoneyOff,
-  Money,
-  Wallet,
 } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
-import { useEffect, useState } from "react";
-import {
-  closeAccount,
-  deleteAccount,
-  deleteAccountDetails,
-  getAccount,
-  getAccounts,
-} from "@/services/account";
+import { useState } from "react";
+import { closeAccount, deleteAccount } from "@/services/account";
 import { fTime } from "@/_pwa-framework/utils/format-time";
 import OpenAccount from "./components/FormularioCuenta";
 import { printAccount } from "@/services/printer";

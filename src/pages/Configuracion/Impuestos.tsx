@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,6 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadConcept } from "@/utils/concepts";
 import {
   alterTaxState,
   deleteTaxDiscount,
@@ -62,8 +61,7 @@ const ImpuestosDescuentos = () => {
   };
 
   const deleteImpuesto = (id: any) => {
-    deleteTaxDiscount(id).then(()=>Load())
-
+    deleteTaxDiscount(id).then(() => Load());
   };
 
   const editImpuesto = async (index: any) => {

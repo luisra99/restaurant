@@ -1,29 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
-  Container,
   Grid,
   TextField,
   Card,
   CardMedia,
   CardContent,
   Typography,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
   Chip,
   Box,
   Button,
-  OutlinedInput,
-  InputAdornment,
-  IconButton,
   Modal,
 } from "@mui/material";
 import { LoadConcept } from "@/utils/concepts";
 import { deleteOffer, getOffers } from "@/services/menu";
 import { useNavigate } from "react-router-dom";
-import { Add } from "@mui/icons-material";
-import OpenAccount from "../Cuenta/components/FormularioCuenta";
 import AddMenuOffer from "../Oferta/Oferta";
 import { usePathname } from "@/_pwa-framework/routes/hooks";
 

@@ -1,9 +1,8 @@
 import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
 import { Button, Grid, Modal, Paper, Typography } from "@mui/material";
-import Calculator from "@/app/components/calculator/Calc";
 import { Person, Timelapse } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import HomeIcon from "@mui/icons-material/Home";

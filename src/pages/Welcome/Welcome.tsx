@@ -1,7 +1,5 @@
 import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
-import AddMenuOffer from "../Oferta/Oferta";
-import PaymentModal from "../Payment/PaymentModal";
 
 function Welcome() {
   return (

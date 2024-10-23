@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Button, Grid, Paper } from "@mui/material";
 import InitialCash from "./components/InitialCash";
 import FinalCash from "./components/FinalCash";

@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import Meta from "@/_pwa-framework/components/Meta";
-import { Grid, Modal, Paper, Typography } from "@mui/material";
+import { Grid, Modal } from "@mui/material";
 import Calculator from "@/app/components/calculator/Calc";
 
 import { useEffect, useState } from "react";
@@ -12,7 +12,6 @@ import {
   modifyAccountDetails,
 } from "@/services/account";
 import { useSearchParams } from "react-router-dom";
-import PaymentModal from "../Payment/PaymentModal";
 const style = {
   position: "absolute",
   top: "50%",

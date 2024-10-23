@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
@@ -10,11 +10,9 @@ import {
   FormControl,
   Box,
   Typography,
-  Grid,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { LoadConcept } from "@/utils/concepts"; // Para cargar conceptos como tipos de cuenta
 import axios from "axios";
 import { listTables } from "@/services/table";
 import { getAccount } from "@/services/account";

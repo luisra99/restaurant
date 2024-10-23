@@ -2,15 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Box,
   Button,
-  TextField,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
   FormControl,
   InputLabel,
   Select,
@@ -18,8 +10,6 @@ import {
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import {
   getConcept,
   LoadConcept,

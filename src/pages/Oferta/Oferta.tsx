@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
@@ -14,10 +14,10 @@ import {
   Grid,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import { Camera, CameraAlt } from "@mui/icons-material";
+import { CameraAlt } from "@mui/icons-material";
 import { LoadConcept } from "@/utils/concepts";
 import axios from "axios";
-import { getOffers, getOffer } from "@/services/menu";
+import { getOffer } from "@/services/menu";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({

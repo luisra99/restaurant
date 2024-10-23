@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,8 +17,6 @@ import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadConcept } from "@/utils/concepts";
-import axios from "axios";
-import { getTable } from "@/services/table";
 import { getConcept, postConcept, putConcept } from "@/services/concept";
 import { deleteConcept } from "@/services/concept";
 

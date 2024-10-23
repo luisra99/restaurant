@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -16,8 +16,13 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadConcept } from "@/utils/concepts";
-import { deleteTable, getTable, listTables, postTables, putTables } from "@/services/table";
+import {
+  deleteTable,
+  getTable,
+  listTables,
+  postTables,
+  putTables,
+} from "@/services/table";
 
 const MesaSchema = Yup.object().shape({
   name: Yup.string().required("Número de mesa requerido"),
@@ -59,7 +64,7 @@ const Mesas = () => {
   };
 
   const deleteMesa = (id: any) => {
-    deleteTable(id).then(()=>Load())
+    deleteTable(id).then(() => Load());
   };
 
   const editMesa = async (index: any) => {
