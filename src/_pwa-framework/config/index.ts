@@ -1,9 +1,7 @@
 import appConfig from "@/app/app-config.json";
 import isMobile from "@/utils/is-mobile";
 const mode: boolean = import.meta.env.ENV_MODE === "dev" ? true : false;
-const apiScope = mode
-  ? `${import.meta.env.ENV_SERVER_URL}/gw-dev/`
-  : `${import.meta.env.ENV_SERVER_URL}/gw/`;
+const apiScope = mode ? `/api/gw-dev/` : `/api/gw/`;
 
 const email = appConfig.email;
 const title = appConfig.title;

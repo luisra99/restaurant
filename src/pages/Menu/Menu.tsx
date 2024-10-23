@@ -137,7 +137,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
               <CardMedia
                 component="img"
                 height="140"
-                image={`http://localhost:4000/public/${item.image}`}
+                image={`/api/public/${item.image}`}
                 alt={item.name}
                 sx={{
                   objectFit: "cover", // Asegura que la imagen cubra el área sin distorsionarse

@@ -75,7 +75,7 @@ const Dependientes = () => {
 
   const deleteDependent = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:4000/dependents/${id}`);
+      await axios.delete(`/api/dependents/${id}`);
     } catch (error) {
       console.error("Error al eliminar dependiente", error);
     } finally {
@@ -84,9 +84,7 @@ const Dependientes = () => {
   };
 
   const editDependent = async (index: number) => {
-    const { data } = await axios.get(
-      `http://localhost:4000/dependents/${index}`
-    );
+    const { data } = await axios.get(`/api/dependents/${index}`);
     console.log(data);
     setInitialValues({ name: data.name });
     setEditingIndex(index);

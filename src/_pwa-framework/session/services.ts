@@ -5,7 +5,7 @@ export const logInService = async (is: string): Promise<any> => {
     const { data } = await axios.get(`${apiScope}/login`, {
       params: {
         is,
-        redirect: `${import.meta.env.ENV_SERVER_URL}/create-session`,
+        redirect: `/api/create-session`,
       },
     });
     return data.url;

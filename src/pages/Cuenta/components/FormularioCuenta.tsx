@@ -83,15 +83,9 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
   ) => {
     try {
       if (id) {
-        const response = await axios.put(
-          `http://localhost:4000/accounts/${id}`,
-          values
-        );
+        const response = await axios.put(`/api/accounts/${id}`, values);
       } else {
-        const { data } = await axios.post(
-          "http://localhost:4000/accounts",
-          values
-        );
+        const { data } = await axios.post("/api/accounts", values);
         if (data.id) {
           navegar(`/manage?id=${data.id}`);
         }

@@ -51,7 +51,7 @@ const AddMenuOffer = ({ id, handleClose }: any) => {
     if (id) {
       const offer = await getOffer(id);
       setInitialValues(offer);
-      setPreview(`http://localhost:4000/public/${offer.image}`);
+      setPreview(`/api/public/${offer.image}`);
     }
     setAreas(conceptoArea);
     setCategorys(conceptoCategory);
@@ -76,10 +76,10 @@ const AddMenuOffer = ({ id, handleClose }: any) => {
 
     try {
       if (id) {
-        await axios.put(`http://localhost:4000/offers/${id}`, formData);
+        await axios.put(`/api/offers/${id}`, formData);
         handleClose();
       } else {
-        await axios.post(`http://localhost:4000/offers`, formData);
+        await axios.post(`/api/offers`, formData);
       }
 
       // Resetear el formulario y la vista previa después de la creación exitosa

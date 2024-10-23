@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function AppErrorBoundaryFallback({ error, resetErrorBoundary }: any) {
-  axios.post(`${import.meta.env.ENV_SERVER_URL}/gw/errorLog`, {
+  axios.post(`/api/errorLog`, {
     message: JSON.stringify(error),
   });
   console.log(Date.now(), "Control de error de la plantilla ", error);

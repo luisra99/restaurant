@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const listTables = async () => {
   try {
-    const { data } = await axios.get(`http://localhost:4000/tables`);
+    const { data } = await axios.get(`/api/tables`);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -10,7 +10,7 @@ export const listTables = async () => {
 };
 export const getTable = async (id: number) => {
   try {
-    const { data } = await axios.get(`http://localhost:4000/tables/${id}`);
+    const { data } = await axios.get(`/api/tables/${id}`);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -18,10 +18,7 @@ export const getTable = async (id: number) => {
 };
 export const putTables = async (id: number, content: any) => {
   try {
-    const { data } = await axios.put(
-      `http://localhost:4000/tables/${id}`,
-      content
-    );
+    const { data } = await axios.put(`/api/tables/${id}`, content);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -30,7 +27,7 @@ export const putTables = async (id: number, content: any) => {
 
 export const postTables = async (content: any) => {
   try {
-    const { data } = await axios.post(`http://localhost:4000/tables`, content);
+    const { data } = await axios.post(`/api/tables`, content);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);
@@ -38,7 +35,7 @@ export const postTables = async (content: any) => {
 };
 export const deleteTable = async (id: number) => {
   try {
-    const { data } = await axios.delete(`http://localhost:4000/tables/${id}`);
+    const { data } = await axios.delete(`/api/tables/${id}`);
     return data;
   } catch (error) {
     console.error("Error consumiendo servicio", error);

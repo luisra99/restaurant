@@ -27,14 +27,14 @@ const Dashboard = () => {
           <Button
             variant={"contained"}
             sx={{ p: 2 }}
-            onClick={() => axios.get("http://localhost:4000/printer/today")}
+            onClick={() => axios.get("/api/printer/today")}
           >
             Venta de área
           </Button>
           <Button
             variant={"contained"}
             sx={{ p: 2, m: 1 }}
-            onClick={() => axios.get("http://localhost:4000/printer/inform")}
+            onClick={() => axios.get("/api/printer/inform")}
           >
             Reporte de caja
           </Button>
