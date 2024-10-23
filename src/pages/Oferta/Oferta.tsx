@@ -18,6 +18,7 @@ import { Camera, CameraAlt } from "@mui/icons-material";
 import { LoadConcept } from "@/utils/concepts";
 import axios from "axios";
 import { getOffers, getOffer } from "@/services/menu";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("El nombre es obligatorio"),
@@ -30,9 +31,10 @@ const validationSchema = Yup.object().shape({
     .positive("Debe ser un número positivo"),
 });
 
-const AddMenuOffer = ({ id }: any) => {
+const AddMenuOffer = ({ id, handleClose }: any) => {
   const [preview, setPreview] = useState<null | string>(null); // Estado para almacenar la vista previa de la imagen
   const [areas, setAreas] = useState([]);
+  const navegar = useNavigate();
   const [initialValues, setInitialValues] = useState({
     image: null,
     name: "",
@@ -75,6 +77,7 @@ const AddMenuOffer = ({ id }: any) => {
     try {
       if (id) {
         await axios.put(`http://localhost:4000/offers/${id}`, formData);
+        handleClose();
       } else {
         await axios.post(`http://localhost:4000/offers`, formData);
       }
@@ -93,7 +96,7 @@ const AddMenuOffer = ({ id }: any) => {
   return (
     <Box sx={{ maxWidth: 600, margin: "0 auto", padding: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Agregar Oferta al Menú
+        {id ? "Modificar oferta" : "Agregar Oferta al Menú"}
       </Typography>
       <Formik
         initialValues={initialValues}
@@ -257,8 +260,13 @@ const AddMenuOffer = ({ id }: any) => {
 
               <Box display={"flex"} justifyContent={"space-between"} gap={1}>
                 {/* Botón de submit */}
-                <Button variant="text" color="primary" fullWidth>
-                  Limpiar
+                <Button
+                  variant="text"
+                  color="primary"
+                  fullWidth
+                  onClick={handleClose}
+                >
+                  Cerrar
                 </Button>
                 <Button
                   type="submit"
@@ -266,7 +274,7 @@ const AddMenuOffer = ({ id }: any) => {
                   color="primary"
                   fullWidth
                 >
-                  Agregar Oferta
+                  {id ? "Actualizar" : "Agregar Oferta"}
                 </Button>
               </Box>
             </Form>

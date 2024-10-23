@@ -61,7 +61,7 @@ function Mesas() {
       <Box justifyContent="center" width="100%" p={4}>
         <Grid container spacing={4}>
           {mesas.map((mesa: any) => (
-            <Grid item xs={12} sm={4} md={2} key={mesa.name}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={mesa.name}>
               <Paper
                 elevation={3}
                 sx={{
@@ -163,7 +163,7 @@ function Mesas() {
                     color="textSecondary"
                     sx={{ marginTop: 0.5 }}
                   >
-                    Mesero: {mesa.Account.dependent || "No asignado"}
+                    Mesero: {mesa.Account?.dependent?.name || "No asignado"}
                   </Typography>
                 )}
               </Paper>

@@ -63,14 +63,6 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
     if (id) {
       getAccount(id).then(
         ({ name, description, people, idDependent, idTable, idType }: any) => {
-          console.log("datos ceunta", {
-            name,
-            description,
-            people,
-            idDependent,
-            idTable,
-            idType,
-          });
           setInitialValues(
             structuredClone({
               name,
@@ -121,7 +113,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
   return (
     <Box sx={{ maxWidth: 600, margin: "0 auto", padding: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Abrir Nueva Cuenta
+        {id ? "Actualizar detalles de la cuenta" : "Nueva Cuenta"}
       </Typography>
       <Formik
         initialValues={initialValues}
@@ -234,8 +226,13 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
 
             <Box display="flex" justifyContent="space-between" gap={1}>
               {/* Botón de limpiar */}
-              <Button variant="text" color="primary" fullWidth>
-                Limpiar
+              <Button
+                variant="text"
+                color="primary"
+                fullWidth
+                onClick={() => handleClose()}
+              >
+                Cerrar
               </Button>
               {/* Botón de submit */}
               <Button
@@ -244,7 +241,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 color="primary"
                 fullWidth
               >
-                Abrir Cuenta
+                {id ? "Actualizar información" : "Abrir Cuenta"}
               </Button>
             </Box>
           </Form>

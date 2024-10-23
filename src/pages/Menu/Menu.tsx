@@ -95,7 +95,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
             variant="contained"
             fullWidth
             sx={{ height: "100%" }}
-            onClick={() => navegar(`/offer`)}
+            onClick={() => setOpen(true)}
           >
             Crear oferta
           </Button>
@@ -131,23 +131,14 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
       {/* Efecto de desvanecimiento inferior */}
 
       <Grid container spacing={2} maxHeight={"74vh"} overflow={"auto"} p={2}>
-        <Box
-          sx={{
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "50px", // Altura del difuminado
-            background:
-              "linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
-            zIndex: 1,
-          }}
-        />
         {filteredItems.map((item) => (
           <Grid
             item
             key={item.id}
-            xs={4}
-            sm={3}
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
             pb={2}
             onClick={() => setProduct?.(item.id)}
             sx={{ cursor: "pointer" }}
@@ -195,18 +186,6 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
             </Card>
           </Grid>
         ))}
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "50px", // Altura del difuminado
-            background:
-              "linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
-            zIndex: 1,
-          }}
-        />
       </Grid>
       <Modal
         onClose={() => {
@@ -218,7 +197,13 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <AddMenuOffer id={id} />
+          <AddMenuOffer
+            id={id}
+            handleClose={() => {
+              setOpen(false);
+              setId(null);
+            }}
+          />
         </Box>
       </Modal>
     </>

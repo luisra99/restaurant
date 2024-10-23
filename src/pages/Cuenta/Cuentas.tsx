@@ -51,7 +51,7 @@ function Cuentas() {
       <Box justifyContent="center" width="100%" p={4}>
         <Grid container spacing={4}>
           {cuentas.map((cuenta: any) => (
-            <Grid item xs={12} sm={4} key={cuenta.name}>
+            <Grid item xs={12} sm={6} md={4} xl={3} key={cuenta.name}>
               <Paper
                 elevation={3}
                 sx={{
@@ -70,7 +70,9 @@ function Cuentas() {
                   alignItems="center"
                 >
                   {/* Nombre de la mesa */}
-                  <Typography variant="h6">{cuenta.name}</Typography>
+                  <Typography variant="h6">
+                    {cuenta.name ? cuenta.name : cuenta.table.name}
+                  </Typography>
 
                   {/* Cantidad de personas */}
                   <Box display="flex" alignItems="center">
@@ -87,68 +89,6 @@ function Cuentas() {
           ))}
         </Grid>
       </Box>
-      <Modal
-        open={false}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box
-            display="flex"
-            justifyContent="space-around"
-            alignItems="center"
-            sx={{ marginTop: 2 }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-                /* Acción para abrir cuenta normal */
-              }}
-            >
-              <ReceiptLongIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Cuenta local
-              </Typography>
-            </Button>
-
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-
-                /* Acción para pedidos para llevar */
-              }}
-            >
-              <ShoppingCartCheckoutIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Para Llevar
-              </Typography>
-            </Button>
-
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ flexDirection: "column", padding: 2, m: 0.5 }}
-              onClick={() => {
-                setOpen(false);
-
-                /* Acción para servicio a domicilio */
-              }}
-            >
-              <HomeIcon sx={{ fontSize: 50 }} />
-              <Typography variant="body2" sx={{ marginTop: 1 }}>
-                Cuenta casa
-              </Typography>
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
     </>
   );
 }
