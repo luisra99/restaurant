@@ -28,17 +28,17 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Paper>
+            <ImpuestosDescuentos />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper>
             <Dependientes />
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
           <Paper>
             <Divisas />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={12}>
-          <Paper>
-            <ImpuestosDescuentos />
           </Paper>
         </Grid>
       </Grid>

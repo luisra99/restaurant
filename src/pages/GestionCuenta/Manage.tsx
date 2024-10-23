@@ -49,7 +49,7 @@ function Manage() {
 
   useEffect(() => {
     Load();
-  }, []);
+  }, [searchParams]);
 
   return (
     <>

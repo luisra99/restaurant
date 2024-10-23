@@ -68,7 +68,7 @@ const FinalCash = () => {
   return (
     <Box p={3}>
       <Typography variant="h5" gutterBottom>
-        Declarar el efectivo en caja inicial
+        Declarar el efectivo en caja final
       </Typography>
 
       <Formik

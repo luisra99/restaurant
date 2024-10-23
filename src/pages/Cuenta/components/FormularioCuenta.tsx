@@ -19,6 +19,7 @@ import axios from "axios";
 import { listTables } from "@/services/table";
 import { getAccount } from "@/services/account";
 import { listDependents } from "@/services/dependent";
+import { useNavigate } from "react-router-dom";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
@@ -32,7 +33,7 @@ const validationSchema = Yup.object().shape({
   idTable: Yup.string().nullable(), // La mesa puede ser opcional
 });
 
-const OpenAccount = ({ id, idTable,handleClose }: any) => {
+const OpenAccount = ({ id, idTable, handleClose }: any) => {
   const [tables, setTables] = useState<any>([]); // Estado para almacenar las mesas
   const [dependents, setDependents] = useState<any>([]); // Estado para almacenar los tipos de cuenta
   const [initialValues, setInitialValues] = useState<any>({
@@ -44,7 +45,7 @@ const OpenAccount = ({ id, idTable,handleClose }: any) => {
     idType: null,
   });
   // const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
-
+  const navegar = useNavigate();
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
     const tableConcepts = await listTables(); // ID para cargar mesas
@@ -97,18 +98,21 @@ const OpenAccount = ({ id, idTable,handleClose }: any) => {
           values
         );
       } else {
-        const response = await axios.post(
+        const { data } = await axios.post(
           "http://localhost:4000/accounts",
           values
         );
+        if (data.id) {
+          navegar(`/manage?id=${data.id}`);
+        }
       }
 
       resetForm();
       alert("Cuenta abierta con éxito");
-      handleClose?.()
-    } catch (error) {
+      handleClose?.();
+    } catch (error: any) {
       console.error(error);
-      alert("Ha ocurrido un error al abrir la cuenta");
+      alert("Ha ocurrido un error al abrir la cuenta: " + error.message);
     } finally {
       setSubmitting(false);
     }
@@ -163,7 +167,7 @@ const OpenAccount = ({ id, idTable,handleClose }: any) => {
                 name="description"
                 as={TextField}
                 label="Descripción"
-                value={values.description??""}
+                value={values.description ?? ""}
                 variant="outlined"
                 error={touched.description && Boolean(errors.description)}
                 helperText={touched.description && errors.description}
@@ -176,7 +180,7 @@ const OpenAccount = ({ id, idTable,handleClose }: any) => {
                 name="people"
                 as={TextField}
                 label="Número de personas"
-                value={values.people??""}
+                value={values.people ?? ""}
                 variant="outlined"
                 type="number"
                 error={touched.people && Boolean(errors.people)}

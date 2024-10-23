@@ -96,13 +96,6 @@ const Areas = () => {
                 error={touched.denomination && Boolean(errors.denomination)}
                 helperText={touched.denomination && errors.denomination}
               />
-              <Field
-                name="details"
-                as={TextField}
-                label="Tasa de Cambio"
-                error={touched.details && Boolean(errors.details)}
-                helperText={touched.details && errors.details}
-              />
               <Button
                 variant="contained"
                 onClick={() => {
@@ -122,7 +115,6 @@ const Areas = () => {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Tasa de Cambio</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -130,7 +122,6 @@ const Areas = () => {
             {concepts.map((area, index) => (
               <TableRow key={index}>
                 <TableCell>{area.denomination}</TableCell>
-                <TableCell>{area.details}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => editArea(area.id)}>
                     <EditIcon />

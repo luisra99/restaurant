@@ -28,7 +28,7 @@ const CategoriaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre de la categoría requerido"),
 });
 
-const Dependent = () => {
+const Operator = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [concepts, setConcepts] = useState<any[]>([]);
   const [initialValues, setInitialValues] = useState({
@@ -88,7 +88,7 @@ const Dependent = () => {
               <Field
                 name="denomination"
                 as={TextField}
-                label="Efectivo en caja"
+                label="Cajero en turno"
                 error={touched.denomination && Boolean(errors.denomination)}
                 helperText={touched.denomination && errors.denomination}
               />
@@ -110,4 +110,4 @@ const Dependent = () => {
   );
 };
 
-export default Dependent;
+export default Operator;

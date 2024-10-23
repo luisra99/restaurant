@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { Add } from "@mui/icons-material";
 import OpenAccount from "../Cuenta/components/FormularioCuenta";
 import AddMenuOffer from "../Oferta/Oferta";
+import { usePathname } from "@/_pwa-framework/routes/hooks";
 
 const style = {
   bgcolor: "background.paper",
@@ -38,7 +39,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const [category, setCategory] = useState("Todo");
   const [categorys, setCategorys] = useState<any[]>([]);
   const [menu, setMenu] = useState<any[]>([]);
-
+  const pathname = usePathname();
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<any>(null);
 
@@ -169,25 +170,27 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
                   {item.description}
                 </Typography>
                 <Typography variant="h6">${item.price}</Typography>
-                <Box display={"flex"} justifyContent={"flex-end"}>
-                  <Button
-                    variant="outlined"
-                    sx={{ mr: 1 }}
-                    color="error"
-                    onClick={() => deleteOffer(item.id)}
-                  >
-                    Eliminar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      setId(item.id);
-                      setOpen(true);
-                    }}
-                  >
-                    Modificar
-                  </Button>
-                </Box>
+                {pathname === "/menu" && (
+                  <Box display={"flex"} justifyContent={"flex-end"}>
+                    <Button
+                      variant="outlined"
+                      sx={{ mr: 1 }}
+                      color="error"
+                      onClick={() => deleteOffer(item.id)}
+                    >
+                      Eliminar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setId(item.id);
+                        setOpen(true);
+                      }}
+                    >
+                      Modificar
+                    </Button>
+                  </Box>
+                )}
               </CardContent>
             </Card>
           </Grid>

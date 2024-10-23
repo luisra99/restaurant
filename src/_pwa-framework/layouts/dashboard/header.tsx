@@ -182,7 +182,7 @@ export default function Header({ onOpenNav }: any) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <OpenAccount />
+          <OpenAccount handleClose={handleClose} />
         </Box>
       </Modal>
     </>

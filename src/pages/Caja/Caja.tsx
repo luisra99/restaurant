@@ -1,27 +1,44 @@
 import React from "react";
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, Paper } from "@mui/material";
 import InitialCash from "./components/InitialCash";
 import FinalCash from "./components/FinalCash";
-import Dependent from "./components/Dependent";
+import Operator from "./components/Operator";
+import axios from "axios";
 
 const Dashboard = () => {
   return (
     <Box p={3}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={4} md={4}>
           <Paper>
             <InitialCash />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={4} md={4}>
           <Paper>
             <FinalCash />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={4} md={4}>
           <Paper>
-            <Dependent />
+            <Operator />
           </Paper>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <Button
+            variant={"contained"}
+            sx={{ p: 2 }}
+            onClick={() => axios.get("http://localhost:4000/printer/today")}
+          >
+            Venta de área
+          </Button>
+          <Button
+            variant={"contained"}
+            sx={{ p: 2, m: 1 }}
+            onClick={() => axios.get("http://localhost:4000/printer/inform")}
+          >
+            Reporte de caja
+          </Button>
         </Grid>
       </Grid>
     </Box>
