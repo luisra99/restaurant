@@ -18,6 +18,7 @@ import { listTables } from "@/services/table";
 import { getAccount } from "@/services/account";
 import { listDependents } from "@/services/dependent";
 import { useNavigate } from "react-router-dom";
+import { LoadConcept } from "@/utils/concepts";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
@@ -30,7 +31,6 @@ const validationSchema = Yup.object().shape({
   idDependent: Yup.string().nullable(), // Este campo es opcional
   idTable: Yup.string().nullable(), // La mesa puede ser opcional
 });
-
 const OpenAccount = ({ id, idTable, handleClose }: any) => {
   const [tables, setTables] = useState<any>([]); // Estado para almacenar las mesas
   const [dependents, setDependents] = useState<any>([]); // Estado para almacenar los tipos de cuenta
@@ -42,14 +42,14 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
     idTable: idTable ?? null,
     idType: null,
   });
-  // const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
+  const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
   const navegar = useNavigate();
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
     const tableConcepts = await listTables(); // ID para cargar mesas
     const dependentsList = await listDependents(); // ID para tipos de cuenta
-    // const typeConcepts = await LoadConcept(2); // ID para tipos de cuenta
-    // setAccountTypes(typeConcepts);
+    const typeConcepts = await LoadConcept("Tipo de cuenta"); // ID para tipos de cuenta
+    setAccountTypes(typeConcepts);
     setTables(tableConcepts);
     setDependents(dependentsList);
   };
@@ -139,9 +139,11 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 aria-label="Platform"
                 fullWidth
               >
-                <ToggleButton value="13">Cuenta normal</ToggleButton>
-                <ToggleButton value="15">Cuenta casa</ToggleButton>
-                <ToggleButton value="14">Para llevar</ToggleButton>
+                {accountTypes.map((type: any) => (
+                  <ToggleButton value={`${type.id}`}>
+                    {type.denomination}
+                  </ToggleButton>
+                ))}
               </Field>
             </FormControl>
 

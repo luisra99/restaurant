@@ -15,7 +15,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   People,
-  AccessTime,
   Add,
   Remove,
   Settings,
@@ -29,6 +28,7 @@ import { fTime } from "@/_pwa-framework/utils/format-time";
 import OpenAccount from "./components/FormularioCuenta";
 import { printAccount } from "@/services/printer";
 import PaymentModal from "../Payment/PaymentModal";
+import { useNavigate } from "react-router-dom";
 function Cuenta({
   data,
   setNegative,
@@ -42,8 +42,8 @@ function Cuenta({
   setProduct: (args: number) => void;
   load: () => Promise<void>;
 }) {
-  const accountTypeIcon: { [key: number]: JSX.Element } = {
-    13: (
+  const accountTypeIcon: { [key: string]: JSX.Element } = {
+    "Cuenta local": (
       <ReceiptLongIcon
         sx={{
           width: "50%",
@@ -53,7 +53,7 @@ function Cuenta({
         }}
       />
     ),
-    14: (
+    "Para llevar": (
       <ShoppingCartCheckoutIcon
         sx={{
           width: "50%",
@@ -63,7 +63,7 @@ function Cuenta({
         }}
       />
     ),
-    15: (
+    "Cuenta casa": (
       <HomeIcon
         sx={{
           width: "50%",
@@ -82,6 +82,7 @@ function Cuenta({
     setOpen(false);
   }
   const [open, setOpen] = useState(false);
+  const navegar = useNavigate();
   const [paymentModal, setPaymentModal] = useState(false);
   return (
     <>
@@ -92,7 +93,10 @@ function Cuenta({
           <Grid container display={"flex"} justifyContent={"start"}>
             <Grid item xs={6} textAlign={"left"}>
               <Typography variant="h5">{data?.name}</Typography>
-              <Typography>Depediente: {data?.dependent}</Typography>
+              <Typography>
+                Depediente: {data?.dependent ?? "Sin asignar"}
+              </Typography>
+              <Typography>{data.table?.name} </Typography>
             </Grid>
 
             <Grid item xs={2} textAlign={"left"}>
@@ -101,7 +105,7 @@ function Cuenta({
                 alignItems={"center"}
                 flexWrap={"wrap"}
               >
-                <AccessTime sx={{ mr: 1 }} /> {fTime(data?.created)}
+                Hora: {fTime(data?.created)}
               </Typography>
               <br />
               <Box
@@ -119,7 +123,7 @@ function Cuenta({
               display={"flex"}
               justifyContent={"center"}
             >
-              {accountTypeIcon[data?.idType]}
+              {accountTypeIcon[data?.type.denomination]}
             </Grid>
 
             <Grid
@@ -400,7 +404,9 @@ function Cuenta({
               color="error"
               fullWidth
               sx={{ py: 2 }}
-              onClick={() => deleteAccount(data.id)}
+              onClick={() =>
+                deleteAccount(data.id).then(() => navegar("/mesas"))
+              }
             >
               <Typography variant="subtitle1" letterSpacing={0.7}>
                 Eliminar
@@ -425,7 +431,9 @@ function Cuenta({
               color="success"
               fullWidth
               sx={{ py: 2 }}
-              onClick={() => closeAccount(data.id)}
+              onClick={() =>
+                closeAccount(data.id).then(() => navegar("/mesas"))
+              }
             >
               <Typography variant="subtitle1" letterSpacing={0.7}>
                 Cerrar
