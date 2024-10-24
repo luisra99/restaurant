@@ -80,6 +80,7 @@ function Cuenta({
     reason: "backdropClick" | "escapeKeyDown"
   ): void {
     setOpen(false);
+    load();
   }
   const [open, setOpen] = useState(false);
   const navegar = useNavigate();
@@ -123,7 +124,7 @@ function Cuenta({
               display={"flex"}
               justifyContent={"center"}
             >
-              {accountTypeIcon[data?.type.denomination]}
+              {accountTypeIcon[data?.type?.denomination]}
             </Grid>
 
             <Grid

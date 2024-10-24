@@ -139,9 +139,9 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 aria-label="Platform"
                 fullWidth
               >
-                {accountTypes.map((type: any) => (
-                  <ToggleButton value={`${type.id}`}>
-                    {type.denomination}
+                {accountTypes?.map((type: any) => (
+                  <ToggleButton value={`${type?.id}`}>
+                    {type?.denomination}
                   </ToggleButton>
                 ))}
               </Field>
