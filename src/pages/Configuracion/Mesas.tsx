@@ -58,6 +58,7 @@ const Mesas = () => {
           details: "",
         })
       );
+      setEditingIndex(null);
     } else {
       await postTables(mesa);
     }

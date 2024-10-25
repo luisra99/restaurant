@@ -50,6 +50,7 @@ const Categorias = () => {
           denomination: "",
         })
       );
+      setEditingIndex(null);
     } else {
       await postConcept(1, concept);
     }
