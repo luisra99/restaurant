@@ -16,6 +16,7 @@ import { NavItem } from "./common/NavItem";
 import OpenAccount from "@/pages/Cuenta/components/FormularioCuenta";
 import { useNavigate } from "react-router-dom";
 import PropinaModal from "@/pages/Payment/PropinaModal";
+import axios from "axios";
 export default function Header({ onOpenNav }: any) {
   const theme = useTheme();
   const pathname = usePathname();
@@ -147,6 +148,13 @@ export default function Header({ onOpenNav }: any) {
             onClick={() => setPropina(true)}
           >
             Propina
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ mr: 1 }}
+            onClick={() => axios.post("/api/operator/lastTicket")}
+          >
+            Imprimir Último
           </Button>
           <Button
             variant="outlined"
