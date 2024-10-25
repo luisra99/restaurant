@@ -134,17 +134,19 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
             sx={{ cursor: "pointer" }}
           >
             <Card>
-              <CardMedia
-                component="img"
-                height="140"
-                image={`/api/public/${item.image}`}
-                alt={item.name}
-                sx={{
-                  objectFit: "cover", // Asegura que la imagen cubra el área sin distorsionarse
-                  width: "100%", // Hace que la imagen ocupe todo el ancho del contenedor
-                  borderRadius: "8px 8px 0 0", // Bordes redondeados en la parte superior
-                }}
-              />
+              {item.image && (
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={`/api/public/${item.image}`}
+                  alt={item.name}
+                  sx={{
+                    objectFit: "cover", // Asegura que la imagen cubra el área sin distorsionarse
+                    width: "100%", // Hace que la imagen ocupe todo el ancho del contenedor
+                    borderRadius: "8px 8px 0 0", // Bordes redondeados en la parte superior
+                  }}
+                />
+              )}
               <CardContent>
                 <Typography variant="h6">{item.name}</Typography>
                 <Typography variant="body2" color="textSecondary">
