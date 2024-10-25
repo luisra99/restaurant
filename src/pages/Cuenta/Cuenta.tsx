@@ -13,14 +13,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import HomeIcon from "@mui/icons-material/Home";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  People,
-  Add,
-  Remove,
-  Settings,
-  Print,
-  Info,
-} from "@mui/icons-material";
+import { People, Add, Remove, Print, Info } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
 import { closeAccount, deleteAccount } from "@/services/account";
@@ -29,6 +22,7 @@ import OpenAccount from "./components/FormularioCuenta";
 import { printAccount } from "@/services/printer";
 import PaymentModal from "../Payment/PaymentModal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 function Cuenta({
   data,
   setNegative,
@@ -371,24 +365,52 @@ function Cuenta({
                 {/* Espacio vacío para mantener la alineación */}
                 <Grid item xs={2}></Grid>
               </Grid>
-
               {/* Botón de Settings fijado en la esquina inferior derecha */}
-              <Button
-                size="large"
-                variant="contained"
-                color="info"
-                sx={{
-                  position: "absolute",
-                  bottom: 0, // Ajusta este valor según sea necesario
-                  right: 0, // Ajusta este valor según sea necesario
-                  top: 0,
-                  height: "100%",
-                  width: "50px",
-                  borderRadius: "8px 8px 8px 8px",
-                }}
-              >
-                <Settings />
-              </Button>
+              {data?.mappedTaxsDiscounts?.length ? (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="warning"
+                  sx={{
+                    position: "absolute",
+                    bottom: 0, // Ajusta este valor según sea necesario
+                    right: 0, // Ajusta este valor según sea necesario
+                    top: 0,
+                    height: "100%",
+                    width: "50px",
+                    borderRadius: "8px 8px 8px 8px",
+                  }}
+                  onClick={() =>
+                    axios
+                      .delete(`/api/accounts/tax/${data.id}`)
+                      .then(() => load())
+                  }
+                >
+                  <Remove />
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="warning"
+                  sx={{
+                    position: "absolute",
+                    bottom: 0, // Ajusta este valor según sea necesario
+                    right: 0, // Ajusta este valor según sea necesario
+                    top: 0,
+                    height: "100%",
+                    width: "50px",
+                    borderRadius: "8px 8px 8px 8px",
+                  }}
+                  onClick={() =>
+                    axios
+                      .post(`/api/accounts/tax/${data.id}`)
+                      .then(() => load())
+                  }
+                >
+                  <Add />
+                </Button>
+              )}
             </Paper>
           </Grid>
         </Grid>
