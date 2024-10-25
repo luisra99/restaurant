@@ -2,53 +2,29 @@ import { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import {
-  getConcept,
-  LoadConcept,
-  postConcept,
-  putConcept,
-} from "@/utils/concepts";
-import { deleteConcept } from "@/services/concept";
+import { getInitialCash, saveInitialCash } from "@/services/payments";
 
 const CategoriaSchema = Yup.object().shape({
-  nombre: Yup.string().required("Nombre de la categoría requerido"),
+  initialCash: Yup.string().required("Nombre de la categoría requerido"),
 });
 
 const InitialCash = () => {
   const [editingIndex, setEditingIndex] = useState(null);
-  const [concepts, setConcepts] = useState<any[]>([]);
   const [initialValues, setInitialValues] = useState({
-    denomination: "",
+    initialCash: "",
   });
   const Load = async () => {
-    const _concepts = await LoadConcept("Categorías");
-    setConcepts([..._concepts]);
+    const data = await getInitialCash();
+    setInitialValues(data);
   };
 
   useEffect(() => {
     Load();
   }, []);
 
-  const addCategoria = async (concept: any) => {
-    if (editingIndex !== null) {
-      await putConcept(editingIndex, concept).then(() =>
-        setInitialValues({
-          denomination: "",
-        })
-      );
-    } else {
-      await postConcept(1, concept);
-    }
-  };
-
-  const deleteCategoria = (id: any) => {
-    deleteConcept(id).then(() => Load());
-  };
-
-  const editCategoria = async (id: any) => {
-    setEditingIndex(id);
-    const concept = await getConcept(id);
-    setInitialValues(concept);
+  const _saveInitialCash = async (concept: any) => {
+    const data = await saveInitialCash(concept);
+    setInitialValues(data);
   };
 
   return (
@@ -63,7 +39,8 @@ const InitialCash = () => {
         validationSchema={CategoriaSchema}
         onSubmit={async (values, { resetForm }) => {
           console.log("submit");
-          addCategoria(values).then(() => Load());
+
+          _saveInitialCash(values).then(() => Load());
           if (editingIndex) setEditingIndex(null);
           resetForm();
         }}
@@ -72,17 +49,18 @@ const InitialCash = () => {
           <Form>
             <Box display="flex" flexDirection="column" gap={2}>
               <Field
-                name="denomination"
+                name="initialCash"
                 as={TextField}
+                type="number"
                 label="Efectivo en caja"
-                error={touched.denomination && Boolean(errors.denomination)}
-                helperText={touched.denomination && errors.denomination}
+                error={touched.initialCash && Boolean(errors.initialCash)}
+                helperText={touched.initialCash && errors.initialCash}
               />
               <Button
                 variant="contained"
                 onClick={() => {
                   console.log("submit");
-                  addCategoria(values).then(() => Load());
+                  _saveInitialCash(values).then(() => Load());
                   resetForm();
                 }}
               >

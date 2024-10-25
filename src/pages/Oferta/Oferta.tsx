@@ -38,8 +38,8 @@ const AddMenuOffer = ({ id, handleClose }: any) => {
   const [initialValues, setInitialValues] = useState({
     image: null,
     name: "",
-    description: "",
-    details: "",
+    description: " ",
+    details: " ",
     idCategory: "",
     idArea: "",
     price: "",

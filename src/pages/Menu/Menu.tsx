@@ -60,10 +60,10 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
   const filteredItems = menu.filter((item) => {
     const isInCategory = category === "Todo" || item.category.id === category;
     const isInSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       Number(searchTerm) + 200 >= Number(item.price) ||
-      item.details.toLowerCase().includes(searchTerm.toLowerCase());
+      item.details?.toLowerCase().includes(searchTerm.toLowerCase());
     return isInCategory && isInSearch;
   });
 

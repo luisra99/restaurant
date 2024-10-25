@@ -1,52 +1,26 @@
 import { HEADER, NAV } from "./config-layout";
 
-import AccountPopover from "./common/account-popover";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import LanguagePopover from "./common/language-popover";
-import NotificationsPopover from "./common/notifications-popover";
 import PropTypes from "prop-types";
-import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import { bgBlur } from "../../theme/css";
 import { useResponsive } from "../../hooks/use-responsive";
 import { useTheme } from "@mui/material/styles";
-import {
-  Collapse,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Modal,
-} from "@mui/material";
-import {
-  ExpandLess,
-  ExpandMore,
-  Home,
-  ShoppingCart,
-} from "@mui/icons-material";
-import { Fragment, useEffect, useState } from "react";
-import { atom, useRecoilState } from "recoil";
-
-import Avatar from "@mui/material/Avatar";
+import { Modal } from "@mui/material";
+import { useState } from "react";
 import Button from "@mui/material/Button";
-import Drawer from "@mui/material/Drawer";
-import { RouterLink } from "@/_pwa-framework/routes/components";
-import { Routes } from "@/_pwa-framework/routes/types";
-import Scrollbar from "@/_pwa-framework/components/scrollbar/scrollbar";
-import Typography from "@mui/material/Typography";
-import { alpha } from "@mui/material/styles";
 import routes from "@/_pwa-framework/routes";
 import { usePathname } from "@/_pwa-framework/routes/hooks";
-import { useSession } from "@/_pwa-framework/session/state";
 import { NavItem } from "./common/NavItem";
 import OpenAccount from "@/pages/Cuenta/components/FormularioCuenta";
-import { minWidth } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import PropinaModal from "@/pages/Payment/PropinaModal";
 export default function Header({ onOpenNav }: any) {
   const theme = useTheme();
   const pathname = usePathname();
   const [open, setOpen] = useState<any>({});
+  const [propina, setPropina] = useState<any>(false);
   const navegar = useNavigate();
   const [openAccount, setOpenAccount] = useState<any>(false);
   const handleClick = (param?: string) => {
@@ -170,6 +144,13 @@ export default function Header({ onOpenNav }: any) {
           <Button
             variant="outlined"
             sx={{ mr: 1 }}
+            onClick={() => setPropina(true)}
+          >
+            Propina
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ mr: 1 }}
             onClick={() => navegar(`/accounts`)}
           >
             Ver Cuentas
@@ -190,6 +171,7 @@ export default function Header({ onOpenNav }: any) {
           <OpenAccount handleClose={handleClose} />
         </Box>
       </Modal>
+      <PropinaModal onClose={() => setPropina(false)} open={!!propina} />
     </>
   );
 }
