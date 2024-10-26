@@ -5,8 +5,6 @@ const apiScope = mode ? `/api/gw-dev/` : `/api/gw/`;
 
 const email = appConfig.email;
 const title = appConfig.title;
-const identitys = appConfig.identitys;
-const profileConfig = appConfig.profileConfig;
 const logInRedirectPath = appConfig.loginRedirectPath;
 const selfSignUp = appConfig.selfSignUp;
 const localSignIn = appConfig.localSignIn;
@@ -56,10 +54,8 @@ export {
   selfSignUp,
   localSignIn,
   title,
-  profileConfig,
   apiScope,
   mode,
-  identitys,
   messages,
   notifications,
   defaultMetaTags,
