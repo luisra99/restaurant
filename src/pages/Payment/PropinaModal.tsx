@@ -112,7 +112,7 @@ const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
                     onChange={handleChange}
                     error={touched.idDivisa && Boolean(errors.idDivisa)}
                   >
-                    {divisas.map((divisa) => (
+                    {divisas?.map((divisa) => (
                       <MenuItem key={divisa.id} value={divisa.id}>
                         {divisa.denomination}
                       </MenuItem>

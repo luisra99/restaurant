@@ -141,7 +141,7 @@ const Dependientes = () => {
                 <TableCell colSpan={2}>Cargando...</TableCell>
               </TableRow>
             ) : (
-              dependents.map((dependent, index) => (
+              dependents?.map((dependent, index) => (
                 <TableRow key={dependent.id}>
                   <TableCell>{dependent.name}</TableCell>
                   <TableCell>

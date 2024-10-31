@@ -117,7 +117,7 @@ const Areas = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {concepts.map((area, index) => (
+            {concepts?.map((area, index) => (
               <TableRow key={index}>
                 <TableCell>{area.denomination}</TableCell>
                 <TableCell>

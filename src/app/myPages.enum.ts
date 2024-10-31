@@ -1,4 +1,5 @@
 export enum Pages {
+  Test,
   Welcome,
   Mesas,
   Accounts,

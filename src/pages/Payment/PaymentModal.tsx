@@ -121,7 +121,7 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
                   value={values.idMethod}
                   onChange={handleChange}
                 >
-                  {tiposPago.map((tipoPago: any) => (
+                  {tiposPago?.map((tipoPago: any) => (
                     <FormControlLabel
                       value={`${tipoPago.id}`}
                       control={<Radio />}
@@ -142,7 +142,7 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
                     onChange={handleChange}
                     error={touched.idDivisa && Boolean(errors.idDivisa)}
                   >
-                    {divisas.map((divisa) => (
+                    {divisas?.map((divisa) => (
                       <MenuItem key={divisa.id} value={divisa.id}>
                         {divisa.denomination}
                       </MenuItem>

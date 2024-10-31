@@ -51,21 +51,19 @@ const Mesas = () => {
 
   const addMesa = async (mesa: any) => {
     if (editingIndex !== null) {
-      await putTables(editingIndex, mesa).then(() =>
-        setInitialValues({
-          name: "",
-          capacity: "",
-          details: "",
-        })
-      );
+      await putTables(editingIndex, mesa);
       setEditingIndex(null);
     } else {
       await postTables(mesa);
     }
+    await Load(); // Asegúrate de que la carga ocurra después de agregar o actualizar
+    setInitialValues({ name: "", capacity: "", details: "" }); // Mueve esto aquí
   };
 
   const deleteMesa = (id: any) => {
-    deleteTable(id).then(() => Load());
+    deleteTable(id).then(() => {
+      Load().then(() => console.log("Mesas cargadas:", mesas));
+    });
   };
 
   const editMesa = async (index: any) => {
@@ -84,10 +82,7 @@ const Mesas = () => {
         initialValues={initialValues}
         enableReinitialize
         validationSchema={MesaSchema}
-        onSubmit={(values, { resetForm }) => {
-          addMesa(values);
-          resetForm();
-        }}
+        onSubmit={() => {}}
       >
         {({ errors, touched, values, resetForm }) => (
           <Form>
@@ -116,10 +111,7 @@ const Mesas = () => {
               />
               <Button
                 variant="contained"
-                onClick={() => {
-                  addMesa(values).then(() => Load());
-                  resetForm();
-                }}
+                onClick={() => addMesa(values).then(() => resetForm())}
               >
                 {editingIndex !== null ? "Guardar Cambios" : "Añadir Mesa"}
               </Button>

@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import Meta from "@/_pwa-framework/components/Meta";
+import Meta from "@/base/components/Meta";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
@@ -17,8 +17,8 @@ import { People, Add, Remove, Print, Info } from "@mui/icons-material";
 import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
 import { closeAccount, deleteAccount } from "@/services/account";
-import { fTime } from "@/_pwa-framework/utils/format-time";
-import OpenAccount from "./components/FormularioCuenta";
+import { fTime } from "@/base/utils/format-time";
+import OpenAccount from "../../components/revisar/FormularioCuenta";
 import { printAccount } from "@/services/printer";
 import PaymentModal from "../Payment/PaymentModal";
 import { useNavigate } from "react-router-dom";

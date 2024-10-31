@@ -1,15 +1,12 @@
 import { Box } from "@mui/system";
-import Meta from "@/_pwa-framework/components/Meta";
-import { Grid, Modal, Paper, Typography } from "@mui/material";
+import Meta from "@/base/components/Meta";
+import { Dialog, Grid, Paper, Typography } from "@mui/material";
 import { Person } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import HomeIcon from "@mui/icons-material/Home";
 import { listTables } from "@/services/table";
-import { fToNow } from "@/_pwa-framework/utils/format-time";
+import { fToNow } from "@/base/utils/format-time";
 import { getAccounts } from "@/services/account";
-import OpenAccount from "../Cuenta/components/FormularioCuenta";
+import OpenAccount from "../../components/revisar/FormularioCuenta";
 import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
@@ -44,11 +41,6 @@ function Mesas() {
     3: "orange",
     4: "lightblue",
   };
-  const accountTypeIcon: { [key: number]: JSX.Element } = {
-    13: <ReceiptLongIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-    14: <ShoppingCartCheckoutIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-    15: <HomeIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-  };
   useEffect(() => {
     Load();
   }, []);
@@ -58,14 +50,14 @@ function Mesas() {
       <Meta title="Configuración" />
       <Box justifyContent="center" width="100%" p={4}>
         <Grid container spacing={4}>
-          {mesas.map((mesa: any) => (
+          {mesas?.map((mesa: any) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={mesa.name}>
               <Paper
                 elevation={3}
                 sx={{
                   padding: 2,
                   borderRadius: "8px",
-                  backgroundColor: statusColors[mesa.status] || "lightgray",
+                  backgroundColor: mesa.Account ? "lightgreen" : "lightgray",
                   cursor: "pointer",
                   position: "relative",
                 }}
@@ -123,13 +115,6 @@ function Mesas() {
                       - ${mesa.amount}
                     </Typography>
                   )}
-
-                  {/* Tiempo de ocupación */}
-                  {mesa.Account && (
-                    <Box display="flex" alignItems="center">
-                      {accountTypeIcon[mesa.Account.idType]}
-                    </Box>
-                  )}
                 </Box>
 
                 {/* Productos en la mesa */}
@@ -169,16 +154,9 @@ function Mesas() {
           ))}
         </Grid>
       </Box>
-      <Modal
-        open={!!openAccount}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <OpenAccount idTable={openAccount} handleClose={handleClose} />
-        </Box>
-      </Modal>
+      <Dialog fullScreen onClose={handleClose} open={!!openAccount}>
+        <OpenAccount idTable={openAccount} handleClose={handleClose} />
+      </Dialog>
     </>
   );
 }

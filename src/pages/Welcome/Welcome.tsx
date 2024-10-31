@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import Meta from "@/_pwa-framework/components/Meta";
+import Meta from "@/base/components/Meta";
 
 function Welcome() {
   return (

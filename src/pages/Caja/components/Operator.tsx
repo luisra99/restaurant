@@ -92,7 +92,7 @@ const Operator = () => {
                   error={touched.idDependent && Boolean(errors.idDependent)}
                 >
                   <MenuItem value="">Ninguno</MenuItem>
-                  {dependents.map((dependent: any, index: number) => (
+                  {dependents?.map((dependent: any, index: number) => (
                     <MenuItem key={index} value={dependent.id}>
                       {dependent.name}
                     </MenuItem>

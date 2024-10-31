@@ -2,16 +2,16 @@ import { ComponentType, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { RecoilRoot } from "recoil";
-import SessionBackDrop from "./_pwa-framework/components/backdrop/backdrop";
+import SessionBackDrop from "./base/components/backdrop/backdrop";
 import { Suspense } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import "./global.css";
-import ThemeProvider from "@/theme/Provider";
+import ThemeProvider from "@/base/theme/Provider";
 import { CssBaseline } from "@mui/material";
-import HotKeys from "./_pwa-framework/sections/HotKeys";
-import SW from "./_pwa-framework/sections/SW";
-import Notifications from "./_pwa-framework/sections/Notifications";
+import HotKeys from "./base/sections/HotKeys";
+import SW from "./base/sections/SW";
+import Notifications from "./base/sections/Notifications";
 
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);

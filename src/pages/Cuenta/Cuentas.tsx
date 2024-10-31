@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import Meta from "@/_pwa-framework/components/Meta";
+import Meta from "@/base/components/Meta";
 import { Grid, Paper, Typography } from "@mui/material";
 import { Person } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -45,7 +45,7 @@ function Cuentas() {
       <Meta title="Configuración" />
       <Box justifyContent="center" width="100%" p={4}>
         <Grid container spacing={4}>
-          {cuentas.map((cuenta: any) => (
+          {cuentas?.map((cuenta: any) => (
             <Grid item xs={12} sm={6} md={4} xl={3} key={cuenta.name}>
               <Paper
                 elevation={3}

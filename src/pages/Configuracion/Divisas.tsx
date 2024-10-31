@@ -124,7 +124,7 @@ const Divisas = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {concepts.map((divisa, index) => (
+            {concepts?.map((divisa, index) => (
               <TableRow key={index}>
                 <TableCell>{divisa.denomination}</TableCell>
                 <TableCell>{divisa.details}</TableCell>

@@ -118,7 +118,7 @@ const Categorias = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {concepts.map(({ denomination, id }, index) => (
+            {concepts?.map(({ denomination, id }, index) => (
               <TableRow key={index}>
                 <TableCell>{denomination}</TableCell>
                 <TableCell>

@@ -9,14 +9,6 @@ export const deleteConcept = async (id: number) => {
   }
 };
 
-export const listConcepts = async () => {
-  try {
-    const { data } = await axios.get(`/api/concepts`);
-    return data;
-  } catch (error) {
-    console.error("Error consumiendo servicio", error);
-  }
-};
 export const getConcept = async (id: number) => {
   try {
     const { data } = await axios.get(`/api/concepts/${id}`);
