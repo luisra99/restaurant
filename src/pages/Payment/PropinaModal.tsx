@@ -14,6 +14,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { LoadConcept } from "@/utils/concepts";
 import { savePropina } from "@/services/payments";
+import { notify } from "@/base/utils/notify";
 
 interface PaymentFormProps {
   open: boolean;
@@ -42,7 +43,8 @@ const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
         const divisasConcept = await LoadConcept("Divisas");
         setDivisas(divisasConcept);
       } catch (error) {
-        console.error("Error al obtener las divisas:", error);
+        console.error("Error consumiendo servicio", error);
+        throw new Error("Error consumiendo servicio");
       }
     };
     fetchDivisas();
@@ -55,7 +57,9 @@ const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
       resetForm();
       onClose();
     } catch (error) {
-      console.error("Error al realizar el pago:", error);
+      notify("No se guardó la propina", "error");
+      console.error("Error consumiendo servicio", error);
+      throw new Error("Error consumiendo servicio");
     }
   };
 

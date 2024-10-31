@@ -47,6 +47,7 @@ const Menu = ({ setProduct }: { setProduct?: (args: any) => void }) => {
           id={id}
           handleClose={() => {
             setOpen(false);
+            setId(null);
             loadMenuData();
           }}
         />

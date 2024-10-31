@@ -14,9 +14,8 @@ import {
   ToggleButtonGroup,
   Grid,
 } from "@mui/material";
-import axios from "axios";
 import { listTables } from "@/services/table";
-import { getAccount } from "@/services/account";
+import { createAccount, getAccount, modifyAccount } from "@/services/account";
 import { listDependents } from "@/services/dependent";
 import { useNavigate } from "react-router-dom";
 import { LoadConcept } from "@/utils/concepts";
@@ -82,25 +81,18 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
     values: any,
     { setSubmitting, resetForm }: any
   ) => {
-    try {
-      if (id) {
-        const response = await axios.put(`/api/accounts/${id}`, values);
-      } else {
-        const { data } = await axios.post("/api/accounts", values);
-        if (data.id) {
-          navegar(`/manage?id=${data.id}`);
-        }
-      }
-
-      resetForm();
-      alert("Cuenta abierta con éxito");
-      handleClose?.();
-    } catch (error: any) {
-      console.error(error);
-      alert("Ha ocurrido un error al abrir la cuenta: " + error.message);
-    } finally {
-      setSubmitting(false);
+    if (id) {
+      await modifyAccount(id, values).then(() => {
+        resetForm();
+        handleClose?.();
+      });
+    } else {
+      await createAccount(values).then((data) => {
+        navegar(`/manage?id=${data.id}`);
+        handleClose?.();
+      });
     }
+    setSubmitting(false);
   };
 
   return (

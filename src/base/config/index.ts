@@ -33,8 +33,8 @@ const defaultMetaTags = {
 const notifications: any = {
   options: {
     anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "left",
+      vertical: "top",
+      horizontal: "center",
     },
     autoHideDuration: 5000,
   },

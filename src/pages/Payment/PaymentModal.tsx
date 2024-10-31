@@ -17,6 +17,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { LoadConcept } from "@/utils/concepts";
 import { pay } from "@/services/payments";
+import { notify } from "@/base/utils/notify";
 
 interface PaymentFormProps {
   open: boolean;
@@ -54,7 +55,7 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
         const tiposPagoConcept = await LoadConcept("Tipos de pago");
         setTiposPago(tiposPagoConcept);
       } catch (error) {
-        console.error("Error al obtener las divisas:", error);
+        console.error("Error consumiendo servicio", error);
       }
     };
     fetchDivisas();
@@ -67,7 +68,9 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
       resetForm();
       onClose();
     } catch (error) {
-      console.error("Error al realizar el pago:", error);
+      notify("Falló el pago", "error");
+      console.error("Error consumiendo servicio", error);
+      throw new Error("Error consumiendo servicio");
     }
   };
 

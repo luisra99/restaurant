@@ -22,6 +22,7 @@ import {
   postDependent,
   putDependent,
 } from "@/services/dependent";
+import { notify } from "@/base/utils/notify";
 
 const DependienteSchema = Yup.object().shape({
   name: Yup.string().required("Nombre requerido"),
@@ -40,7 +41,9 @@ const Dependientes = () => {
       const dependientes = await listDependents();
       setDependents(dependientes);
     } catch (error) {
-      console.error("Error al cargar dependientes", error);
+      notify("No se pudieron cargar los dependientes", "error");
+      console.error("Error consumiendo servicio", error);
+      throw new Error("Error consumiendo servicio");
     } finally {
       setLoading(false);
     }
@@ -57,7 +60,9 @@ const Dependientes = () => {
         const updatedDependent = await putDependent(editingIndex, dependent);
         setEditingIndex(null);
       } catch (error) {
-        console.error("Error al actualizar dependiente", error);
+        notify("No se pudo editar", "error");
+        console.error("Error consumiendo servicio", error);
+        throw new Error("Error consumiendo servicio");
       } finally {
         loadDependents();
       }
@@ -66,7 +71,9 @@ const Dependientes = () => {
       try {
         const newDependent = await postDependent(dependent);
       } catch (error) {
-        console.error("Error al crear dependiente", error);
+        notify("No se pudo crear", "error");
+        console.error("Error consumiendo servicio", error);
+        throw new Error("Error consumiendo servicio");
       } finally {
         loadDependents();
       }
@@ -76,8 +83,11 @@ const Dependientes = () => {
   const deleteDependent = async (id: number) => {
     try {
       await axios.delete(`/api/dependents/${id}`);
+      notify("Dependinte eliminado");
     } catch (error) {
-      console.error("Error al eliminar dependiente", error);
+      notify("No se pudo eliminar", "error");
+      console.error("Error consumiendo servicio", error);
+      throw new Error("Error consumiendo servicio");
     } finally {
       loadDependents();
     }

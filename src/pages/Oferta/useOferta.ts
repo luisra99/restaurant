@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import * as Yup from "yup";
 import { LoadConcept } from "@/utils/concepts";
 import { getOffer, postOffer, putOffer } from "@/services/menu";
+import { notify } from "@/base/utils/notify";
 
 // Interfaces para los tipos de datos utilizados
 interface OfferValues {
@@ -100,8 +101,9 @@ const useOferta = ({ id, handleClose }: UseOfertaProps) => {
 
       try {
         if (id) {
-          await putOffer({ formData, id });
-          handleClose();
+          await putOffer({ formData, id }).then(() => {
+            handleClose();
+          });
         } else {
           await postOffer(formData);
           setFormValues({
@@ -118,10 +120,10 @@ const useOferta = ({ id, handleClose }: UseOfertaProps) => {
         id && setFormValues(initialValues);
         resetForm();
         setPreview(null);
-        alert("Oferta agregada con éxito");
       } catch (error) {
-        console.error(error);
-        alert("Ha ocurrido un error al agregar la oferta");
+        notify("No se pudo crear", "error");
+        console.error("Error consumiendo servicio", error);
+        throw new Error("Error consumiendo servicio");
       } finally {
         setSubmitting(false);
       }
