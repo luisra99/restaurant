@@ -7,5 +7,6 @@ export const notify = (
   enqueueSnackbar(message, {
     autoHideDuration: 3000,
     variant: variant ?? "success",
+    anchorOrigin: { horizontal: "center", vertical: "top" },
   });
 };

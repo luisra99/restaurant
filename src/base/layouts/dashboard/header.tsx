@@ -10,7 +10,6 @@ import { Dialog } from "@mui/material";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import routes from "@/base/routes";
-import { usePathname } from "@/base/routes/hooks";
 import { NavItem } from "./common/NavItem";
 import OpenAccount from "@/components/revisar/FormularioCuenta";
 import { useNavigate } from "react-router-dom";
@@ -18,25 +17,10 @@ import PropinaModal from "@/pages/Payment/PropinaModal";
 import axios from "axios";
 export default function Header({ onOpenNav }: any) {
   const theme = useTheme();
-  const pathname = usePathname();
-  const [open, setOpen] = useState<any>({});
   const [propina, setPropina] = useState<any>(false);
   const navegar = useNavigate();
   const [openAccount, setOpenAccount] = useState<any>(false);
-  const handleClick = (param?: string) => {
-    param && setOpen((prevState: any) => ({ [param]: !prevState[param] }));
-  };
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+
   const lgUp = useResponsive("up", "lg");
 
   const _lgUp = lgUp

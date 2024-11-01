@@ -3,22 +3,8 @@ import Meta from "@/base/components/Meta";
 import { Grid, Paper, Typography } from "@mui/material";
 import { Person } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import HomeIcon from "@mui/icons-material/Home";
 import { getAccounts } from "@/services/account";
 import { useNavigate } from "react-router-dom";
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 function Cuentas() {
   const [open, setOpen] = useState(false);
@@ -34,11 +20,6 @@ function Cuentas() {
   useEffect(() => {
     Load();
   }, []);
-  const accountTypeIcon: { [key: number]: JSX.Element } = {
-    13: <ReceiptLongIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-    14: <ShoppingCartCheckoutIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-    15: <HomeIcon fontSize="small" sx={{ marginRight: 0.5 }} />,
-  };
 
   return (
     <>
@@ -46,7 +27,7 @@ function Cuentas() {
       <Box justifyContent="center" width="100%" p={4}>
         <Grid container spacing={4}>
           {cuentas?.map((cuenta: any) => (
-            <Grid item xs={12} sm={6} md={4} xl={3} key={cuenta.name}>
+            <Grid item xs={12} sm={6} md={4} xl={3} key={cuenta.id}>
               <Paper
                 elevation={3}
                 sx={{
@@ -66,13 +47,13 @@ function Cuentas() {
                 >
                   {/* Nombre de la mesa */}
                   <Typography variant="h6">
-                    {cuenta.name ? cuenta.name : cuenta.table.name}
+                    {cuenta.name ? cuenta.name : cuenta.table?.name}
                   </Typography>
 
                   {/* Cantidad de personas */}
                   <Box display="flex" alignItems="center">
                     <Typography variant="body2" color="textSecondary">
-                      {cuenta.table && `${cuenta.table.name} -`}{" "}
+                      {cuenta.table && `${cuenta.table?.name} -`}{" "}
                       {`${cuenta.people ?? "¿?"}`}
                       {cuenta.table && `/${cuenta.table.capacity}`}
                     </Typography>

@@ -8,7 +8,6 @@ import Popover from "@mui/material/Popover";
 import { RouterLink } from "@/base/routes/components";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
-import { useSession } from "@/base/session/state";
 import { useState } from "react";
 
 const MENU_OPTIONS = [
@@ -33,7 +32,6 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
-  const [state] = useSession();
 
   const handleOpen = (event: any) => {
     setOpen(event.currentTarget);

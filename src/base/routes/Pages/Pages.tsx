@@ -1,12 +1,7 @@
-import "../../components/backdrop/backdrop.css";
+import { Outlet, Route, Routes } from "react-router-dom";
 
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-
-import AuthGuard from "../auth-guard";
 import Box from "@mui/material/Box";
-import CallBackUrlController from "../callback-url-controller";
 import DashboardLayout from "@/base/layouts/dashboard";
-import NotFoundView from "@/base/layouts/error";
 import { getPageHeight } from "./utils";
 import routes from "..";
 
@@ -17,27 +12,15 @@ function Pages() {
         <Route
           path="/"
           element={
-            <AuthGuard>
-              <DashboardLayout>
-                <Outlet />
-              </DashboardLayout>
-            </AuthGuard>
+            <DashboardLayout>
+              <Outlet />
+            </DashboardLayout>
           }
         >
           {Object.values(routes).map(
             ({ path, component: Component, subPath }) => {
               if (Component && path) {
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    element={
-                      // <AuthGuard>
-                      <Component />
-                      // </AuthGuard>
-                    }
-                  />
-                );
+                return <Route key={path} path={path} element={<Component />} />;
               }
 
               return (
@@ -50,11 +33,7 @@ function Pages() {
                         <Route
                           key={completePath}
                           path={completePath}
-                          element={
-                            <AuthGuard>
-                              <ChildComponent />
-                            </AuthGuard>
-                          }
+                          element={<ChildComponent />}
                         />
                       );
                     }
@@ -65,10 +44,6 @@ function Pages() {
             }
           )}
         </Route>
-
-        <Route path="/create-session" element={<CallBackUrlController />} />
-        <Route path="404" element={<NotFoundView />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </Box>
   );
