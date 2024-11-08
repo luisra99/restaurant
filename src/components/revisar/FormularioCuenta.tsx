@@ -18,7 +18,7 @@ import { listTables } from "@/services/table";
 import { createAccount, getAccount, modifyAccount } from "@/services/account";
 import { listDependents } from "@/services/dependent";
 import { useNavigate } from "react-router-dom";
-import { LoadConcept } from "@/utils/concepts";
+import { getConcepts } from "@/services/concept";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
@@ -48,7 +48,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
   const loadOptions = async () => {
     const tableConcepts = await listTables(); // ID para cargar mesas
     const dependentsList = await listDependents(); // ID para tipos de cuenta
-    const typeConcepts = await LoadConcept("Tipo de cuenta"); // ID para tipos de cuenta
+    const typeConcepts = await getConcepts("Tipo de cuenta"); // ID para tipos de cuenta
     setAccountTypes(typeConcepts);
     setTables(tableConcepts);
     setDependents(dependentsList);
@@ -82,10 +82,11 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
     { setSubmitting, resetForm }: any
   ) => {
     if (id) {
-      await modifyAccount(id, values).then(() => {
+      const account = await modifyAccount(id, values);
+      if (account) {
         resetForm();
-        handleClose?.();
-      });
+        handleClose?.(account);
+      }
     } else {
       await createAccount(values).then((data) => {
         navegar(`/manage?id=${data.id}`);
@@ -127,14 +128,14 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                   as={ToggleButtonGroup}
                   color="primary"
                   exclusive
-                  value={`${values.idType}`}
+                  value={values.idType}
                   onChange={(e: any) => setFieldValue("idType", e.target.value)}
                   name="idType"
                   aria-label="Platform"
                   fullWidth
                 >
                   {accountTypes?.map((type: any) => (
-                    <ToggleButton value={`${type?.id}`}>
+                    <ToggleButton value={type?.id} key={type?.id}>
                       {type?.denomination}
                     </ToggleButton>
                   ))}
@@ -174,7 +175,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 <Field
                   name="idTable"
                   as={Select}
-                  value={`${values.idTable}`}
+                  value={values.idTable}
                   label="Mesa (opcional)"
                   error={touched.idTable && Boolean(errors.idTable)}
                 >
@@ -198,7 +199,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 <Field
                   name="idDependent"
                   as={Select}
-                  value={`${values.idDependent}`}
+                  value={values.idDependent}
                   label="Dependiente (opcional)"
                   error={touched.idDependent && Boolean(errors.idDependent)}
                 >

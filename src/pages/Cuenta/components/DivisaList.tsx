@@ -15,7 +15,9 @@ const DivisaList: FunctionComponent<DivisaListProps> = ({ divisaList }) => {
       mt={1}
       justifyContent={"space-evenly"}
     >
-      {divisaList?.map((currency: any) => <DivisaAmount currency={currency} />)}
+      {divisaList?.map((currency: any) => (
+        <DivisaAmount currency={currency} key={currency} />
+      ))}
     </Grid>
   );
 };

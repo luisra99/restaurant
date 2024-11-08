@@ -12,11 +12,11 @@ const CategoryFilter = ({
 }) => (
   <Box mb={2}>
     <Chip
-      label="Todo"
+      label="Reciente"
       clickable
       sx={sx}
-      color={category === "Todo" ? "primary" : "default"}
-      onClick={() => onCategoryChange("Todo")}
+      color={category === "Reciente" ? "primary" : "default"}
+      onClick={() => onCategoryChange("Reciente")}
     />
     {categories?.map((cat) => (
       <Chip

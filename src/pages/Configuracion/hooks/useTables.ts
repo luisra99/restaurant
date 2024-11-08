@@ -14,7 +14,7 @@ export const useTables = () => {
     capacity: "",
     details: "",
   });
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState<string | null>(null);
 
   const loadTables = async () => {
     const _tables = await listTables();

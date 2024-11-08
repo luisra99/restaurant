@@ -1,18 +1,19 @@
-import { Add, Remove } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { Button, Grid, Paper, Typography } from "@mui/material";
-import axios from "axios";
 import { Fragment, FunctionComponent } from "react";
 
 interface TaxDiscountProps {
   mappedTaxsDiscounts: any[];
-  id: number;
+  id: string;
   load: any;
+  setOpen: any;
 }
 
 const TaxDiscount: FunctionComponent<TaxDiscountProps> = ({
   mappedTaxsDiscounts,
   id,
   load,
+  setOpen,
 }) => {
   return (
     <Paper
@@ -54,48 +55,23 @@ const TaxDiscount: FunctionComponent<TaxDiscountProps> = ({
         {/* Espacio vacío para mantener la alineación */}
         <Grid item xs={2}></Grid>
       </Grid>
-      {/* Botón de Settings fijado en la esquina inferior derecha */}
-      {mappedTaxsDiscounts?.length ? (
-        <Button
-          size="large"
-          variant="contained"
-          color="warning"
-          sx={{
-            position: "absolute",
-            bottom: 0, // Ajusta este valor según sea necesario
-            right: 0, // Ajusta este valor según sea necesario
-            top: 0,
-            height: "100%",
-            width: "50px",
-            borderRadius: "8px 8px 8px 8px",
-          }}
-          onClick={() =>
-            axios.delete(`/api/accounts/tax/${id}`).then(() => load())
-          }
-        >
-          <Remove />
-        </Button>
-      ) : (
-        <Button
-          size="large"
-          variant="contained"
-          color="warning"
-          sx={{
-            position: "absolute",
-            bottom: 0, // Ajusta este valor según sea necesario
-            right: 0, // Ajusta este valor según sea necesario
-            top: 0,
-            height: "100%",
-            width: "50px",
-            borderRadius: "8px 8px 8px 8px",
-          }}
-          onClick={() =>
-            axios.post(`/api/accounts/tax/${id}`).then(() => load())
-          }
-        >
-          <Add />
-        </Button>
-      )}
+      <Button
+        size="large"
+        variant="contained"
+        color="warning"
+        sx={{
+          position: "absolute",
+          bottom: 0, // Ajusta este valor según sea necesario
+          right: 0, // Ajusta este valor según sea necesario
+          top: 0,
+          height: "100%",
+          width: "50px",
+          borderRadius: "8px 8px 8px 8px",
+        }}
+        onClick={() => setOpen(true)}
+      >
+        <Edit />
+      </Button>
     </Paper>
   );
 };

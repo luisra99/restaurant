@@ -11,7 +11,7 @@ const CalculatorModal = ({
   negative,
   setNegative,
 }: {
-  open: number | null;
+  open: string | null;
   handleClose: () => void;
   quantity: string;
   setQuantity: (value: string) => void;

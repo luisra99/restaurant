@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 const AccountMenu = ({
   setProduct,
 }: {
-  setProduct: (value: number | null) => void;
+  setProduct: (value: string | null) => void;
 }) => (
   <Box sx={{ width: "60vw" }} position={"absolute"}>
     <Menu setProduct={setProduct} />

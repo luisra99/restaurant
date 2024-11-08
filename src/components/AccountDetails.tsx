@@ -8,12 +8,14 @@ const AccountDetails = ({
   deleteOffer,
   data,
   load,
+  setCuenta,
 }: {
-  setProduct: (value: number | null) => void;
+  setProduct: (value: string | null) => void;
   setNegative: (value: boolean) => void;
-  deleteOffer: (id: number) => void;
+  deleteOffer: (id: string) => void;
   data: any;
   load: () => any;
+  setCuenta: (args: any) => any;
 }) => (
   <Box
     sx={{
@@ -29,6 +31,7 @@ const AccountDetails = ({
       deleteOffer={deleteOffer}
       data={data}
       load={load}
+      setCuenta={setCuenta}
     />
   </Box>
 );

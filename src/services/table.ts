@@ -11,7 +11,7 @@ export const listTables = async () => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const getTable = async (id: number) => {
+export const getTable = async (id: string) => {
   try {
     const { data } = await axios.get(`/api/tables/${id}`);
     return data;
@@ -21,7 +21,7 @@ export const getTable = async (id: number) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const putTables = async (id: number, content: any) => {
+export const putTables = async (id: string, content: any) => {
   try {
     const { data } = await axios.put(`/api/tables/${id}`, content);
     notify("Mesa modificada");
@@ -44,7 +44,7 @@ export const postTables = async (content: any) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const deleteTable = async (id: number) => {
+export const deleteTable = async (id: string) => {
   try {
     const { data } = await axios.delete(`/api/tables/${id}`);
     notify("Mesa eliminada");

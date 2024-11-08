@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import * as Yup from "yup";
-import { LoadConcept } from "@/utils/concepts";
 import { getOffer, postOffer, putOffer } from "@/services/menu";
 import { notify } from "@/base/utils/notify";
+import { getConcepts } from "@/services/concept";
 
 // Interfaces para los tipos de datos utilizados
 interface OfferValues {
@@ -62,8 +62,8 @@ const useOferta = ({ id, handleClose }: UseOfertaProps) => {
 
   const loadData = useCallback(async () => {
     const [conceptoArea, conceptoCategory] = await Promise.all([
-      LoadConcept("Áreas"),
-      LoadConcept("Categorías"),
+      getConcepts("Áreas"),
+      getConcepts("Categorías"),
     ]);
 
     if (id) {

@@ -3,7 +3,7 @@ import Mesas from "./Mesas";
 import Categorias from "./Categorias";
 import Dependientes from "./Dependientes";
 import Divisas from "./Divisas";
-import ImpuestosDescuentos from "./Impuestos";
+import ImpuestosDescuentos from "./ImpuestosDescuentos";
 import Areas from "./Areas";
 
 const Dashboard = () => {

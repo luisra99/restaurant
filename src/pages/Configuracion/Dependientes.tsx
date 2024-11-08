@@ -30,7 +30,7 @@ const DependienteSchema = Yup.object().shape({
 
 const Dependientes = () => {
   const [dependents, setDependents] = useState<any[]>([]);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<any>({ name: "" });
 
@@ -80,7 +80,7 @@ const Dependientes = () => {
     }
   };
 
-  const deleteDependent = async (id: number) => {
+  const deleteDependent = async (id: string) => {
     try {
       await axios.delete(`/api/dependents/${id}`);
       notify("Dependinte eliminado");
@@ -93,7 +93,7 @@ const Dependientes = () => {
     }
   };
 
-  const editDependent = async (index: number) => {
+  const editDependent = async (index: string) => {
     const { data } = await axios.get(`/api/dependents/${index}`);
     console.log(data);
     setInitialValues({ name: data.name });

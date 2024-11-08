@@ -1,7 +1,7 @@
 import { notify } from "@/base/utils/notify";
 import axios from "axios";
 
-export const printAccount = async (id: number) => {
+export const printAccount = async (id: string) => {
   try {
     const { data } = await axios.post(`/api/printer/account/${id}`);
     notify("Impreso correctamente");

@@ -10,20 +10,24 @@ interface AccountSummaryProps {
 const AccountSummary: React.FC<AccountSummaryProps> = ({ data }) => (
   <>
     <Paper elevation={3} sx={summaryPaperStyles}>
-      <Typography variant="caption" fontSize={25} textTransform={"uppercase"}>
+      <Typography
+        variant="caption"
+        fontSize={"1px"}
+        textTransform={"uppercase"}
+      >
         <Typography>Productos</Typography>
-        <Typography fontSize={25} textAlign={"center"}>
+        <Typography fontSize={"1px"} textAlign={"center"}>
           <b>{data?.totalQuantity}</b>
         </Typography>
       </Typography>
       <Typography
         variant="caption"
-        fontSize={25}
+        fontSize={"1px"}
         textTransform={"uppercase"}
         color={"dimgrey"}
       >
         <Typography textAlign={"center"}>SubTotal</Typography>
-        <Typography fontSize={25} textAlign={"center"}>
+        <Typography fontSize={"1px"} textAlign={"center"}>
           <b>${data?.totalAmount?.toFixed(2)}</b>
         </Typography>
       </Typography>

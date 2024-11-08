@@ -23,27 +23,35 @@ const AccountStatistic: FunctionComponent<AccountStatisticProps> = ({
         justifyContent: "space-between",
       }}
     >
-      <Typography variant="caption" fontSize={25} textTransform={"uppercase"}>
+      <Typography
+        variant="caption"
+        fontSize={"1rem"}
+        textTransform={"uppercase"}
+      >
         <Typography>Productos</Typography>
-        <Typography fontSize={25} textAlign={"center"}>
+        <Typography fontSize={"1rem"} textAlign={"center"}>
           <b>{totalQuantity}</b>{" "}
         </Typography>
       </Typography>
       <Typography
         variant="caption"
-        fontSize={25}
+        fontSize={"1rem"}
         textTransform={"uppercase"}
         color={"dimgrey"}
       >
         <Typography textAlign={"center"}>SubTotal</Typography>
-        <Typography textAlign={"center"} fontSize={25}>
+        <Typography textAlign={"center"} fontSize={"1rem"}>
           {" "}
           $ <b style={{ fontWeight: 100 }}>{totalPrice?.toFixed(2)}</b>
         </Typography>
       </Typography>
-      <Typography variant="caption" fontSize={25} textTransform={"uppercase"}>
+      <Typography
+        variant="caption"
+        fontSize={"1rem"}
+        textTransform={"uppercase"}
+      >
         <Typography textAlign={"center"}> A pagar</Typography>
-        <Typography textAlign={"center"} fontSize={25}>
+        <Typography textAlign={"center"} fontSize={"1rem"}>
           {" "}
           $ <b style={{ fontWeight: 900 }}>{finalPrice?.toFixed(2)}</b>
         </Typography>

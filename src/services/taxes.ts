@@ -12,7 +12,7 @@ export const getTaxes = async () => {
   }
 };
 
-export const getTaxById = async (id: number) => {
+export const getTaxById = async (id: string) => {
   try {
     const { data } = await axios.get(`/api/taxDiscounts/${id}`);
     return data;
@@ -34,7 +34,7 @@ export const postTax = async (content: any) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const putTax = async (id: number, content: any) => {
+export const putTax = async (id: string, content: any) => {
   try {
     const { data } = await axios.put(`/api/taxDiscounts/${id}`, content);
     notify("Modificado");
@@ -45,7 +45,7 @@ export const putTax = async (id: number, content: any) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const alterTaxState = async (id: number) => {
+export const alterTaxState = async (id: string) => {
   try {
     const { data } = await axios.post(`/api/taxDiscounts/alterState/${id}`);
     notify("Modificado");
@@ -56,7 +56,7 @@ export const alterTaxState = async (id: number) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const deleteTaxDiscount = async (id: number) => {
+export const deleteTaxDiscount = async (id: string) => {
   try {
     const { data } = await axios.delete(`/api/taxDiscounts/${id}`);
     notify("Eliminado");

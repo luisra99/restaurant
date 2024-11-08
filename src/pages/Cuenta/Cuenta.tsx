@@ -14,6 +14,7 @@ import TaxDiscount from "./components/TaxDiscounts";
 import AccountStatistic from "./components/AccountStatistic";
 import OrdersList from "./components/OrdersList";
 import AccountInfo from "./components/AccountInfo";
+import TaxesManage from "./components/TaxesManage";
 
 function Cuenta({
   data,
@@ -21,24 +22,25 @@ function Cuenta({
   setProduct,
   deleteOffer,
   load,
+  setCuenta,
 }: {
   data: any;
-  deleteOffer: (idOffer: number) => void;
+  deleteOffer: (idOffer: string) => void;
   setNegative: (args: boolean) => void;
-  setProduct: (args: number) => void;
+  setProduct: (args: string) => void;
   load: () => Promise<void>;
+  setCuenta: (args: any) => Promise<void>;
 }) {
   function handleClosePayment() {
     load().then(() => setPaymentModal(false));
   }
-  function handleClose(
-    event: {},
-    reason: "backdropClick" | "escapeKeyDown"
-  ): void {
+  function handleClose(account: any): void {
     setOpen(false);
-    load();
+    setOpenTaxes(false);
+    if (account) setCuenta(account);
   }
   const [open, setOpen] = useState(false);
+  const [openTaxes, setOpenTaxes] = useState(false);
   const navegar = useNavigate();
   const [paymentModal, setPaymentModal] = useState(false);
   return (
@@ -67,11 +69,13 @@ function Cuenta({
         finalPrice={data?.finalPrice}
         totalPaid={data?.totalPaid}
         setPaymentModal={setPaymentModal}
+        idAccount={data.id}
       />
       <TaxDiscount
         id={data?.id}
         load={load}
         mappedTaxsDiscounts={data?.mappedTaxsDiscounts}
+        setOpen={setOpenTaxes}
       />
 
       <Grid
@@ -87,9 +91,7 @@ function Cuenta({
             color="error"
             fullWidth
             sx={{ py: 2 }}
-            onClick={() =>
-              deleteAccount(data?.id).then(() => navegar("/mesas"))
-            }
+            onClick={() => deleteAccount(data?.id).then(() => navegar("/"))}
           >
             <Delete />
           </Button>
@@ -112,7 +114,7 @@ function Cuenta({
             color="success"
             fullWidth
             sx={{ py: 2 }}
-            onClick={() => closeAccount(data?.id).then(() => navegar("/mesas"))}
+            onClick={() => closeAccount(data?.id).then(() => navegar("/"))}
           >
             <Typography variant="subtitle1" letterSpacing={0.7}>
               Cerrar
@@ -123,6 +125,12 @@ function Cuenta({
       <InfoLine name={data?.name} people={data?.people} />
       <DivisaList divisaList={data?.divisaAmount} />
       <ModifyAccount handleClose={handleClose} open={open} id={data?.id} />
+      <TaxesManage
+        handleClose={handleClose}
+        open={openTaxes}
+        idAccount={data?.id}
+        initialValue={data?.taxDiscount}
+      />
       <PaymentModal
         open={paymentModal}
         onClose={handleClosePayment}

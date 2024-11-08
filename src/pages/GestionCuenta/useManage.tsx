@@ -9,22 +9,22 @@ import {
 
 const useManage = () => {
   const [searchParams] = useSearchParams();
-  const [open, setOpen] = useState<number | null>(null);
-  const [idAccount, setAccount] = useState<number | null>(null);
+  const [open, setOpen] = useState<string | null>(null);
+  const [idAccount, setAccount] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<string>("");
   const [negative, setNegative] = useState<boolean>(false);
   const [cuenta, setCuenta] = useState<any>({});
 
   const handleClose = () => setOpen(null);
 
-  const deleteOffer = async (idOffer: number) => {
-    await deleteAccountDetails({ idAccount, idOffer });
-    await loadAccountData();
+  const deleteOffer = async (idOffer: string) => {
+    const account = await deleteAccountDetails({ idAccount, idOffer });
+    if (account) setCuenta(account);
   };
 
   const loadAccountData = async () => {
-    const id = Number(searchParams.get("id"));
-    if (typeof id === "number") {
+    const id = searchParams.get("id");
+    if (id) {
       setAccount(id);
       const accountData = await getAccount(id);
       setCuenta(accountData);
@@ -36,7 +36,7 @@ const useManage = () => {
   }, [searchParams]);
 
   const modifyAccount = async () => {
-    await modifyAccountDetails({
+    const account = await modifyAccountDetails({
       idAccount,
       quantity: Number(quantity),
       negative,
@@ -45,7 +45,7 @@ const useManage = () => {
     setNegative(false);
     setOpen(null);
     setQuantity("");
-    await loadAccountData();
+    if (account) setCuenta(account);
   };
 
   return {
@@ -61,6 +61,7 @@ const useManage = () => {
     deleteOffer,
     modifyAccount,
     loadAccountData,
+    setCuenta,
   };
 };
 

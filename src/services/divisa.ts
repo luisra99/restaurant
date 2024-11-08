@@ -11,7 +11,7 @@ export const listDivisas = async () => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const getDivisa = async (id: number) => {
+export const getDivisa = async (id: string) => {
   try {
     const { data } = await axios.get(`/api/divisas/${id}`);
     return data;
@@ -21,7 +21,7 @@ export const getDivisa = async (id: number) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const putDivisa = async (id: number, content: any) => {
+export const putDivisa = async (id: string, content: any) => {
   try {
     const { data } = await axios.put(`/api/divisas/${id}`, content);
     notify("Divisa modificada");
@@ -44,7 +44,7 @@ export const postDivisa = async (content: any) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const deleteDivisa = async (id: number) => {
+export const deleteDivisa = async (id: string) => {
   try {
     const { data } = await axios.delete(`/api/divisas/${id}`);
     notify("Divisa eliminada");

@@ -1,7 +1,7 @@
 {
   "name": "GestionRestaurante",
   "short_name": "reactpwa",
-  "start_url": "/mesa",
+  "start_url": "/",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "lang": "en",

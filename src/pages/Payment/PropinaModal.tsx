@@ -12,17 +12,19 @@ import {
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { LoadConcept } from "@/utils/concepts";
 import { savePropina } from "@/services/payments";
 import { notify } from "@/base/utils/notify";
+import { getConcepts } from "@/services/concept";
 
 interface PaymentFormProps {
   open: boolean;
   onClose: () => void;
+  idAccount?: string;
+  amount?: string;
 }
 
 interface Divisa {
-  id: number;
+  id: string;
   denomination: string;
 }
 
@@ -33,14 +35,23 @@ const validationSchema = Yup.object().shape({
   idDivisa: Yup.string().nullable(),
 });
 
-const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
+const PropinaModal: React.FC<PaymentFormProps> = ({
+  open,
+  onClose,
+  idAccount,
+  amount = "",
+}) => {
   const [divisas, setDivisas] = useState<Divisa[]>([]);
+  const [initialValues, setInitialValues] = useState<any>({
+    amount: "",
+    idDivisa: null,
+  });
 
   useEffect(() => {
     // Llamada para obtener las divisas desde el backend
     const fetchDivisas = async () => {
       try {
-        const divisasConcept = await LoadConcept("Divisas");
+        const divisasConcept = await getConcepts("Divisas");
         setDivisas(divisasConcept);
       } catch (error) {
         console.error("Error consumiendo servicio", error);
@@ -50,10 +61,14 @@ const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
     fetchDivisas();
   }, []);
 
+  useEffect(() => {
+    setInitialValues({ amount, idDivisa: null });
+  }, [amount]);
+
   const handleSubmit = async (values: any, { resetForm }: any) => {
     try {
       // Aquí puedes hacer la llamada a tu API para registrar el pago
-      await savePropina(values);
+      await savePropina({ ...values, idAccount });
       resetForm();
       onClose();
     } catch (error) {
@@ -83,11 +98,9 @@ const PropinaModal: React.FC<PaymentFormProps> = ({ open, onClose }) => {
         </Typography>
 
         <Formik
-          initialValues={{
-            amount: "",
-            idDivisa: null,
-          }}
+          initialValues={initialValues}
           validationSchema={validationSchema}
+          enableReinitialize
           onSubmit={handleSubmit}
         >
           {({ values, handleChange, errors, touched }) => (

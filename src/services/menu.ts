@@ -42,6 +42,17 @@ export const getOffers = async () => {
   }
 };
 
+export const getRecent = async () => {
+  try {
+    const { data } = await axios.get(`/api/offers/recent`);
+    return data;
+  } catch (error) {
+    notify("No se pudieron obtener las ofertas", "error");
+    console.error("Error consumiendo servicio", error);
+    throw new Error("Error consumiendo servicio");
+  }
+};
+
 export const getOffer = async (id: string) => {
   try {
     const { data } = await axios.get(`/api/offers/${id}`);
@@ -52,7 +63,8 @@ export const getOffer = async (id: string) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const deleteOffer = async (id: number) => {
+
+export const deleteOffer = async (id: string) => {
   try {
     const { data } = await axios.delete(`/api/offers/${id}`);
     notify("Oferta eliminada");

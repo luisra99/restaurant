@@ -16,9 +16,13 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadConcept } from "@/utils/concepts";
-import { getConcept, postConcept, putConcept } from "@/services/concept";
-import { deleteConcept } from "@/services/concept";
+import {
+  deleteConcept,
+  getConcept,
+  getConcepts,
+  postConcept,
+  putConcept,
+} from "@/services/concept";
 
 const AreaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
@@ -30,10 +34,9 @@ const Areas = () => {
   const [initialValues, setInitialValues] = useState({
     denomination: "",
     details: "",
-    fatherId: 3,
   });
   const Load = async () => {
-    const _concepts = await LoadConcept("Áreas");
+    const _concepts = await getConcepts("Áreas");
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);
@@ -45,13 +48,12 @@ const Areas = () => {
         setInitialValues({
           denomination: "",
           details: "",
-          fatherId: 3,
         });
         resetForm();
       });
       setEditingIndex(null);
     } else {
-      postConcept(area).then(() => {
+      postConcept("Áreas", area).then(() => {
         Load();
         resetForm();
       });

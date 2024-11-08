@@ -15,18 +15,18 @@ import {
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { LoadConcept } from "@/utils/concepts";
 import { pay } from "@/services/payments";
 import { notify } from "@/base/utils/notify";
+import { getConcepts } from "@/services/concept";
 
 interface PaymentFormProps {
   open: boolean;
   onClose: () => void;
-  idAccount: number;
+  idAccount: string;
 }
 
 interface Divisa {
-  id: number;
+  id: string;
   denomination: string;
 }
 
@@ -50,9 +50,9 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
     // Llamada para obtener las divisas desde el backend
     const fetchDivisas = async () => {
       try {
-        const divisasConcept = await LoadConcept("Divisas");
+        const divisasConcept = await getConcepts("Divisas");
         setDivisas(divisasConcept);
-        const tiposPagoConcept = await LoadConcept("Tipos de pago");
+        const tiposPagoConcept = await getConcepts("Tipos de pago");
         setTiposPago(tiposPagoConcept);
       } catch (error) {
         console.error("Error consumiendo servicio", error);
@@ -126,7 +126,7 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
                 >
                   {tiposPago?.map((tipoPago: any) => (
                     <FormControlLabel
-                      value={`${tipoPago.id}`}
+                      value={tipoPago.id}
                       control={<Radio />}
                       label={tipoPago.denomination}
                     />

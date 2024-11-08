@@ -1,17 +1,21 @@
+import PropinaModal from "@/pages/Payment/PropinaModal";
 import { Button, Paper, Typography } from "@mui/material";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 interface PaymentProps {
   finalPrice: number;
   totalPaid: number;
   setPaymentModal: any;
+  idAccount: string;
 }
 
 const Payment: FunctionComponent<PaymentProps> = ({
   finalPrice,
   totalPaid,
   setPaymentModal,
+  idAccount,
 }) => {
+  const [propinaModal, setPropinaModal] = useState(false);
   return (
     <Paper
       elevation={3}
@@ -36,17 +40,31 @@ const Payment: FunctionComponent<PaymentProps> = ({
         </Typography>
       </Typography>
       <Typography variant="caption" fontSize={25} textTransform={"uppercase"}>
-        <Button
-          variant="contained"
-          color="success"
-          fullWidth
-          sx={{ py: 2 }}
-          onClick={() => setPaymentModal(true)}
-        >
-          <Typography variant="subtitle1" letterSpacing={0.7}>
-            Pagar
-          </Typography>
-        </Button>
+        {finalPrice - totalPaid < 0 ? (
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ py: 2 }}
+            onClick={() => setPropinaModal(true)}
+          >
+            <Typography variant="subtitle1" letterSpacing={0.7}>
+              Propina
+            </Typography>
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="success"
+            fullWidth
+            sx={{ py: 2 }}
+            onClick={() => setPaymentModal(true)}
+          >
+            <Typography variant="subtitle1" letterSpacing={0.7}>
+              Pagar
+            </Typography>
+          </Button>
+        )}
       </Typography>
       <Typography variant="caption" fontSize={25} textTransform={"uppercase"}>
         <Typography textAlign={"center"}>
@@ -59,6 +77,20 @@ const Payment: FunctionComponent<PaymentProps> = ({
           </b>
         </Typography>
       </Typography>
+      <PropinaModal
+        open={propinaModal}
+        onClose={() => {
+          setPropinaModal(false);
+        }}
+        idAccount={idAccount}
+        amount={
+          finalPrice - totalPaid < 0
+            ? Math.abs(finalPrice - totalPaid)
+                .toFixed(2)
+                .toString()
+            : ""
+        }
+      />
     </Paper>
   );
 };

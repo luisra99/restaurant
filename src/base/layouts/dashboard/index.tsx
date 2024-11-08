@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
-import Header from "./header";
 import Main from "./main";
 import PropTypes from "prop-types";
 import { useScrollToTop } from "@/base/hooks/use-scroll-to-top";
 import { useState } from "react";
+import Header from "./header";
 
 export default function DashboardLayout({ children }: any) {
   const [openNav, setOpenNav] = useState(false);

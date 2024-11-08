@@ -18,6 +18,7 @@ function Manage() {
     deleteOffer,
     modifyAccount,
     loadAccountData,
+    setCuenta,
   } = useManage();
 
   return (
@@ -30,6 +31,7 @@ function Manage() {
         deleteOffer={deleteOffer}
         data={cuenta}
         load={loadAccountData}
+        setCuenta={setCuenta}
       />
       <CalculatorModal
         open={open}

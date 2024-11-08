@@ -5,17 +5,16 @@ import * as Yup from "yup";
 import { getInitialCash, saveInitialCash } from "@/services/payments";
 
 const CategoriaSchema = Yup.object().shape({
-  initialCash: Yup.string().required("Nombre de la categoría requerido"),
+  initialCash: Yup.string().required("El monto es requerido"),
 });
 
 const InitialCash = () => {
-  const [editingIndex, setEditingIndex] = useState(null);
   const [initialValues, setInitialValues] = useState({
     initialCash: "",
   });
   const Load = async () => {
     const data = await getInitialCash();
-    setInitialValues(data);
+    if (data) setInitialValues(data);
   };
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const InitialCash = () => {
 
   const _saveInitialCash = async (concept: any) => {
     const data = await saveInitialCash(concept);
-    setInitialValues(data);
+    if (data) setInitialValues(data);
   };
 
   return (
@@ -41,7 +40,6 @@ const InitialCash = () => {
           console.log("submit");
 
           _saveInitialCash(values).then(() => Load());
-          if (editingIndex) setEditingIndex(null);
           resetForm();
         }}
       >
@@ -51,10 +49,11 @@ const InitialCash = () => {
               <Field
                 name="initialCash"
                 as={TextField}
+                value={values.initialCash}
                 type="number"
                 label="Efectivo en caja"
-                error={touched.initialCash && Boolean(errors.initialCash)}
-                helperText={touched.initialCash && errors.initialCash}
+                error={touched?.initialCash && Boolean(errors?.initialCash)}
+                helperText={touched?.initialCash && errors?.initialCash}
               />
               <Button
                 variant="contained"

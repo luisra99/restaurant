@@ -16,13 +16,14 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 import {
+  deleteConcept,
   getConcept,
-  LoadConcept,
+  getConcepts,
   postConcept,
   putConcept,
-} from "@/utils/concepts";
-import { deleteConcept } from "@/services/concept";
+} from "@/services/concept";
 
 const CategoriaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre de la categoría requerido"),
@@ -35,7 +36,7 @@ const Categorias = () => {
     denomination: "",
   });
   const Load = async () => {
-    const _concepts = await LoadConcept("Categorías");
+    const _concepts = await getConcepts("Categorías");
     setConcepts([..._concepts]);
   };
 
@@ -52,7 +53,7 @@ const Categorias = () => {
       );
       setEditingIndex(null);
     } else {
-      await postConcept(1, concept);
+      await postConcept("Categorías", concept);
     }
   };
 

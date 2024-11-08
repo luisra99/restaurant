@@ -10,7 +10,7 @@ import {
 
 export const useTaxes = () => {
   const [taxes, setTaxes] = useState<any[]>([]);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState<string | null>(null);
   const [initialValues, setInitialValues] = useState({
     name: "",
     percent: "",

@@ -11,7 +11,7 @@ export const listDependents = async () => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const getDivisa = async (id: number) => {
+export const getDivisa = async (id: string) => {
   try {
     const { data } = await axios.get(`/api/divisas/${id}`);
     return data;
@@ -21,7 +21,7 @@ export const getDivisa = async (id: number) => {
     throw new Error("Error consumiendo servicio");
   }
 };
-export const putDependent = async (id: number, content: any) => {
+export const putDependent = async (id: string, content: any) => {
   try {
     const { data } = await axios.put(`/api/dependents/${id}`, content);
     notify("Dependiente modificado");
@@ -45,7 +45,7 @@ export const postDependent = async (content: any) => {
   }
 };
 
-export const deleteDependent = async (id: number) => {
+export const deleteDependent = async (id: string) => {
   try {
     const { data } = await axios.delete(`/api/dependents/${id}`);
     notify("Dependiente eliminado");

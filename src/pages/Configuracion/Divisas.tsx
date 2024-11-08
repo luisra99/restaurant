@@ -16,9 +16,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadConcept } from "@/utils/concepts";
 import { getDivisa, postDivisa, putDivisa } from "@/services/divisa";
-import { deleteConcept } from "@/services/concept";
+import { deleteConcept, getConcepts } from "@/services/concept";
 
 const DivisaSchema = Yup.object().shape({
   nombre: Yup.string().required("Nombre requerido"),
@@ -32,7 +31,7 @@ const Divisas = () => {
     details: "",
   });
   const Load = async () => {
-    const _concepts = await LoadConcept("Divisas");
+    const _concepts = await getConcepts("Divisas");
     setConcepts(_concepts);
   };
   const [editingIndex, setEditingIndex] = useState(null);

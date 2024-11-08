@@ -152,9 +152,9 @@ const ImpuestosDescuentos = () => {
           <TableHead>
             <TableRow>
               <TableCell>Activo</TableCell>
-              <TableCell>Tipo Valor</TableCell>
+              <TableCell>Nombre</TableCell>
               <TableCell>Tipo</TableCell>
-              <TableCell>Porcentaje</TableCell>
+              <TableCell align="center">Porcentaje</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -169,7 +169,7 @@ const ImpuestosDescuentos = () => {
                 </TableCell>
                 <TableCell>{impuesto.name}</TableCell>
                 <TableCell>{impuesto.tax ? "Impuesto" : "Descuento"}</TableCell>
-                <TableCell>{impuesto.percent}</TableCell>
+                <TableCell align="center">{impuesto.percent}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => editImpuesto(impuesto.id)}>
                     <EditIcon />
