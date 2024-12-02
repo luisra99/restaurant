@@ -1,5 +1,6 @@
 // components/AccountDetails.tsx
 import Cuenta from "@/pages/Cuenta/Cuenta";
+import { Box } from "@mui/material";
 
 const AccountDetails = ({
   setProduct,
@@ -16,14 +17,23 @@ const AccountDetails = ({
   load: () => any;
   setCuenta: (args: any) => any;
 }) => (
-  <Cuenta
-    setProduct={setProduct}
-    setNegative={setNegative}
-    deleteOffer={deleteOffer}
-    data={data}
-    load={load}
-    setCuenta={setCuenta}
-  />
+  <Box
+    sx={{
+      maxHeight: "93vh",
+      marginLeft: "62vw",
+      overflow: "auto",
+      p: 1,
+    }}
+  >
+    <Cuenta
+      setProduct={setProduct}
+      setNegative={setNegative}
+      deleteOffer={deleteOffer}
+      data={data}
+      load={load}
+      setCuenta={setCuenta}
+    />
+  </Box>
 );
 
 export default AccountDetails;

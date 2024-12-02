@@ -1,12 +1,14 @@
 // components/MenuItemCard.tsx
 import { usePathname } from "@/base/routes/hooks";
+import { CalculateRounded, Delete, Edit } from "@mui/icons-material";
 import {
   Card,
   CardMedia,
   CardContent,
   Typography,
+  CardActions,
   Box,
-  Button,
+  IconButton,
 } from "@mui/material";
 
 const MenuItemCard = ({
@@ -14,41 +16,57 @@ const MenuItemCard = ({
   onSelect,
   onDelete,
   onEdit,
+  onSelectForCalc,
 }: {
   item: any;
   onSelect: (id: any) => void;
   onDelete: (id: any) => void;
   onEdit: (id: any) => void;
+  onSelectForCalc: (id: any) => void;
 }) => {
   const path = usePathname();
   return (
-    <Card onClick={() => onSelect(item.id)}>
-      {path == "/menu" && item.image && (
-        <CardMedia
-          component="img"
-          height="140"
-          image={`/api/public/${item.image}`}
-        />
-      )}
-      <CardContent>
-        <Typography variant="h6">{item.name}</Typography>
-        <Typography variant="body2">{item.description}</Typography>
-        <Typography variant="h6">${item.price}</Typography>
-        {path == "/menu" && (
-          <Box display="flex" justifyContent="space-between">
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => onDelete(item.id)}
-            >
-              Eliminar
-            </Button>
-            <Button variant="contained" onClick={() => onEdit(item.id)}>
-              Modificar
-            </Button>
-          </Box>
+    <Card
+      sx={{
+        paddingBottom: 0,
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box
+        sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+        onClick={() => onSelect(item.id)}
+      >
+        {path == "/menu" && item.image && (
+          <CardMedia
+            component="img"
+            height="140"
+            image={`/api/public/${item.image}`}
+          />
         )}
-      </CardContent>
+        <CardContent sx={{ padding: "8px 12px !important" }}>
+          <Typography variant="h6">{item.name}</Typography>
+          <Typography variant="body2">{item.description}</Typography>
+          <Typography variant="body2">${item.price}</Typography>
+        </CardContent>
+      </Box>
+      <CardActions>
+        {path !== "/menu" && (
+          <IconButton color="primary" onClick={() => onSelectForCalc(item.id)}>
+            <CalculateRounded />
+          </IconButton>
+        )}
+        {path == "/menu" && (
+          <>
+            <IconButton color="error" onClick={() => onDelete(item.id)}>
+              <Delete />
+            </IconButton>
+            <IconButton onClick={() => onEdit(item.id)}>
+              <Edit />
+            </IconButton>
+          </>
+        )}
+      </CardActions>
     </Card>
   );
 };

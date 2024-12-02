@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, createRef } from "react";
 import { getOffers, deleteOffer, getRecent } from "@/services/menu";
 import { getConcepts } from "@/services/concept";
 
+const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 // Función para normalizar texto: elimina tildes, espacios y convierte a minúsculas
 const normalizeText = (text: string) =>
   text
@@ -14,6 +15,7 @@ const useMenu = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [category, setCategory] = useState("Reciente");
+  const [categoryLabel, setCategoryLabel] = useState<string | undefined>();
   const [categories, setCategories] = useState<any[]>([]);
   const [menu, setMenu] = useState<any[]>([]);
   const [recents, setRecents] = useState<any[]>([]);
@@ -52,9 +54,28 @@ const useMenu = () => {
     await deleteOffer(id);
     loadMenuData();
   };
+  const letterRefs = useRef(
+    alphabet.reduce(
+      (acc: any, letter: any) => {
+        acc[letter] = createRef<HTMLDivElement>();
+        return acc;
+      },
+      {} as { [key: string]: React.RefObject<HTMLDivElement> }
+    )
+  );
 
+  const handleLetterClick = (letter: string) => {
+    // Desplazamos a la sección correspondiente usando el ref de cada letra
+    letterRefs.current[letter].current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
   const handleSearchChange = (value: string) => setSearchTerm(value);
-  const handleCategoryChange = (value: string) => setCategory(value);
+  const handleCategoryChange = (value: string, _categoryLabel?: string) => {
+    setCategory(value);
+    setCategoryLabel(_categoryLabel);
+  };
 
   // Debounce effect for searchTerm
   useEffect(() => {
@@ -94,6 +115,9 @@ const useMenu = () => {
     open,
     id,
     filteredItems,
+    categoryLabel,
+    letterRefs,
+    handleLetterClick,
     setOpen,
     setId,
     loadMenuData,

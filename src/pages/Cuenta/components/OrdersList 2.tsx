@@ -1,18 +1,22 @@
 import { Grid, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
-import Order from "./Order";
+import Order from "./Order2";
 
 interface OrdersListProps {
   setNegative: any;
   setProduct: any;
   deleteOffer: any;
+  idAccount: any;
   orders: any[];
+  loadAccountData: any;
 }
 
 const OrdersList: FunctionComponent<OrdersListProps> = ({
   deleteOffer,
   setNegative,
   setProduct,
+  idAccount,
+  loadAccountData,
   orders,
 }) => {
   return (
@@ -24,6 +28,8 @@ const OrdersList: FunctionComponent<OrdersListProps> = ({
           deleteOffer={deleteOffer}
           setProduct={setProduct}
           setNegative={setNegative}
+          idAccount={idAccount}
+          loadAccountData={loadAccountData}
           key={index}
         />
       ))}

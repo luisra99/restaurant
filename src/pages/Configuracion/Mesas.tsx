@@ -16,13 +16,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  deleteTable,
-  getTable,
-  listTables,
-  postTables,
-  putTables,
-} from "@/services/table";
+import { deleteTable, getTable, postTables, putTables } from "@/services/table";
+import { getOptions } from "@/services/options";
 
 const MesaSchema = Yup.object().shape({
   name: Yup.string().required("Número de mesa requerido"),
@@ -39,7 +34,7 @@ const Mesas = () => {
     details: "",
   });
   const Load = async () => {
-    const _concepts = await listTables();
+    const _concepts = await getOptions("tables");
     setMesas([..._concepts]);
   };
 

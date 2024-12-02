@@ -54,7 +54,8 @@ export const modifyAccountDetails = async ({
       negative,
       idOffer,
     });
-    notify("Cuenta modificada");
+    notify(negative ? "Retirado" : "Agregado", "vibrateOnly");
+
     return data;
   } catch (error) {
     notify("No se pudieron modificar los detalles de la cuenta", "error");
@@ -67,7 +68,7 @@ export const deleteAccountDetails = async ({ idAccount, idOffer }: any) => {
     const { data } = await axios.delete(
       `/api/accounts/details/${idAccount}/${idOffer}`
     );
-    notify("Eliminado");
+    notify("Eliminado", "vibrateOnly");
     return data;
   } catch (error) {
     notify("No se pudo eliminar", "error");
@@ -101,6 +102,17 @@ export const modifyAccount = async (id: any, values: any) => {
   try {
     const { data } = await axios.put(`/api/accounts/${id}`, values);
     notify("Cuenta modificada");
+    return data;
+  } catch (error) {
+    notify("No se pudo mofdificar", "error");
+    console.error("Error consumiendo servicio", error);
+    return false;
+  }
+};
+export const marchAccount = async (id: any) => {
+  try {
+    const { data } = await axios.put(`/api/accounts/march/${id}`);
+    notify("Orden marchada");
     return data;
   } catch (error) {
     notify("No se pudo mofdificar", "error");

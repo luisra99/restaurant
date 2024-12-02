@@ -14,11 +14,11 @@ import {
   ToggleButtonGroup,
   Grid,
 } from "@mui/material";
-import { listTables } from "@/services/table";
 import { createAccount, getAccount, modifyAccount } from "@/services/account";
 import { listDependents } from "@/services/dependent";
 import { useNavigate } from "react-router-dom";
 import { getConcepts } from "@/services/concept";
+import { getOptions } from "@/services/options";
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
@@ -46,7 +46,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
   const navegar = useNavigate();
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
-    const tableConcepts = await listTables(); // ID para cargar mesas
+    const tableConcepts = await getOptions("tables"); // ID para cargar mesas
     const dependentsList = await listDependents(); // ID para tipos de cuenta
     const typeConcepts = await getConcepts("Tipo de cuenta"); // ID para tipos de cuenta
     setAccountTypes(typeConcepts);

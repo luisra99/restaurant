@@ -20,6 +20,7 @@ export default function Main({ children, sx, ...other }: any) {
         minHeight: 1,
         display: "flex",
         flexDirection: "column",
+        px: "10px",
         pt: `${HEADER.H_MOBILE + SPACING}px`,
         ...(lgUp && {
           px: 2,

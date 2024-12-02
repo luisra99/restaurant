@@ -12,20 +12,17 @@ import Button from "@mui/material/Button";
 import routes from "@/base/routes";
 import { NavItem } from "./common/NavItem";
 import OpenAccount from "@/components/revisar/FormularioCuenta";
-import { useNavigate } from "react-router-dom";
 import PropinaModal from "@/pages/Payment/PropinaModal";
-import axios from "axios";
 export default function Header({ onOpenNav }: any) {
   const theme = useTheme();
   const [propina, setPropina] = useState<any>(false);
-  const navegar = useNavigate();
   const [openAccount, setOpenAccount] = useState<any>(false);
 
   const lgUp = useResponsive("up", "lg");
 
   const _lgUp = lgUp
     ? {
-        width: `calc(100% - ${NAV.WIDTH + 1}px)`,
+        width: `calc(100% - ${NAV.WIDTH}px)`,
         height: HEADER.H_DESKTOP,
       }
     : {};
@@ -72,20 +69,6 @@ export default function Header({ onOpenNav }: any) {
             onClick={() => setPropina(true)}
           >
             Propina
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ mr: 1 }}
-            onClick={() => axios.post("/api/operator/lastTicket")}
-          >
-            Imprimir Último
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ mr: 1 }}
-            onClick={() => navegar(`/accounts`)}
-          >
-            Ver Cuentas
           </Button>
 
           <Button variant="contained" onClick={() => setOpenAccount(true)}>

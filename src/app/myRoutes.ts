@@ -18,16 +18,17 @@ const myRoutes: Routes = {
   [Pages.Accounts]: {
     component: Cuentas,
     path: "/accounts",
+    title: "Cuentas",
   },
   [Pages.Menu]: {
     component: Menu,
     path: "/menu",
-    title: "Menú",
+    title: "",
   },
   [Pages.Config]: {
     component: Config,
     path: "/config",
-    title: "Configuración",
+    title: "",
   },
   [Pages.Caja]: {
     component: Caja,
