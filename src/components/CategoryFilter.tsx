@@ -15,8 +15,8 @@ const CategoryFilter = ({
   categories: { id: string; denomination: string }[];
   onCategoryChange: (value: string, categoryLabel?: string) => void;
 }) => (
-  <Grid container spacing={1} alignItems="center" p={0.2}>
-    <Grid item xs={4} sm={4} md={3} lg={2}>
+  <Grid container spacing={1} alignItems="center" p={0.2} mb={1}>
+    <Grid item xs={4} sm={4} md={3} lg={4}>
       <Button
         fullWidth
         variant={category === "Reciente" ? "contained" : "outlined"}
@@ -28,7 +28,7 @@ const CategoryFilter = ({
       </Button>
     </Grid>
     {categories?.map((cat) => (
-      <Grid item xs={4} sm={4} md={3} lg={2} key={cat.id}>
+      <Grid item xs={4} sm={4} md={3} lg={4} key={cat.id}>
         <Button
           fullWidth
           variant={category === cat.id ? "contained" : "outlined"}

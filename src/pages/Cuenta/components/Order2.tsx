@@ -37,16 +37,11 @@ const Order: FunctionComponent<OrderProps> = ({
       </Grid>
 
       <Grid item xs={6} textAlign="right">
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-end"
-          gap={1}
-        >
+        <Box display="flex" alignItems="center" justifyContent="flex-end">
           <Button
             sx={{
-              marginRight: 2,
-              padding: { sx: "6px !important", md: "12px !important" },
+              marginRight: 1,
+              padding: { sx: "6px !important", md: "9px !important" },
               minWidth: "unset !important",
               "&:hover": { backgroundColor: "#e0e0e0" },
             }}
@@ -58,7 +53,8 @@ const Order: FunctionComponent<OrderProps> = ({
           </Button>
           <Button
             sx={{
-              padding: { sx: "6px !important", md: "12px !important" },
+              marginRight: 1,
+              padding: { sx: "6px !important", md: "9px !important" },
               minWidth: "unset !important",
               "&:hover": { backgroundColor: "#e0e0e0" },
             }}
@@ -78,7 +74,7 @@ const Order: FunctionComponent<OrderProps> = ({
 
           <Button
             sx={{
-              padding: { sx: "6px !important", md: "12px !important" },
+              padding: { sx: "6px !important", md: "9px !important" },
               minWidth: "unset !important",
               "&:hover": { backgroundColor: "#e0e0e0" },
             }}

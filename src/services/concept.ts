@@ -30,7 +30,7 @@ export const getConcepts = async (
     | "Tipos de pago"
     | "Estado cuenta"
     | "Divisas"
-) => {
+): Promise<any[]> => {
   try {
     const { data } = await axios.get(`/api/concept-list/${father}`);
     return data;

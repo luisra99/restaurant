@@ -1,13 +1,6 @@
 import { Box } from "@mui/system";
 import Meta from "@/base/components/Meta";
-import {
-  Dialog,
-  Divider,
-  Grid,
-  IconButton,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Dialog, Divider, Grid, Paper, Typography } from "@mui/material";
 import { Bolt, Person } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { listTables } from "@/services/table";
@@ -61,6 +54,13 @@ function Mesas() {
                       cursor: "pointer",
                       position: "relative",
                     }}
+                    onClick={(e: any) => {
+                      if (e.target.id !== "bolt") {
+                        mesa.Account
+                          ? navegar(`/manage?id=${mesa.Account.id}`)
+                          : setOpenAccount(mesa.id);
+                      }
+                    }}
                   >
                     <Box
                       display="flex"
@@ -72,11 +72,6 @@ function Mesas() {
                         alignItems="center"
                         flexGrow={1}
                         justifyContent={"space-between"}
-                        onClick={() =>
-                          mesa.Account
-                            ? navegar(`/manage?id=${mesa.Account.id}`)
-                            : setOpenAccount(mesa.id)
-                        }
                       >
                         <Typography variant="h6" flexGrow={1}>
                           {mesa.name}
@@ -92,8 +87,14 @@ function Mesas() {
                         </Typography>
                       </Box>
                       {!mesa.Account && (
-                        <IconButton
-                          sx={{ backgroundColor: "darkorange", color: "white" }}
+                        <Bolt
+                          id="bolt"
+                          sx={{
+                            backgroundColor: "darkorange",
+                            color: "white",
+                            borderRadius: 50,
+                            fontSize: "35px",
+                          }}
                           onClick={() =>
                             createAccount({
                               idTable: mesa.id,
@@ -102,9 +103,7 @@ function Mesas() {
                               navegar(`/manage?id=${data.id}`);
                             })
                           }
-                        >
-                          <Bolt />
-                        </IconButton>
+                        />
                       )}
                     </Box>
 

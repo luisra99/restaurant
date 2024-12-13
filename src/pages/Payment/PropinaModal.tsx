@@ -20,7 +20,7 @@ interface PaymentFormProps {
   open: boolean;
   onClose: () => void;
   idAccount?: string;
-  amount?: string;
+  amount?: number | string;
 }
 
 interface Divisa {
@@ -39,7 +39,7 @@ const PropinaModal: React.FC<PaymentFormProps> = ({
   open,
   onClose,
   idAccount,
-  amount = "",
+  amount,
 }) => {
   const [divisas, setDivisas] = useState<Divisa[]>([]);
   const [initialValues, setInitialValues] = useState<any>({
@@ -62,7 +62,7 @@ const PropinaModal: React.FC<PaymentFormProps> = ({
   }, []);
 
   useEffect(() => {
-    setInitialValues({ amount, idDivisa: null });
+    setInitialValues({ amount: amount ?? "", idDivisa: null });
   }, [amount]);
 
   const handleSubmit = async (values: any, { resetForm }: any) => {

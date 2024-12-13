@@ -44,6 +44,11 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
   idAccount,
 }) => {
   const [divisas, setDivisas] = useState<Divisa[]>([]);
+  const [initialValues, setInitialValues] = useState<any>({
+    amount: "",
+    idMethod: "", // Efectivo por defecto
+    idDivisa: null,
+  });
   const [tiposPago, setTiposPago] = useState<any[]>([]);
 
   useEffect(() => {
@@ -53,6 +58,14 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
         const divisasConcept = await getConcepts("Divisas");
         setDivisas(divisasConcept);
         const tiposPagoConcept = await getConcepts("Tipos de pago");
+        const efectivoConcept = tiposPagoConcept.find(
+          (concept: any) => concept.denomination == "Efectivo"
+        );
+        setInitialValues({
+          amount: "",
+          idMethod: efectivoConcept.id, // Efectivo por defecto
+          idDivisa: null,
+        });
         setTiposPago(tiposPagoConcept);
       } catch (error) {
         console.error("Error consumiendo servicio", error);
@@ -94,65 +107,56 @@ const PaymentModal: React.FC<PaymentFormProps> = ({
         </Typography>
 
         <Formik
-          initialValues={{
-            amount: "",
-            idMethod: "", // Efectivo por defecto
-            idDivisa: null,
-          }}
+          initialValues={initialValues}
+          enableReinitialize
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ values, handleChange, errors, touched }) => (
             <Form>
-              <Box mb={2}>
-                <Field
-                  as={TextField}
-                  name="amount"
-                  label="Cantidad"
-                  type="number"
-                  fullWidth
-                  error={touched.amount && Boolean(errors.amount)}
-                  helperText={touched.amount && errors.amount}
-                  onChange={handleChange}
-                />
-              </Box>
+              <Field
+                as={TextField}
+                name="amount"
+                label="Cantidad"
+                type="number"
+                fullWidth
+                error={touched.amount && Boolean(errors.amount)}
+                helperText={touched.amount && errors.amount}
+                onChange={handleChange}
+              />
 
-              <Box mb={2}>
-                <Typography variant="subtitle1">Método de Pago</Typography>
-                <RadioGroup
-                  name="idMethod"
-                  value={values.idMethod}
+              <Typography variant="subtitle1">Método de Pago</Typography>
+              <RadioGroup
+                name="idMethod"
+                value={values.idMethod}
+                onChange={handleChange}
+              >
+                {tiposPago?.map((tipoPago: any) => (
+                  <FormControlLabel
+                    value={tipoPago.id}
+                    control={<Radio />}
+                    label={tipoPago.denomination}
+                  />
+                ))}
+              </RadioGroup>
+
+              <FormControl fullWidth>
+                <InputLabel id="currency-label">Divisa (Opcional)</InputLabel>
+                <Select
+                  labelId="currency-label"
+                  name="idDivisa"
+                  label="Divisa (Opcional)"
+                  value={values.idDivisa}
                   onChange={handleChange}
+                  error={touched.idDivisa && Boolean(errors.idDivisa)}
                 >
-                  {tiposPago?.map((tipoPago: any) => (
-                    <FormControlLabel
-                      value={tipoPago.id}
-                      control={<Radio />}
-                      label={tipoPago.denomination}
-                    />
+                  {divisas?.map((divisa) => (
+                    <MenuItem key={divisa.id} value={divisa.id}>
+                      {divisa.denomination}
+                    </MenuItem>
                   ))}
-                </RadioGroup>
-              </Box>
-
-              <Box mb={2}>
-                <FormControl fullWidth>
-                  <InputLabel id="currency-label">Divisa</InputLabel>
-                  <Select
-                    labelId="currency-label"
-                    name="idDivisa"
-                    label="Divisa"
-                    value={values.idDivisa}
-                    onChange={handleChange}
-                    error={touched.idDivisa && Boolean(errors.idDivisa)}
-                  >
-                    {divisas?.map((divisa) => (
-                      <MenuItem key={divisa.id} value={divisa.id}>
-                        {divisa.denomination}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+                </Select>
+              </FormControl>
 
               <Box mt={2}>
                 <Button

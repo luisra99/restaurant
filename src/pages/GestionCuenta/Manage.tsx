@@ -4,6 +4,7 @@ import CalculatorModal from "@/components/CalculatorModal";
 import {
   Box,
   Button,
+  Divider,
   Grid,
   ListItemIcon,
   ListItemText,
@@ -18,7 +19,7 @@ import {
   marchAccount,
   modifyAccountDetails,
 } from "@/services/account";
-import { Delete, Edit, MenuRounded, Print, Wallet } from "@mui/icons-material";
+import { Delete, Edit, Wallet } from "@mui/icons-material";
 import { printAccount } from "@/services/printer";
 import { useNavigate } from "react-router-dom";
 import MenuGrid from "@/components/MenuGrid";
@@ -30,6 +31,8 @@ import { useState } from "react";
 import ModifyAccount from "../Cuenta/components/ModifyAccount";
 import TaxesManage from "../Cuenta/components/TaxesManage";
 import PaymentModal from "../Payment/PaymentModal";
+import { fToNow } from "@/base/utils/format-time";
+import PropinaModal from "../Payment/PropinaModal";
 
 function Manage() {
   const [openMenu, setOpenMenu] = useState(null);
@@ -53,6 +56,9 @@ function Manage() {
   function handleClosePayment() {
     loadAccountData().then(() => setPaymentModal(false));
   }
+  function handleClosePropina() {
+    loadAccountData().then(() => setPropinaModal(false));
+  }
   function handleCloseModal(account: any): void {
     setEditModal(false);
     setOpenTaxes(false);
@@ -60,6 +66,7 @@ function Manage() {
   }
   const [openTaxes, setOpenTaxes] = useState(false);
   const [paymentModal, setPaymentModal] = useState(false);
+  const [propinaModal, setPropinaModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const handleOpenMenu = (event: any) => {
     setOpenMenu(event.currentTarget);
@@ -98,62 +105,115 @@ function Manage() {
           item
           xs={12}
           md={5}
+          overflow={"auto"}
           sx={{
-            height: { xs: "calc(37vh - 29px);", md: "calc(100vh - 58px)" },
+            height: { xs: "calc(40vh + 2px);", md: "calc(100vh - 68px)" },
+            padding: { xs: 0, md: 1.5 },
           }}
         >
-          <Typography variant="body2" textAlign={"left"}>
-            {`${cuenta?.table?.name} - ${cuenta?.totalQuantity} ${
-              cuenta?.totalQuantity > 1 ? "productos" : "producto"
-            } - $${cuenta?.finalPrice}`}
+          <Typography
+            variant="body2"
+            textAlign={"left"}
+            fontSize={{ xs: "14px", md: "20px" }}
+          >
+            <b style={{ fontWeight: 900 }}>{`${cuenta?.table?.name} `}</b>
+            <i>{`( $${cuenta?.finalPrice} ) - ${cuenta?.type?.denomination}`}</i>{" "}
+            (Abierta
+            {` ${fToNow(cuenta?.created)})`}
           </Typography>
-          <Grid item xs={12} flexGrow={1} overflow={"auto"}>
-            <Box
-              justifyContent="center"
-              width="100%"
-              p={0}
-              sx={{
-                height: { xs: "calc(30vh - 29px)", md: "calc(90vh - 29px)" },
-              }}
+          <Box sx={{ display: { xs: "none", md: "flex" } }} gap={2}>
+            <Typography
+              variant="body2"
+              textAlign={"left"}
+              fontSize={{ xs: "14px", md: "17px" }}
             >
-              <OrdersList
-                orders={cuenta?.orders}
-                deleteOffer={deleteOffer}
-                idAccount={idAccount}
-                setProduct={openProduct}
-                loadAccountData={loadAccountData}
-                setNegative={setNegative}
-              />
+              Dependiente: {`${cuenta.dependent ?? "Sin asignar"}`}
+            </Typography>
+            <Typography
+              variant="body2"
+              textAlign={"left"}
+              fontSize={{ xs: "14px", md: "17px" }}
+            >
+              Personas: {`${cuenta?.people ?? "No especificado"}`}
+            </Typography>
+          </Box>
+          <Divider sx={{ m: 0.3 }} />
+          {!!cuenta?.orders?.length && (
+            <Box display={"flex"} justifyContent={"space-between"}>
+              <Typography
+                variant="body2"
+                textAlign={"left"}
+                fontSize={{ xs: "14px", md: "17px" }}
+                fontWeight={700}
+              >
+                Productos:{" "}
+                {!!cuenta?.totalQuantity
+                  ? cuenta?.totalQuantity
+                  : "Sin productos"}
+              </Typography>
+              <Typography
+                variant="body2"
+                textAlign={"left"}
+                fontSize={{ xs: "14px", md: "17px" }}
+                fontWeight={700}
+              >
+                Subtotal: ${cuenta?.totalPrice}
+              </Typography>
+              <Typography
+                variant="body2"
+                textAlign={"left"}
+                fontSize={{ xs: "14px", md: "17px" }}
+                fontWeight={700}
+              >
+                {Number(cuenta?.finalPrice ?? 0) -
+                  Number(cuenta?.totalPaid ?? 0) <
+                0
+                  ? `Vuelto: $${Math.abs(
+                      Number(cuenta?.finalPrice ?? 0) -
+                        Number(cuenta?.totalPaid ?? 0)
+                    ).toFixed(2)}`
+                  : `A pagar: $${(
+                      Number(cuenta?.finalPrice ?? 0) -
+                      Number(cuenta?.totalPaid ?? 0)
+                    ).toFixed(2)}`}
+              </Typography>
             </Box>
+          )}
+          <Divider sx={{ m: 0.3 }} />
+          {!!cuenta?.propina && (
+            <Typography
+              variant="body2"
+              textAlign={"left"}
+              fontSize={{ xs: "14px", md: "17px" }}
+            >
+              Propina guardada: ${cuenta?.propina}
+            </Typography>
+          )}
+          <Grid
+            item
+            xs={12}
+            flexGrow={1}
+            overflow={"auto"}
+            sx={{
+              height: { xs: "calc(75% - 62px)", md: "calc(70% - 62px)" },
+            }}
+          >
+            <OrdersList
+              orders={cuenta?.orders}
+              deleteOffer={deleteOffer}
+              idAccount={idAccount}
+              setProduct={openProduct}
+              loadAccountData={loadAccountData}
+              setNegative={setNegative}
+            />
           </Grid>
 
-          <Grid item xs={12} pt={1}>
-            <Grid container spacing={1}>
-              <Grid item xs={2} textAlign={"center"}>
-                <Button
-                  color="primary"
-                  variant="outlined"
-                  onClick={handleOpenMenu}
-                  size="small"
-                >
-                  <MenuRounded />
-                </Button>
-              </Grid>
-              <Grid item xs={2}>
+          <Grid item xs={12} pt={0.5} paddingBottom={"8px"}>
+            <Grid container spacing={0.7} justifyContent={"center"}>
+              <Grid item xs={3} md={3}>
                 <Button
                   variant="contained"
-                  color="info"
-                  size="small"
-                  fullWidth
-                  onClick={() => printAccount(cuenta?.id)}
-                >
-                  <Print />
-                </Button>
-              </Grid>
-              <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="success"
+                  color="error"
                   size="small"
                   fullWidth
                   onClick={() =>
@@ -165,7 +225,20 @@ function Manage() {
                   </Typography>
                 </Button>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3} md={3}>
+                <Button
+                  variant="contained"
+                  color="info"
+                  size="small"
+                  fullWidth
+                  onClick={() => printAccount(cuenta?.id)}
+                >
+                  <Typography variant="subtitle1" letterSpacing={0.7}>
+                    Recibo
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid item xs={3} md={3}>
                 <Button
                   variant="contained"
                   color="success"
@@ -180,10 +253,10 @@ function Manage() {
                   </Typography>
                 </Button>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3} md={3}>
                 <Button
                   variant="contained"
-                  color="success"
+                  color="primary"
                   size="small"
                   fullWidth
                   onClick={() => setPaymentModal(true)}
@@ -193,17 +266,138 @@ function Manage() {
                   </Typography>
                 </Button>
               </Grid>
+              <Grid item xs={3} md={3}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  fullWidth
+                  onClick={() => {
+                    deleteAccount(cuenta?.id).then(() => navegar("/"));
+                  }}
+                >
+                  <Delete />
+                </Button>
+              </Grid>
+              <Grid item xs={3} md={3}>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  size="small"
+                  fullWidth
+                  onClick={() => setOpenTaxes(true)}
+                >
+                  <Typography variant="subtitle1" letterSpacing={0.7}>
+                    Impuestos
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid item xs={3} md={3}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  fullWidth
+                  onClick={() => setEditModal(true)}
+                >
+                  <Typography variant="subtitle1" letterSpacing={0.7}>
+                    Editar
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid item xs={3} md={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  fullWidth
+                  onClick={() => setPropinaModal(true)}
+                >
+                  <Typography variant="subtitle1" letterSpacing={0.7}>
+                    Propina
+                  </Typography>
+                </Button>
+              </Grid>
             </Grid>
+            <Grid
+              container
+              spacing={1}
+              justifyContent={"center"}
+              paddingTop={1}
+            ></Grid>
           </Grid>
-        </Grid>
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
+            {cuenta?.mappedTaxsDiscounts?.length ? (
+              <>
+                <Typography
+                  variant="body2"
+                  textAlign={"left"}
+                  fontSize={{ xs: "14px", md: "18px" }}
+                >
+                  Impuestos y descuentos:
+                </Typography>
+                {cuenta?.mappedTaxsDiscounts?.map((taxDiscount: any) => {
+                  return (
+                    <Typography
+                      key={taxDiscount.denomination}
+                      variant="caption"
+                      p={1}
+                    >
+                      {`${taxDiscount.name} ${taxDiscount.tax ? "+" : "-"}${
+                        taxDiscount.percent
+                      }% ($${taxDiscount.amount.toFixed(2)})`}
+                    </Typography>
+                  );
+                })}
+              </>
+            ) : (
+              <Typography
+                variant="body2"
+                textAlign={"left"}
+                fontSize={{ xs: "14px", md: "20px" }}
+              >
+                No hay impuestos ni descuentos aplicados
+              </Typography>
+            )}
 
+            {cuenta?.divisaAmount?.length ? (
+              <>
+                <Typography
+                  variant="body1"
+                  textAlign={"left"}
+                  fontSize={{ xs: "14px", md: "18px" }}
+                >
+                  Divisas:
+                </Typography>
+                {cuenta?.divisaAmount?.map((divisa: any) => {
+                  return (
+                    <Typography
+                      key={divisa.denomination}
+                      variant="caption"
+                      p={1}
+                    >
+                      {`${divisa.denomination}  ($${divisa.amount})`}
+                    </Typography>
+                  );
+                })}
+              </>
+            ) : (
+              <Typography
+                variant="body2"
+                textAlign={"left"}
+                fontSize={{ xs: "14px", md: "20px" }}
+              >
+                No hay divisas configuradas
+              </Typography>
+            )}
+          </Box>
+        </Grid>
         <Grid
           item
           xs={12}
           md={7}
-          sx={{ height: { xs: "calc(60vh - 29px)", md: "calc(96vh - 29px)" } }}
+          sx={{ height: { xs: "calc(60vh - 65px)", md: "calc(96vh - 29px)" } }}
         >
-          {" "}
           <SearchBar
             searchTerm={searchTerm}
             onSearchChange={handleSearchChange}
@@ -213,7 +407,14 @@ function Manage() {
             handleCategoryChange={handleCategoryChange}
           />
           <Box overflow={"auto"} sx={{ height: { xs: "calc(100% - 100px)" } }}>
-            {categoryLabel && (
+            {(!categoryLabel || category === "Reciente") && (
+              <CategoryFilter
+                category={category}
+                categories={categories}
+                onCategoryChange={handleCategoryChange}
+              />
+            )}
+            {(categoryLabel || category === "Reciente") && (
               <MenuGrid
                 items={filteredItems}
                 letterRefs={letterRefs}
@@ -231,13 +432,6 @@ function Manage() {
                   setId(id);
                   setOpen(true);
                 }}
-              />
-            )}
-            {!categoryLabel && (
-              <CategoryFilter
-                category={category}
-                categories={categories}
-                onCategoryChange={handleCategoryChange}
               />
             )}
           </Box>
@@ -303,6 +497,14 @@ function Manage() {
       <PaymentModal
         open={paymentModal}
         onClose={handleClosePayment}
+        idAccount={cuenta?.id}
+      />
+      <PropinaModal
+        open={propinaModal}
+        amount={Math.abs(
+          Number(cuenta?.finalPrice ?? 0) - Number(cuenta?.totalPaid ?? 0)
+        ).toFixed(2)}
+        onClose={handleClosePropina}
         idAccount={cuenta?.id}
       />
     </>

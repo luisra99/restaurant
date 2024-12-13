@@ -42,7 +42,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
     idTable: idTable ?? null,
     idType: null,
   });
-  const [accountTypes, setAccountTypes] = useState([]); // Estado para almacenar los tipos de cuenta
+  const [accountTypes, setAccountTypes] = useState<any[]>([]); // Estado para almacenar los tipos de cuenta
   const navegar = useNavigate();
   // Cargar las mesas y los tipos de cuenta desde el backend
   const loadOptions = async () => {
@@ -107,6 +107,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
           validationSchema={validationSchema}
           enableReinitialize
           validateOnMount
+          validateOnChange
           onSubmit={handleSubmit}
         >
           {({ values, setFieldValue, errors, touched }: any) => (
@@ -175,7 +176,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 <Field
                   name="idTable"
                   as={Select}
-                  value={values.idTable}
+                  value={[values.idTable]}
                   label="Mesa (opcional)"
                   error={touched.idTable && Boolean(errors.idTable)}
                 >
@@ -199,7 +200,7 @@ const OpenAccount = ({ id, idTable, handleClose }: any) => {
                 <Field
                   name="idDependent"
                   as={Select}
-                  value={values.idDependent}
+                  value={[values.idDependent]}
                   label="Dependiente (opcional)"
                   error={touched.idDependent && Boolean(errors.idDependent)}
                 >
