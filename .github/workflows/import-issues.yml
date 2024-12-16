@@ -1,0 +1,59 @@
+name: Import Issues from YAML
+
+on:
+  workflow_dispatch: # Permite disparar la acción manualmente
+    inputs:
+      yaml_file:
+        description: "Nombre del archivo YAML en el repositorio"
+        default: "tareas.yaml" # Archivo YAML con tus tareas
+        required: false
+
+jobs:
+  import-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install js-yaml
+
+      - name: Process YAML and Create Issues
+        env:
+          REPO: ${{ github.repository }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node <<EOF
+          const fs = require('fs');
+          const yaml = require('js-yaml');
+          const { execSync } = require('child_process');
+
+          const yamlFile = "${{ inputs.yaml_file }}";
+          const repo = process.env.REPO;
+          const token = process.env.TOKEN;
+
+          try {
+            const data = yaml.load(fs.readFileSync(yamlFile, 'utf8'));
+
+            if (!Array.isArray(data)) {
+              throw new Error('El archivo YAML debe contener una lista de tareas.');
+            }
+
+            data.forEach((task, index) => {
+              const title = task.title || `Tarea sin título ${index + 1}`;
+              const body = task.body || 'No se proporcionó descripción.';
+
+              console.log(`Creando issue: ${title}`);
+              const command = `gh issue create --repo ${repo} --title "${title}" --body "${body}" --token "${token}"`;
+              execSync(command, { stdio: 'inherit' });
+            });
+          } catch (e) {
+            console.error('Error al procesar el archivo YAML:', e.message);
+          }
+          EOF
