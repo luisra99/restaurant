@@ -1,115 +1,123 @@
 issues:
   - title: "Configurar el entorno inicial del proyecto"
     body: |
-      **Descripción:** Configurar un entorno de desarrollo utilizando React para el frontend, Express para el backend, Prisma como ORM, y PostgreSQL como base de datos.
+      **Descripción:**  
+      Configurar un entorno de desarrollo utilizando **React** para el frontend, **Express** para el backend, **Prisma** como ORM y **PostgreSQL** como base de datos.
 
-      **Tareas:**
-      1. Inicializar el proyecto con `npm init` o `yarn init`.
-      2. Configurar el entorno de trabajo con TypeScript para una tipificación sólida.
-      3. Instalar dependencias principales:
-         - Frontend: React, React Router, Axios.
-         - Backend: Express, Prisma, dotenv.
-         - Base de datos: PostgreSQL.
-      4. Configurar Prisma con la conexión a PostgreSQL.
+      **Tareas:**  
+      1. Inicializar el proyecto con `npm init` o `yarn init`.  
+      2. Configurar el entorno de trabajo con TypeScript para una tipificación sólida.  
+      3. Instalar dependencias principales:  
+         - Frontend: React, React Router, Axios.  
+         - Backend: Express, Prisma, dotenv.  
+         - Base de datos: PostgreSQL.  
+      4. Configurar Prisma con la conexión a PostgreSQL.  
 
-      **Sugerencias de diseño:**
-      - Usar un monorepo para gestionar backend y frontend juntos (opcional).
-      - Definir un archivo `.env` seguro para almacenar las variables de entorno.
+      **Sugerencias de diseño:**  
+      - Usar un monorepo para gestionar backend y frontend juntos (opcional).  
+      - Definir un archivo `.env` seguro para almacenar las variables de entorno.  
 
   - title: "Implementar control de acceso seguro y personalizado"
     body: |
-      **Descripción:** Crear un sistema de autenticación y autorización seguro.
+      **Descripción:**  
+      Crear un sistema de autenticación y autorización seguro.
 
-      **Tareas:**
-      1. Configurar un sistema de autenticación basado en JWT.
-      2. Diseñar modelos de usuarios en Prisma con roles (`Admin`, `Almacenero`, `Comercial`, etc.).
-      3. Implementar middleware para proteger rutas según permisos.
-      4. Registrar acciones en un historial de auditoría.
+      **Tareas:**  
+      1. Configurar un sistema de autenticación basado en **JWT**.  
+      2. Diseñar modelos de usuarios en Prisma con roles (`Admin`, `Almacenero`, `Comercial`, etc.).  
+      3. Implementar middleware para proteger rutas según permisos.  
+      4. Registrar acciones en un historial de auditoría.  
 
-      **Sugerencias de diseño:**
-      - Usar bcrypt para cifrar contraseñas.
-      - Crear un hook de React para manejar el contexto de autenticación.
-      - Añadir una tabla en la base de datos para el historial de auditoría.
+      **Sugerencias de diseño:**  
+      - Usar **bcrypt** para cifrar contraseñas.  
+      - Crear un hook de React para manejar el contexto de autenticación.  
+      - Añadir una tabla en la base de datos para el historial de auditoría.  
 
   - title: "Crear el módulo de gestión de usuarios y permisos"
     body: |
-      **Descripción:** Implementar la funcionalidad para gestionar usuarios y configurar permisos.
+      **Descripción:**  
+      Implementar la funcionalidad para gestionar usuarios y configurar permisos.
 
-      **Tareas:**
-      1. Crear un CRUD para usuarios en el backend con Express.
-      2. Diseñar un formulario en React para agregar y editar usuarios.
-      3. Crear una tabla en Prisma para almacenar permisos personalizados.
-      4. Implementar un sistema de jerarquías de autorización para ciertas operaciones críticas.
+      **Tareas:**  
+      1. Crear un CRUD para usuarios en el backend con **Express**.  
+      2. Diseñar un formulario en **React** para agregar y editar usuarios.  
+      3. Crear una tabla en **Prisma** para almacenar permisos personalizados.  
+      4. Implementar un sistema de jerarquías de autorización para ciertas operaciones críticas.  
 
-      **Sugerencias de diseño:**
-      - Dividir el formulario en subcomponentes reutilizables.
-      - Usar roles predefinidos con opción de personalización.
-      - Diseñar un dashboard de administración para facilitar la gestión.
+      **Sugerencias de diseño:**  
+      - Dividir el formulario en subcomponentes reutilizables.  
+      - Usar roles predefinidos con opción de personalización.  
+      - Diseñar un **dashboard de administración** para facilitar la gestión.  
 
   - title: "Implementar gestión de locales y áreas internas"
     body: |
-      **Descripción:** Crear funcionalidades para registrar y gestionar locales, almacenes, y sus áreas internas.
+      **Descripción:**  
+      Crear funcionalidades para registrar y gestionar locales, almacenes y sus áreas internas.
 
-      **Tareas:**
-      1. Diseñar modelos en Prisma para locales y áreas.
-      2. Crear endpoints para agregar, modificar y eliminar locales y áreas.
-      3. Desarrollar un formulario en React para la gestión de estas entidades.
-      4. Mostrar un diagrama visual en el frontend para ubicar productos en áreas específicas.
+      **Tareas:**  
+      1. Diseñar modelos en **Prisma** para locales y áreas.  
+      2. Crear endpoints para agregar, modificar y eliminar locales y áreas.  
+      3. Desarrollar un formulario en **React** para la gestión de estas entidades.  
+      4. Mostrar un diagrama visual en el frontend para ubicar productos en áreas específicas.  
 
-      **Sugerencias de diseño:**
-      - Usar librerías como D3.js o React Flow para visualización.
-      - Dividir locales en zonas operativas para un mayor control.
+      **Sugerencias de diseño:**  
+      - Usar librerías como **D3.js** o **React Flow** para visualización.  
+      - Dividir locales en zonas operativas para un mayor control.  
 
   - title: "Implementar control de stock en tiempo real"
     body: |
-      **Descripción:** Crear un módulo para mostrar y gestionar el stock de productos.
+      **Descripción:**  
+      Crear un módulo para mostrar y gestionar el stock de productos.
 
-      **Tareas:**
-      1. Diseñar modelos en Prisma para productos y sus movimientos.
-      2. Crear un endpoint en Express para consultar el stock en tiempo real.
-      3. Implementar una tabla dinámica en React con filtros y búsqueda.
-      4. Mostrar alertas de productos con stock bajo o fechas de vencimiento próximas.
+      **Tareas:**  
+      1. Diseñar modelos en **Prisma** para productos y sus movimientos.  
+      2. Crear un endpoint en **Express** para consultar el stock en tiempo real.  
+      3. Implementar una tabla dinámica en **React** con filtros y búsqueda.  
+      4. Mostrar alertas de productos con stock bajo o fechas de vencimiento próximas.  
 
-      **Sugerencias de diseño:**
-      - Usar Material-UI o Ant Design para tablas y notificaciones.
-      - Optimizar consultas de stock con índices en la base de datos.
+      **Sugerencias de diseño:**  
+      - Usar **Material-UI** o **Ant Design** para tablas y notificaciones.  
+      - Optimizar consultas de stock con índices en la base de datos.  
 
   - title: "Declarar operaciones: entradas, salidas, transferencias, mermas y ventas"
     body: |
-      **Descripción:** Implementar funcionalidades para registrar movimientos de inventario.
+      **Descripción:**  
+      Implementar funcionalidades para registrar movimientos de inventario.
 
-      **Tareas:**
-      1. Crear modelos en Prisma para entradas, salidas, transferencias, mermas y ventas.
-      2. Diseñar formularios en React para registrar cada tipo de operación.
-      3. Implementar validaciones para asegurar que los datos sean correctos antes de guardar.
-      4. Añadir la funcionalidad de confirmación por contraseña para acciones críticas.
+      **Tareas:**  
+      1. Crear modelos en **Prisma** para entradas, salidas, transferencias, mermas y ventas.  
+      2. Diseñar formularios en **React** para registrar cada tipo de operación.  
+      3. Implementar validaciones para asegurar que los datos sean correctos antes de guardar.  
+      4. Añadir la funcionalidad de confirmación por contraseña para acciones críticas.  
 
-      **Sugerencias de diseño:**
-      - Añadir un resumen de las operaciones realizadas por día.
-      - Usar componentes reutilizables para formularios de operaciones similares.
+      **Sugerencias de diseño:**  
+      - Añadir un resumen de las operaciones realizadas por día.  
+      - Usar componentes reutilizables para formularios de operaciones similares.  
 
   - title: "Crear el módulo de notificaciones inteligentes"
     body: |
-      **Descripción:** Configurar un sistema de alertas automáticas.
+      **Descripción:**  
+      Configurar un sistema de alertas automáticas.
 
-      **Tareas:**
-      1. Implementar una lógica en el backend para generar alertas (stock bajo, vencimientos, etc.).
-      2. Configurar notificaciones en tiempo real usando WebSockets o una librería como Socket.io.
-      3. Mostrar notificaciones en el frontend con librerías como react-toastify.
+      **Tareas:**  
+      1. Implementar una lógica en el backend para generar alertas (stock bajo, vencimientos, etc.).  
+      2. Configurar notificaciones en tiempo real usando **WebSockets** o una librería como **Socket.io**.  
+      3. Mostrar notificaciones en el frontend con librerías como **react-toastify**.  
 
-      **Sugerencias de diseño:**
-      - Permitir a los usuarios configurar qué alertas desean recibir.
-      - Agregar un historial de notificaciones.
+      **Sugerencias de diseño:**  
+      - Permitir a los usuarios configurar qué alertas desean recibir.  
+      - Agregar un historial de notificaciones.  
 
   - title: "Implementar reportes y análisis automáticos"
     body: |
-      **Descripción:** Crear reportes y análisis personalizados sobre inventarios y transacciones.
+      **Descripción:**  
+      Crear reportes y análisis personalizados sobre inventarios y transacciones.
 
-      **Tareas:**
-      1. Crear endpoints en Express para generar reportes (ventas, rentabilidad, etc.).
-      2. Diseñar gráficos en React usando librerías como Chart.js.
-      3. Añadir funcionalidad para descargar reportes en PDF o Excel.
+      **Tareas:**  
+      1. Crear endpoints en **Express** para generar reportes (ventas, rentabilidad, etc.).  
+      2. Diseñar gráficos en **React** usando librerías como **Chart.js**.  
+      3. Añadir funcionalidad para descargar reportes en **PDF** o **Excel**.  
 
-      **Sugerencias de diseño:**
-      - Priorizar gráficos intuitivos para los usuarios finales.
-      - Mostrar resúmenes clave (por ejemplo, productos más vendidos o clientes frecuentes).
+      **Sugerencias de diseño:**  
+      - Priorizar gráficos intuitivos para los usuarios finales.  
+      - Mostrar resúmenes clave (por ejemplo, productos más vendidos o clientes frecuentes).  
